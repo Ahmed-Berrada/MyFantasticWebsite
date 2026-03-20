@@ -1,0 +1,149 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+
+const projects = [
+  {
+    num:"01", title:"AlphaSignal", subtitle:"Quantitative Trading Engine", category:"FINANCE · ML",
+    desc:"A systematic trading platform combining momentum signals, ML-based regime detection, and risk-parity portfolio construction. Backtested over 10 years of equity data.",
+    tags:["Python","PyTorch","Pandas","Backtrader"],
+    metrics:[{label:"Sharpe",val:"1.82"},{label:"Max DD",val:"−12%"},{label:"CAGR",val:"24%"}],
+    accent:"var(--accent)",
+  },
+  {
+    num:"02", title:"FinLens", subtitle:"Financial NLP Dashboard", category:"NLP · DATA",
+    desc:"Real-time sentiment analysis on earnings calls, SEC filings, and financial news using fine-tuned FinBERT. Extracts forward-looking statements and per-ticker sentiment scores.",
+    tags:["PyTorch","HuggingFace","FastAPI","React"],
+    metrics:[{label:"Accuracy",val:"91%"},{label:"Latency",val:"120ms"},{label:"Sources",val:"5k/day"}],
+    accent:"var(--navy-light)",
+  },
+  {
+    num:"03", title:"DataWeave", subtitle:"Real-Time ETL Pipeline", category:"DATA ENGINEERING",
+    desc:"Scalable ingestion pipeline processing 50+ financial data sources — market data, alternative data, macro indicators — normalised and served via a unified REST API.",
+    tags:["Spark","Kafka","PostgreSQL","Docker"],
+    metrics:[{label:"Throughput",val:"2M/s"},{label:"Sources",val:"50+"},{label:"Uptime",val:"99.9%"}],
+    accent:"#5b8af5",
+  },
+  {
+    num:"04", title:"RiskMatrix", subtitle:"Portfolio Risk Analyser", category:"FINANCE · ANALYTICS",
+    desc:"Institutional-grade risk analysis: VaR, CVaR, Monte Carlo simulation, factor exposure decomposition, and stress testing against 12 historical crisis scenarios.",
+    tags:["Python","NumPy","Plotly","Streamlit"],
+    metrics:[{label:"Scenarios",val:"10k"},{label:"Factors",val:"30+"},{label:"Speed",val:"<2s"}],
+    accent:"#b87fce",
+  },
+];
+
+export default function Projects() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hovered, setHovered] = useState<number|null>(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+      { threshold: 0.06 }
+    );
+    ref.current?.querySelectorAll(".fade-in").forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section id="projects" ref={ref} style={{
+      background:"var(--bg-2)",
+      borderTop:"1px solid var(--border)", borderBottom:"1px solid var(--border)",
+      padding:"130px 0",
+    }}>
+      <div style={{ maxWidth:"1140px", margin:"0 auto", padding:"0 48px" }}>
+        {/* Label */}
+        <div className="fade-in" style={{
+          display:"flex", alignItems:"center", gap:"16px",
+          fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)",
+          letterSpacing:"0.22em", marginBottom:"52px",
+        }}>
+          <span style={{color:"var(--accent)"}}>02</span>
+          <div style={{flex:1, height:"1px", background:"linear-gradient(90deg, var(--border-2), transparent)"}}/>
+          PROJECTS
+          <div style={{flex:1, height:"1px", background:"linear-gradient(270deg, var(--border-2), transparent)"}}/>
+        </div>
+
+        <h2 className="fade-in font-display" style={{
+          fontSize:"clamp(32px, 4.5vw, 54px)", marginBottom:"56px",
+          letterSpacing:"-0.025em", lineHeight:1.1,
+        }}>
+          Selected Work
+        </h2>
+
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
+          {projects.map((p,i)=>(
+            <div key={i} className="fade-in"
+              onMouseEnter={()=>setHovered(i)} onMouseLeave={()=>setHovered(null)}
+              style={{
+                background: hovered===i ? "var(--bg-3)" : "var(--bg)",
+                border:`1px solid ${hovered===i ? p.accent+"55" : "var(--border)"}`,
+                borderRadius:"8px", padding:"28px", cursor:"pointer",
+                transition:"all 0.3s ease",
+                transform: hovered===i ? "translateY(-4px)" : "translateY(0)",
+                boxShadow: hovered===i ? `0 12px 40px ${p.accent}18` : "none",
+                animationDelay:`${i*0.1}s`, position:"relative", overflow:"hidden",
+              }}>
+              {/* Top line on hover */}
+              {hovered===i && (
+                <div style={{
+                  position:"absolute", top:0, left:0, right:0, height:"2px",
+                  background:`linear-gradient(90deg, transparent, ${p.accent}, transparent)`,
+                }}/>
+              )}
+
+              <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"16px"}}>
+                <div>
+                  <div style={{fontFamily:"var(--font-mono)", fontSize:"10px", color:p.accent, letterSpacing:"0.16em", marginBottom:"6px"}}>{p.category}</div>
+                  <h3 className="font-display" style={{fontSize:"26px", letterSpacing:"-0.015em", color:"var(--text)"}}>{p.title}</h3>
+                  <div style={{fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)", marginTop:"2px"}}>{p.subtitle}</div>
+                </div>
+                <span style={{fontFamily:"var(--font-mono)", fontSize:"32px", color:"var(--border-2)", fontWeight:300, lineHeight:1}}>{p.num}</span>
+              </div>
+
+              <p style={{fontSize:"13px", color:"var(--text-dim)", lineHeight:1.78, marginBottom:"20px"}}>{p.desc}</p>
+
+              {/* Metrics */}
+              <div style={{
+                display:"flex", gap:"0", marginBottom:"20px",
+                background:"var(--bg-3)", borderRadius:"6px",
+                border:"1px solid var(--border)", overflow:"hidden",
+              }}>
+                {p.metrics.map((m,j)=>(
+                  <div key={m.label} style={{
+                    flex:1, padding:"12px 8px", textAlign:"center",
+                    borderRight: j<p.metrics.length-1 ? "1px solid var(--border)" : "none",
+                  }}>
+                    <div style={{fontFamily:"var(--font-mono)", fontSize:"17px", color:p.accent, fontWeight:500}}>{m.val}</div>
+                    <div style={{fontFamily:"var(--font-mono)", fontSize:"9px", color:"var(--text-muted)", letterSpacing:"0.12em", marginTop:"3px"}}>{m.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+                <div style={{display:"flex", gap:"7px", flexWrap:"wrap"}}>
+                  {p.tags.map(t=>(
+                    <span key={t} style={{
+                      fontFamily:"var(--font-mono)", fontSize:"10px",
+                      padding:"3px 9px", background:"var(--bg-3)",
+                      border:"1px solid var(--border)", borderRadius:"3px", color:"var(--text-muted)",
+                    }}>{t}</span>
+                  ))}
+                </div>
+                <a href="#" onClick={e=>e.preventDefault()} style={{
+                  fontFamily:"var(--font-mono)", fontSize:"11px",
+                  color:p.accent, textDecoration:"none", letterSpacing:"0.12em",
+                  transition:"opacity 0.2s",
+                }}
+                onMouseOver={e=>(e.currentTarget as HTMLElement).style.opacity="0.7"}
+                onMouseOut={e=>(e.currentTarget as HTMLElement).style.opacity="1"}>
+                  VIEW ↗
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
