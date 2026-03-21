@@ -12,8 +12,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const go = (id: string) =>
-    document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
+  const go = (id: string) => {
+    const slug = id.toLowerCase().replace(/\s+/g, "-");
+    document.getElementById(slug)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <nav style={{
@@ -25,16 +27,23 @@ export default function Navbar() {
       transition: "all 0.35s ease",
       display: "flex", alignItems: "center", justifyContent: "space-between",
     }}>
-      {/* Logo mark */}
+      {/* Signature mark */}
       <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:"10px" }}>
-        <div style={{
-          width:"32px", height:"32px", border:"1px solid var(--accent)",
-          display:"flex", alignItems:"center", justifyContent:"center",
-          fontFamily:"var(--font-display)", fontSize:"15px", color:"var(--accent)", fontWeight:600,
-        }}>A</div>
-        <span style={{ fontFamily:"var(--font-mono)", fontSize:"12px", color:"var(--text-dim)", letterSpacing:"0.12em" }}>
-          MORGAN
+        style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:"12px" }}>
+        <span
+          className="font-display"
+          style={{
+            fontSize:"26px",
+            color:"var(--accent)",
+            fontStyle:"italic",
+            letterSpacing:"0.01em",
+            lineHeight:1,
+          }}
+        >
+          Ahmed Berrada
+        </span>
+        <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.14em" }}>
+          CS 2027
         </span>
       </button>
 
@@ -49,7 +58,7 @@ export default function Navbar() {
           onMouseOut={e => e.currentTarget.style.color = "var(--text-dim)"}
           >{l}</button>
         ))}
-        <a href="#" style={{
+        <a href="/resume.pdf" target="_blank" rel="noreferrer" style={{
           fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.12em",
           color:"var(--bg)", background:"var(--accent)", padding:"8px 18px",
           borderRadius:"2px", textDecoration:"none", fontWeight:500,

@@ -3,31 +3,31 @@ import { useEffect, useRef, useState } from "react";
 
 const projects = [
   {
-    num:"01", title:"AlphaSignal", subtitle:"Quantitative Trading Engine", category:"FINANCE · ML",
-    desc:"A systematic trading platform combining momentum signals, ML-based regime detection, and risk-parity portfolio construction. Backtested over 10 years of equity data.",
-    tags:["Python","PyTorch","Pandas","Backtrader"],
-    metrics:[{label:"Sharpe",val:"1.82"},{label:"Max DD",val:"−12%"},{label:"CAGR",val:"24%"}],
+    num:"01", title:"Market Data Pipeline", subtitle:"Ingestion + Normalization + Feature Store", category:"DATA ENGINEERING · FINANCE",
+    desc:"Build a production-ready ingestion pipeline for equities and crypto market data. Standardize schemas, validate quality, and expose cleaned datasets for modeling and analytics.",
+    tags:["Python","PostgreSQL","Spark","Docker"],
+    metrics:[{label:"Focus",val:"Reliability"},{label:"Output",val:"Clean OHLCV"},{label:"Use",val:"Model Inputs"}],
     accent:"var(--accent)",
   },
   {
-    num:"02", title:"FinLens", subtitle:"Financial NLP Dashboard", category:"NLP · DATA",
-    desc:"Real-time sentiment analysis on earnings calls, SEC filings, and financial news using fine-tuned FinBERT. Extracts forward-looking statements and per-ticker sentiment scores.",
-    tags:["PyTorch","HuggingFace","FastAPI","React"],
-    metrics:[{label:"Accuracy",val:"91%"},{label:"Latency",val:"120ms"},{label:"Sources",val:"5k/day"}],
+    num:"02", title:"Forecast Service API", subtitle:"Time-Series Modeling + API Delivery", category:"AI · BACKEND",
+    desc:"Deploy a forecasting service with versioned models for short-horizon price movement estimation. Include model tracking, input validation, and an API contract for downstream apps.",
+    tags:["Scikit-learn","FastAPI","GitHub Actions","AWS Lambda"],
+    metrics:[{label:"Focus",val:"Model Ops"},{label:"Output",val:"7-Day Forecast"},{label:"Use",val:"Dashboard API"}],
     accent:"var(--navy-light)",
   },
   {
-    num:"03", title:"DataWeave", subtitle:"Real-Time ETL Pipeline", category:"DATA ENGINEERING",
-    desc:"Scalable ingestion pipeline processing 50+ financial data sources — market data, alternative data, macro indicators — normalised and served via a unified REST API.",
-    tags:["Spark","Kafka","PostgreSQL","Docker"],
-    metrics:[{label:"Throughput",val:"2M/s"},{label:"Sources",val:"50+"},{label:"Uptime",val:"99.9%"}],
+    num:"03", title:"Risk Monitoring Dashboard", subtitle:"Volatility + Drawdown + Alerts", category:"QUANT ANALYTICS · FRONTEND",
+    desc:"Create a web dashboard that tracks rolling volatility, downside risk, and drawdown behavior for a defined basket. Add alerting logic and data quality guards.",
+    tags:["Next.js","TypeScript","YFinance API","PostgreSQL"],
+    metrics:[{label:"Focus",val:"Risk Metrics"},{label:"Output",val:"Live Monitoring"},{label:"Use",val:"Decision Support"}],
     accent:"#5b8af5",
   },
   {
-    num:"04", title:"RiskMatrix", subtitle:"Portfolio Risk Analyser", category:"FINANCE · ANALYTICS",
-    desc:"Institutional-grade risk analysis: VaR, CVaR, Monte Carlo simulation, factor exposure decomposition, and stress testing against 12 historical crisis scenarios.",
-    tags:["Python","NumPy","Plotly","Streamlit"],
-    metrics:[{label:"Scenarios",val:"10k"},{label:"Factors",val:"30+"},{label:"Speed",val:"<2s"}],
+    num:"04", title:"Cloud Quant Sandbox", subtitle:"Infrastructure as Code for Research", category:"CLOUD · DEVOPS",
+    desc:"Provision a reproducible research environment for experiments and backtests using Terraform, containerized workloads, and automated CI checks.",
+    tags:["Terraform","Docker","Kubernetes","GitHub Actions"],
+    metrics:[{label:"Focus",val:"Reproducibility"},{label:"Output",val:"IaC Templates"},{label:"Use",val:"Team Workflow"}],
     accent:"#b87fce",
   },
 ];
@@ -68,7 +68,7 @@ export default function Projects() {
           fontSize:"clamp(32px, 4.5vw, 54px)", marginBottom:"56px",
           letterSpacing:"-0.025em", lineHeight:1.1,
         }}>
-          Selected Work
+          Real-World Project Roadmap
         </h2>
 
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
