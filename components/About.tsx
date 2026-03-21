@@ -2,10 +2,10 @@
 import { useEffect, useRef } from "react";
 
 const timeline = [
-  { year:"2024", title:"Research Assistant", org:"Quantitative Finance Lab", desc:"Developed ML models for portfolio optimization and factor-based risk decomposition." },
-  { year:"2023", title:"Data Science Intern", org:"FinTech Startup", desc:"Built NLP pipelines for real-time sentiment analysis on financial news and earnings calls." },
-  { year:"2022", title:"ML Project Lead", org:"University AI Society", desc:"Led a team of 5 building a live equity prediction system using LSTM and attention models." },
-  { year:"2021", title:"B.Sc. Computer Science", org:"University", desc:"Specialisation in Machine Learning, Statistics & Financial Mathematics." },
+  { year:"Sep 2025 — Present", title:"Apprenticeship — Computer Networks", org:"Siemens Mobility", desc:"Ongoing apprenticeship focused on network infrastructure and reliability." },
+  { year:"2024 — Present", title:"Ambassador", org:"ESIEA", desc:"Representing ESIEA through events, outreach, and student engagement." },
+  { year:"2024", title:"Internship — Computer Networks & Cloud", org:"Maroc Telecom", desc:"Contributed to network and cloud projects, including infrastructure and deployment support." },
+  { year:"2023", title:"Internship — Computer Networks", org:"Axeli", desc:"Supported network setup, monitoring, and day-to-day operational tasks." },
 ];
 
 export default function About() {
@@ -48,7 +48,7 @@ export default function About() {
             I&apos;m a final-year student at the intersection of{" "}
             <strong style={{color:"var(--text)", fontWeight:500}}>computer science</strong>,{" "}
             <strong style={{color:"var(--text)", fontWeight:500}}>artificial intelligence</strong>, and{" "}
-            <strong style={{color:"var(--text)", fontWeight:500}}>quantitative finance</strong>. My work focuses on extracting signal from noise — from predictive models to production data pipelines to systematic trading strategies.
+            <strong style={{color:"var(--text)", fontWeight:500}}>finance</strong>. My work focuses on extracting signal from noise — from predictive models to production data pipelines to systematic trading strategies.
           </p>
           <p className="fade-in" style={{fontSize:"15px", color:"var(--text-dim)", lineHeight:1.9, marginBottom:"36px"}}>
             I believe the sharpest insights live at the boundary of disciplines. Whether applying transformer architectures to time-series forecasting or engineering high-throughput ETL systems, I bring rigorous methodology and practical execution.
@@ -78,7 +78,7 @@ export default function About() {
           <div className="fade-in" style={{
             fontFamily:"var(--font-mono)", fontSize:"10px",
             color:"var(--text-muted)", letterSpacing:"0.22em", marginBottom:"28px",
-          }}>EXPERIENCE & EDUCATION</div>
+          }}>EXPERIENCE</div>
 
           <div style={{ position:"relative" }}>
             <div style={{

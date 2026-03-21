@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Alex Morgan — AI × Quantitative Finance",
+  title: "Ahmed Berrada — Computer Networks & Cloud",
   description:
-      "Engineering student specializing in LLMs and Quantitative Finance. ex-Citadel, ex-Two Sigma.",
+      "Computer networks and cloud enthusiast. Apprentice at Siemens Mobility, ambassador at ESIEA.",
   openGraph: {
-    title: "Alex Morgan — AI × Quantitative Finance",
-    description: "Engineering the intersection of LLMs and Quantitative Finance.",
+    title: "Ahmed Berrada — Computer Networks & Cloud",
+    description: "Building robust computer network and cloud systems.",
     type: "website",
   },
 };

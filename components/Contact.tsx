@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const socials = [
-  {label:"LinkedIn", handle:"/in/alexmorgan", url:"#", icon:"in"},
-  {label:"GitHub",   handle:"alexmorgan",     url:"#", icon:"gh"},
-  {label:"Email",    handle:"alex@email.com", url:"mailto:alex@email.com", icon:"@"},
-  {label:"Twitter/X",handle:"@alexmorgan_fin",url:"#", icon:"𝕏"},
+  {label:"LinkedIn", handle:"/in/ahmedberrada", url:"#", icon:"in"},
+  {label:"GitHub",   handle:"ahmedberrada",     url:"#", icon:"gh"},
+  {label:"Email",    handle:"ahmed.berrada@example.com", url:"mailto:ahmed.berrada@example.com", icon:"@"},
+  {label:"Twitter/X",handle:"@ahmedberrada",url:"#", icon:"𝕏"},
 ];
 
 export default function Contact() {
@@ -24,7 +24,7 @@ export default function Contact() {
   }, []);
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("alex@email.com");
+    navigator.clipboard.writeText("ahmed.berrada@example.com");
     setCopied(true); setTimeout(()=>setCopied(false), 2000);
   };
 
@@ -72,7 +72,7 @@ export default function Contact() {
               onMouseOver={e=>e.currentTarget.style.borderColor="var(--accent)"}
               onMouseOut={e=>e.currentTarget.style.borderColor="var(--border)"}>
                 <span style={{fontFamily:"var(--font-mono)", fontSize:"13px", color:"var(--text)", flex:1, textAlign:"left"}}>
-                  alex@email.com
+                  ahmed.berrada@example.com
                 </span>
                 <span style={{fontFamily:"var(--font-mono)", fontSize:"10px", letterSpacing:"0.12em", color: copied ? "var(--accent)" : "var(--text-muted)", transition:"color 0.2s"}}>
                   {copied ? "COPIED ✓" : "COPY"}
@@ -169,7 +169,7 @@ export default function Contact() {
           display:"flex", justifyContent:"space-between", alignItems:"center",
         }}>
           <span style={{fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)"}}>
-            © 2025 Alex Morgan
+            © 2026 Ahmed Berrada
           </span>
           <span style={{fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)"}}>
             Built with <span style={{color:"var(--accent)"}}>Next.js</span> + <span style={{color:"var(--accent)"}}>Tailwind</span>

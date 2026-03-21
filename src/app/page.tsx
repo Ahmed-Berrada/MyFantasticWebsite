@@ -57,31 +57,31 @@ const STACK = [
 
 const TIMELINE = [
   {
-    year: "2025 — Present",
-    role: "Quantitative Research Intern",
-    org: "Citadel Securities",
-    desc: "Developing high-frequency signal generation models in C++ and Python. Reduced signal latency by 23% via lock-free queue architecture.",
+    year: "Sep 2025 — Present",
+    role: "Apprenticeship — Computer Networks",
+    org: "Siemens Mobility",
+    desc: "Ongoing apprenticeship focused on network infrastructure and operational reliability in mobility systems.",
+    type: "work",
+  },
+  {
+    year: "2024 — Present",
+    role: "Ambassador",
+    org: "ESIEA",
+    desc: "Representing ESIEA through outreach, events, and student engagement initiatives.",
     type: "work",
   },
   {
     year: "2024",
-    role: "Machine Learning Intern",
-    org: "Two Sigma",
-    desc: "Built NLP pipelines to extract alpha signals from earnings call transcripts using fine-tuned LLMs. Achieved 0.71 Sharpe on paper portfolio.",
+    role: "Computer Networks & Cloud Intern",
+    org: "Maroc Telecom",
+    desc: "Worked on networking and cloud-focused initiatives, contributing to deployment and infrastructure tasks.",
     type: "work",
   },
   {
-    year: "2023 — 2027",
-    role: "B.Eng. Electrical & Computer Engineering",
-    org: "McGill University",
-    desc: "Specialization: AI Systems & Computational Finance. GPA 3.9/4.0. Dean's Honours List.",
-    type: "edu",
-  },
-  {
     year: "2023",
-    role: "Teaching Assistant — Algorithms & Data Structures",
-    org: "McGill University",
-    desc: "Led weekly lab sessions for 120 students. Developed automated grading scripts reducing TA overhead by 60%.",
+    role: "Computer Networks Intern",
+    org: "Axeli",
+    desc: "Contributed to computer network setup, monitoring, and support operations.",
     type: "work",
   },
 ];
@@ -451,9 +451,9 @@ function LatencyPipeline() {
 const COMMANDS: Record<string, string[]> = {
   contact: [
     "\x1b[32m✓ Contact Information\x1b[0m",
-    "  email    → alex.morgan@mail.mcgill.ca",
-    "  linkedin → linkedin.com/in/alexmorgan-quant",
-    "  github   → github.com/alexmorgan-quant",
+    "  email    → ahmed.berrada@example.com",
+    "  linkedin → linkedin.com/in/ahmedberrada",
+    "  github   → github.com/ahmedberrada",
     '  pgp      → run \x1b[36m"gpg --keyserver keys.openpgp.org --recv-keys 0xABCD1234"\x1b[0m',
   ],
   help: [
@@ -671,15 +671,15 @@ export default function PortfolioPage() {
                   className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.08] mb-4"
                   style={{ fontFamily: "'Geist Mono', 'JetBrains Mono', monospace" }}
               >
-                Alex Morgan
+                Ahmed Berrada
               </h1>
               <p className="text-xl sm:text-2xl text-slate-400 font-light max-w-2xl leading-relaxed">
-                Engineering the intersection of{" "}
-                <span className="text-indigo-400 font-medium">LLMs</span> and{" "}
-                <span className="text-emerald-400 font-medium">Quantitative Finance</span>.
+                Engineering reliable{" "}
+                <span className="text-indigo-400 font-medium">computer networks</span> and{" "}
+                <span className="text-emerald-400 font-medium">cloud systems</span>.
               </p>
               <p className="mt-4 text-slate-600 font-mono text-sm max-w-xl">
-                B.Eng. @ McGill · ex-Citadel · ex-Two Sigma · building fast, rigorous, and interpretable systems.
+                Siemens Mobility apprentice · ESIEA ambassador · ex-Axeli · ex-Maroc Telecom.
               </p>
             </div>
 
@@ -701,10 +701,10 @@ export default function PortfolioPage() {
                 <Linkedin size={15} /> LinkedIn
               </a>
               <a
-                  href="mailto:alex@mcgill.ca"
+                  href="mailto:ahmed.berrada@example.com"
                   className="flex items-center gap-2 px-4 py-2 rounded-lg border border-emerald-400/20 hover:border-emerald-400/50 text-sm text-emerald-400 hover:text-emerald-300 transition-all bg-emerald-400/[0.04] hover:bg-emerald-400/[0.08]"
               >
-                <Mail size={15} /> alex.morgan@mail.mcgill.ca
+                <Mail size={15} /> ahmed.berrada@example.com
               </a>
             </div>
           </section>
@@ -927,7 +927,7 @@ export default function PortfolioPage() {
           {/* ── FOOTER ── */}
           <footer className="pt-8 border-t border-white/[0.05] flex items-center justify-between flex-wrap gap-4">
             <p className="text-[11px] font-mono text-slate-700">
-              © 2025 Alex Morgan — Built with Next.js · Tailwind · Recharts
+              © 2025 Ahmed Berrada — Built with Next.js · Tailwind · Recharts
             </p>
             <div className="flex items-center gap-1 text-[11px] font-mono text-slate-700">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/50" />

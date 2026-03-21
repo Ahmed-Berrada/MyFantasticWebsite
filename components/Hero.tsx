@@ -117,8 +117,8 @@ export default function Hero() {
             lineHeight:0.95, letterSpacing:"-0.025em",
             marginBottom:"20px",
           }}>
-            Alex<br/>
-            <span style={{color:"var(--accent)", fontStyle:"italic"}}>Morgan</span>
+            Ahmed<br/>
+            <span style={{color:"var(--accent)", fontStyle:"italic"}}>Berrada</span>
           </h1>
 
           <div style={{
