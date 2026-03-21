@@ -17,7 +17,7 @@ const tickers = [
 ];
 
 const sparkData = [42,49,44,61,55,72,64,79,70,83,76,92,85,98,90,100];
-const roles = ["Data Scientist", "AI Engineer", "Quant Analyst", "ML Researcher"];
+const roles = ["CS Student (Class of 2027)", "Aspiring Data Analyst", "Aspiring AI Engineer", "Aspiring Quant"];
 
 export default function Hero() {
   const [typed, setTyped] = useState("");
@@ -134,10 +134,10 @@ export default function Hero() {
             fontSize:"15px", color:"var(--text-dim)", lineHeight:1.9,
             maxWidth:"530px", marginBottom:"44px",
           }}>
-            Building intelligent systems at the intersection of{" "}
-            <span style={{color:"var(--text)"}}>machine learning</span>,{" "}
-            <span style={{color:"var(--text)"}}>quantitative finance</span>, and{" "}
-            <span style={{color:"var(--text)"}}>data engineering</span>. I turn complex datasets into decisions that move markets.
+            Engineering student graduating in 2027, building projects at the intersection of{" "}
+            <span style={{color:"var(--text)"}}>finance</span>,{" "}
+            <span style={{color:"var(--text)"}}>data</span>, and{" "}
+            <span style={{color:"var(--text)"}}>AI</span>. I focus on clean execution, measurable learning, and practical results.
           </p>
 
           <div style={{display:"flex", gap:"14px"}}>
@@ -180,7 +180,7 @@ export default function Hero() {
             <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"var(--accent)"}}/>
             <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"var(--navy-light)"}}/>
             <span style={{fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", marginLeft:"8px", letterSpacing:"0.1em"}}>
-              portfolio_stats.py
+              candidate_overview.md
             </span>
           </div>
 
@@ -190,8 +190,8 @@ export default function Hero() {
               color:"var(--text-muted)", letterSpacing:"0.15em",
               marginBottom:"14px", display:"flex", justifyContent:"space-between",
             }}>
-              <span>PERFORMANCE</span>
-              <span style={{color:"var(--accent)"}}>+41.3% YTD</span>
+              <span>PROFILE SNAPSHOT</span>
+              <span style={{color:"var(--accent)"}}>Class of 2027</span>
             </div>
 
             {/* Sparkline */}
@@ -211,10 +211,10 @@ export default function Hero() {
             {/* Stats grid */}
             <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px"}}>
               {[
-                {label:"MODELS DEPLOYED", val:"12+"},
-                {label:"DATA PIPELINES",  val:"8"},
-                {label:"LANGUAGES",       val:"6"},
-                {label:"PROJECTS",        val:"9"},
+                {label:"COURSE PROJECTS", val:"8"},
+                {label:"INTERNSHIPS",     val:"2"},
+                {label:"FOCUS AREAS",     val:"FIN / DATA / AI"},
+                {label:"GRAD YEAR",       val:"2027"},
               ].map(s=>(
                 <div key={s.label} style={{
                   background:"var(--bg-3)", borderRadius:"4px", padding:"14px 12px",
@@ -235,7 +235,7 @@ export default function Hero() {
             }}>
               <div style={{width:"6px",height:"6px",borderRadius:"50%",background:"var(--accent)",flexShrink:0}}/>
               <span style={{fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--accent)", letterSpacing:"0.1em"}}>
-                AVAILABLE — JUNE 2025
+                OPEN TO INTERNSHIPS / APPRENTICESHIP — 2026-2027
               </span>
             </div>
           </div>

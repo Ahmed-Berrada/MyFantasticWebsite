@@ -58,7 +58,7 @@ export default function Contact() {
             </h2>
 
             <p className="fade-in" style={{fontSize:"15px", color:"var(--text-dim)", lineHeight:1.9, marginBottom:"40px"}}>
-              Actively seeking full-time roles in data science, AI engineering, and quantitative analysis. Open to fintechs, hedge funds, and research-driven organisations. Always happy to connect over interesting problems.
+              Open to internship and apprenticeship opportunities in finance, data, and AI. I&apos;m currently building my experience and always happy to connect around interesting projects.
             </p>
 
             {/* Copy email */}

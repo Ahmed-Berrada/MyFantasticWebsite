@@ -45,13 +45,13 @@ export default function About() {
           </h2>
 
           <p className="fade-in" style={{fontSize:"15px", color:"var(--text-dim)", lineHeight:1.9, marginBottom:"20px"}}>
-            I&apos;m a final-year student at the intersection of{" "}
+            I&apos;m an engineering student (Class of 2027) at the intersection of{" "}
             <strong style={{color:"var(--text)", fontWeight:500}}>computer science</strong>,{" "}
             <strong style={{color:"var(--text)", fontWeight:500}}>artificial intelligence</strong>, and{" "}
-            <strong style={{color:"var(--text)", fontWeight:500}}>finance</strong>. My work focuses on extracting signal from noise — from predictive models to production data pipelines to systematic trading strategies.
+            <strong style={{color:"var(--text)", fontWeight:500}}>finance</strong>. My work focuses on learning by building: from predictive models to data pipelines and practical analytics projects.
           </p>
           <p className="fade-in" style={{fontSize:"15px", color:"var(--text-dim)", lineHeight:1.9, marginBottom:"36px"}}>
-            I believe the sharpest insights live at the boundary of disciplines. Whether applying transformer architectures to time-series forecasting or engineering high-throughput ETL systems, I bring rigorous methodology and practical execution.
+            I like working across disciplines and turning theory into concrete deliverables. My goal is to keep improving through hands-on projects, internships, and mentorship.
           </p>
 
           {/* Tag pills */}
