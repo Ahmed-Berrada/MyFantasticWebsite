@@ -20,7 +20,7 @@ export default function Navbar() {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      padding: scrolled ? "10px 48px" : "20px 48px",
+      padding: scrolled ? "8px 48px" : "16px 48px",
       background: scrolled ? "rgba(7,9,15,0.94)" : "transparent",
       backdropFilter: scrolled ? "blur(18px)" : "none",
       borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
@@ -49,7 +49,7 @@ export default function Navbar() {
           <button key={l} onClick={() => go(l)} style={{
             fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.14em",
             color:"var(--text-dim)", background:"none", border:"none", cursor:"pointer",
-            transition:"color 0.2s", padding:"4px 0", textTransform:"uppercase",
+            transition:"color 0.2s", padding:"3px 0", textTransform:"uppercase",
           }}
           onMouseOver={e => e.currentTarget.style.color = "var(--accent)"}
           onMouseOut={e => e.currentTarget.style.color = "var(--text-dim)"}
@@ -57,7 +57,7 @@ export default function Navbar() {
         ))}
         <a href="/resume.pdf" target="_blank" rel="noreferrer" style={{
           fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.12em",
-          color:"var(--bg)", background:"var(--accent)", padding:"8px 18px",
+          color:"var(--bg)", background:"var(--accent)", padding:"6px 18px",
           borderRadius:"2px", textDecoration:"none", fontWeight:500,
           transition:"opacity 0.2s",
         }}
