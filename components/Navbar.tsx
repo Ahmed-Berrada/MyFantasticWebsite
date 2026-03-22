@@ -29,21 +29,18 @@ export default function Navbar() {
     }}>
       {/* Signature mark */}
       <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:"12px" }}>
+        style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center" }}>
         <span
           className="font-display"
           style={{
-            fontSize:"26px",
+            fontSize:"30px",
             color:"var(--accent)",
             fontStyle:"italic",
-            letterSpacing:"0.01em",
+            letterSpacing:"0.02em",
             lineHeight:1,
           }}
         >
-          Ahmed Berrada
-        </span>
-        <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.14em" }}>
-          CS 2027
+          Berrada
         </span>
       </button>
 
