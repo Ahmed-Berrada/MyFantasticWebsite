@@ -63,7 +63,7 @@ export default function Navbar() {
         }}
         onMouseOver={e=>(e.currentTarget as HTMLElement).style.opacity="0.85"}
         onMouseOut={e=>(e.currentTarget as HTMLElement).style.opacity="1"}>
-          RÉSUMÉ ↗
+          RESUME ↗
         </a>
       </div>
     </nav>

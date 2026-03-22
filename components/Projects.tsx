@@ -68,7 +68,7 @@ export default function Projects() {
           fontSize:"clamp(32px, 4.5vw, 54px)", marginBottom:"56px",
           letterSpacing:"-0.025em", lineHeight:1.1,
         }}>
-          Real-World Project Roadmap
+          Project Roadmap
         </h2>
 
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>

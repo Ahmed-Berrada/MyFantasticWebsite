@@ -4,10 +4,9 @@ import { useEffect, useRef, useState } from "react";
 const CONTACT_EMAIL = "aberrada@et.esiea.fr";
 
 const socials = [
-  {label:"LinkedIn", handle:"/in/ahmedberrada", url:"#", icon:"in"},
-  {label:"GitHub",   handle:"ahmedberrada",     url:"#", icon:"gh"},
+  {label:"LinkedIn", handle:"Ahmed Berrada", url:"https://www.linkedin.com/in/ahmed-berrada-293015257/", icon:"in"},
+  {label:"GitHub",   handle:"Ahmed-Berrada", url:"https://github.com/Ahmed-Berrada", icon:"gh"},
   {label:"Email",    handle:CONTACT_EMAIL, url:`mailto:${CONTACT_EMAIL}`, icon:"@"},
-  {label:"Twitter/X",handle:"@ahmedberrada",url:"#", icon:"𝕏"},
 ];
 
 export default function Contact() {
@@ -15,6 +14,8 @@ export default function Contact() {
   const [copied, setCopied] = useState(false);
   const [form, setForm]   = useState({name:"", email:"", message:""});
   const [sent, setSent]   = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -45,6 +46,36 @@ export default function Contact() {
     } catch {
       setCopied(false);
     }
+  };
+
+  const sendMessage = () => {
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const message = form.message.trim();
+
+    if (!name || !email || !message) {
+      setSendError("Please fill in your name, email, and message.");
+      return;
+    }
+
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailValid) {
+      setSendError("Please provide a valid email address.");
+      return;
+    }
+
+    setSendError(null);
+    setSending(true);
+
+    const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    );
+
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+    setSending(false);
+    setSent(true);
+    setForm({ name: "", email: "", message: "" });
   };
 
   return (
@@ -126,7 +157,28 @@ export default function Contact() {
               <div style={{textAlign:"center", padding:"48px 0"}}>
                 <div className="font-display" style={{fontSize:"52px", color:"var(--accent)", marginBottom:"12px"}}>✓</div>
                 <div className="font-display" style={{fontSize:"26px", color:"var(--text)", marginBottom:"8px"}}>Message sent.</div>
-                <div style={{fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)"}}>I&apos;ll be in touch shortly.</div>
+                <div style={{fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)", marginBottom:"18px"}}>I&apos;ll be in touch shortly.</div>
+                <button
+                  onClick={() => {
+                    setSent(false);
+                    setSendError(null);
+                  }}
+                  style={{
+                    fontFamily:"var(--font-mono)",
+                    fontSize:"10px",
+                    letterSpacing:"0.12em",
+                    padding:"10px 14px",
+                    background:"transparent",
+                    color:"var(--text-dim)",
+                    border:"1px solid var(--border-2)",
+                    borderRadius:"4px",
+                    cursor:"pointer",
+                  }}
+                  onMouseOver={e=>e.currentTarget.style.borderColor="var(--accent)"}
+                  onMouseOut={e=>e.currentTarget.style.borderColor="var(--border-2)"}
+                >
+                  SEND ANOTHER MESSAGE
+                </button>
               </div>
             ) : (
               <>
@@ -166,7 +218,7 @@ export default function Contact() {
                       onBlur={e=>e.target.style.borderColor="var(--border)"}
                     />
                   </div>
-                  <button onClick={()=>setSent(true)} style={{
+                  <button onClick={sendMessage} style={{
                     fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.14em",
                     padding:"14px", background:"var(--accent)", color:"#000",
                     border:"none", borderRadius:"4px", cursor:"pointer", fontWeight:600,
@@ -174,8 +226,13 @@ export default function Contact() {
                   }}
                   onMouseOver={e=>e.currentTarget.style.opacity="0.87"}
                   onMouseOut={e=>e.currentTarget.style.opacity="1"}>
-                    SEND MESSAGE →
+                    {sending ? "SENDING..." : "SEND MESSAGE →"}
                   </button>
+                  {sendError && (
+                    <div style={{fontFamily:"var(--font-mono)", fontSize:"10px", color:"#e78a8a", marginTop:"4px"}}>
+                      {sendError}
+                    </div>
+                  )}
                 </div>
               </>
             )}

@@ -68,7 +68,7 @@ export default function Skills() {
         fontSize:"clamp(32px, 4.5vw, 54px)", marginBottom:"56px",
         letterSpacing:"-0.025em", lineHeight:1.1,
       }}>
-        Modern Quant{" "}
+        {" "}
         <span style={{color:"var(--accent)", fontStyle:"italic"}}>Expertise</span>
       </h2>
 
