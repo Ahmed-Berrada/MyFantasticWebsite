@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
+const CONTACT_EMAIL = "aberrada@et.esiea.fr";
+
 const socials = [
   {label:"LinkedIn", handle:"/in/ahmedberrada", url:"#", icon:"in"},
   {label:"GitHub",   handle:"ahmedberrada",     url:"#", icon:"gh"},
-  {label:"Email",    handle:"ahmed.berrada@example.com", url:"mailto:ahmed.berrada@example.com", icon:"@"},
+  {label:"Email",    handle:CONTACT_EMAIL, url:`mailto:${CONTACT_EMAIL}`, icon:"@"},
   {label:"Twitter/X",handle:"@ahmedberrada",url:"#", icon:"𝕏"},
 ];
 
@@ -23,9 +25,26 @@ export default function Contact() {
     return () => obs.disconnect();
   }, []);
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText("ahmed.berrada@example.com");
-    setCopied(true); setTimeout(()=>setCopied(false), 2000);
+  const copyEmail = async () => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(CONTACT_EMAIL);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = CONTACT_EMAIL;
+        input.setAttribute("readonly", "");
+        input.style.position = "absolute";
+        input.style.left = "-9999px";
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
@@ -58,7 +77,7 @@ export default function Contact() {
             </h2>
 
             <p className="fade-in" style={{fontSize:"15px", color:"var(--text-dim)", lineHeight:1.9, marginBottom:"40px"}}>
-              Open to internship and apprenticeship opportunities in finance, data, and AI. I&apos;m currently building my experience and always happy to connect around interesting projects.
+              Open to job opportunities in finance, data, and AI. I&apos;m currently building my experience and always happy to connect around interesting projects.
             </p>
 
             {/* Copy email */}
@@ -72,7 +91,7 @@ export default function Contact() {
               onMouseOver={e=>e.currentTarget.style.borderColor="var(--accent)"}
               onMouseOut={e=>e.currentTarget.style.borderColor="var(--border)"}>
                 <span style={{fontFamily:"var(--font-mono)", fontSize:"13px", color:"var(--text)", flex:1, textAlign:"left"}}>
-                  ahmed.berrada@example.com
+                  {CONTACT_EMAIL}
                 </span>
                 <span style={{fontFamily:"var(--font-mono)", fontSize:"10px", letterSpacing:"0.12em", color: copied ? "var(--accent)" : "var(--text-muted)", transition:"color 0.2s"}}>
                   {copied ? "COPIED ✓" : "COPY"}
