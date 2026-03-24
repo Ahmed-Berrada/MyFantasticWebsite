@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Alex Morgan — Data, AI & Finance",
-  description: "Portfolio — Data Scientist, AI Engineer & Quantitative Analyst",
+  title: "Ahmed Berrada — Scalable AI for Financial Systems",
+  description: "Computer Science student (Class of 2027) building cloud-native data and AI systems for finance use cases.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
+    <html lang="en">
+      <body>
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
