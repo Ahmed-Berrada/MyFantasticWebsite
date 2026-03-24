@@ -4,21 +4,21 @@ import { useEffect, useRef, useState } from "react";
 const projects = [
   {
     num:"01", title:"Market Data Pipeline", subtitle:"Ingestion + Normalization + Feature Store", category:"DATA ENGINEERING · FINANCE",
-    desc:"Build a production-ready ingestion pipeline for equities and crypto market data. Standardize schemas, validate quality, and expose cleaned datasets for modeling and analytics.",
+    desc:"Build a production-ready ingestion pipeline for equities and crypto market data. Standardize schemas, validate quality, and expose cleaned datasets for modeling.",
     tags:["Python","PostgreSQL","Spark","Docker"],
     metrics:[{label:"Focus",val:"Reliability"},{label:"Output",val:"Clean OHLCV"},{label:"Use",val:"Model Inputs"}],
     accent:"var(--accent)",
   },
   {
     num:"02", title:"Forecast Service API", subtitle:"Time-Series Modeling + API Delivery", category:"AI · BACKEND",
-    desc:"Deploy a forecasting service with versioned models for short-horizon price movement estimation. Include model tracking, input validation, and an API contract for downstream apps.",
+    desc:"Deploy a forecasting service with versioned models for short-horizon price movement estimation. Include model tracking and an API contract for downstream apps.",
     tags:["Scikit-learn","FastAPI","GitHub Actions","AWS Lambda"],
     metrics:[{label:"Focus",val:"Model Ops"},{label:"Output",val:"7-Day Forecast"},{label:"Use",val:"Dashboard API"}],
     accent:"var(--navy-light)",
   },
   {
     num:"03", title:"Risk Monitoring Dashboard", subtitle:"Volatility + Drawdown + Alerts", category:"QUANT ANALYTICS · FRONTEND",
-    desc:"Create a web dashboard that tracks rolling volatility, downside risk, and drawdown behavior for a defined basket. Add alerting logic and data quality guards.",
+    desc:"Web dashboard tracking rolling volatility, downside risk, and drawdown for a defined basket. Add alerting logic and data quality guards.",
     tags:["Next.js","TypeScript","YFinance API","PostgreSQL"],
     metrics:[{label:"Focus",val:"Risk Metrics"},{label:"Output",val:"Live Monitoring"},{label:"Use",val:"Decision Support"}],
     accent:"#5b8af5",
@@ -46,75 +46,52 @@ export default function Projects() {
   }, []);
 
   return (
-    <section id="projects" ref={ref} style={{
-      background:"var(--bg-2)",
-      borderTop:"1px solid var(--border)", borderBottom:"1px solid var(--border)",
-      padding:"130px 0",
-    }}>
+    <section id="projects" ref={ref} style={{ background:"var(--bg-2)", borderTop:"1px solid var(--border)", borderBottom:"1px solid var(--border)", padding:"130px 0" }}>
       <div style={{ maxWidth:"1140px", margin:"0 auto", padding:"0 48px" }}>
-        {/* Label */}
-        <div className="fade-in" style={{
-          display:"flex", alignItems:"center", gap:"16px",
-          fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)",
-          letterSpacing:"0.22em", marginBottom:"52px",
-        }}>
+        <div className="fade-in" style={{ display:"flex", alignItems:"center", gap:"16px", fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.22em", marginBottom:"52px" }}>
           <span style={{color:"var(--accent)"}}>02</span>
           <div style={{flex:1, height:"1px", background:"linear-gradient(90deg, var(--border-2), transparent)"}}/>
           PROJECTS
           <div style={{flex:1, height:"1px", background:"linear-gradient(270deg, var(--border-2), transparent)"}}/>
         </div>
 
-        <h2 className="fade-in font-display" style={{
-          fontSize:"clamp(32px, 4.5vw, 54px)", marginBottom:"56px",
-          letterSpacing:"-0.025em", lineHeight:1.1,
-        }}>
+        <h2 className="fade-in font-display" style={{ fontSize:"clamp(32px, 4.5vw, 54px)", marginBottom:"16px", letterSpacing:"-0.025em", lineHeight:1.1 }}>
           Project Roadmap
         </h2>
+        <p className="fade-in" style={{ fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)", marginBottom:"48px", letterSpacing:"0.05em" }}>
+          Projects in progress — building in public.
+        </p>
 
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
+        <div className="projects-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
           {projects.map((p,i)=>(
             <div key={i} className="fade-in"
               onMouseEnter={()=>setHovered(i)} onMouseLeave={()=>setHovered(null)}
               style={{
-                background: hovered===i ? "var(--bg-3)" : "var(--bg)",
-                border:`1px solid ${hovered===i ? p.accent+"55" : "var(--border)"}`,
-                borderRadius:"8px", padding:"28px", cursor:"pointer",
+                background:hovered===i?"var(--bg-3)":"var(--bg)",
+                border:`1px solid ${hovered===i?p.accent+"55":"var(--border)"}`,
+                borderRadius:"8px", padding:"28px", cursor:"default",
                 transition:"all 0.3s ease",
-                transform: hovered===i ? "translateY(-4px)" : "translateY(0)",
-                boxShadow: hovered===i ? `0 12px 40px ${p.accent}18` : "none",
+                transform:hovered===i?"translateY(-4px)":"translateY(0)",
+                boxShadow:hovered===i?`0 12px 40px ${p.accent}18`:"none",
                 animationDelay:`${i*0.1}s`, position:"relative", overflow:"hidden",
               }}>
-              {/* Top line on hover */}
-              {hovered===i && (
-                <div style={{
-                  position:"absolute", top:0, left:0, right:0, height:"2px",
-                  background:`linear-gradient(90deg, transparent, ${p.accent}, transparent)`,
-                }}/>
-              )}
+              {hovered===i && <div style={{ position:"absolute", top:0, left:0, right:0, height:"2px", background:`linear-gradient(90deg, transparent, ${p.accent}, transparent)` }}/>}
 
               <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"16px"}}>
                 <div>
                   <div style={{fontFamily:"var(--font-mono)", fontSize:"10px", color:p.accent, letterSpacing:"0.16em", marginBottom:"6px"}}>{p.category}</div>
-                  <h3 className="font-display" style={{fontSize:"26px", letterSpacing:"-0.015em", color:"var(--text)"}}>{p.title}</h3>
+                  <h3 className="font-display" style={{fontSize:"22px", letterSpacing:"-0.015em", color:"var(--text)"}}>{p.title}</h3>
                   <div style={{fontFamily:"var(--font-mono)", fontSize:"11px", color:"var(--text-muted)", marginTop:"2px"}}>{p.subtitle}</div>
                 </div>
-                <span style={{fontFamily:"var(--font-mono)", fontSize:"32px", color:"var(--border-2)", fontWeight:300, lineHeight:1}}>{p.num}</span>
+                <span style={{fontFamily:"var(--font-mono)", fontSize:"28px", color:"var(--border-2)", fontWeight:300, lineHeight:1}}>{p.num}</span>
               </div>
 
               <p style={{fontSize:"13px", color:"var(--text-dim)", lineHeight:1.78, marginBottom:"20px"}}>{p.desc}</p>
 
-              {/* Metrics */}
-              <div style={{
-                display:"flex", gap:"0", marginBottom:"20px",
-                background:"var(--bg-3)", borderRadius:"6px",
-                border:"1px solid var(--border)", overflow:"hidden",
-              }}>
+              <div style={{ display:"flex", gap:"0", marginBottom:"20px", background:"var(--bg-3)", borderRadius:"6px", border:"1px solid var(--border)", overflow:"hidden" }}>
                 {p.metrics.map((m,j)=>(
-                  <div key={m.label} style={{
-                    flex:1, padding:"12px 8px", textAlign:"center",
-                    borderRight: j<p.metrics.length-1 ? "1px solid var(--border)" : "none",
-                  }}>
-                    <div style={{fontFamily:"var(--font-mono)", fontSize:"17px", color:p.accent, fontWeight:500}}>{m.val}</div>
+                  <div key={m.label} style={{ flex:1, padding:"12px 8px", textAlign:"center", borderRight:j<p.metrics.length-1?"1px solid var(--border)":"none" }}>
+                    <div style={{fontFamily:"var(--font-mono)", fontSize:"12px", color:p.accent, fontWeight:500}}>{m.val}</div>
                     <div style={{fontFamily:"var(--font-mono)", fontSize:"9px", color:"var(--text-muted)", letterSpacing:"0.12em", marginTop:"3px"}}>{m.label}</div>
                   </div>
                 ))}
@@ -123,27 +100,23 @@ export default function Projects() {
               <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
                 <div style={{display:"flex", gap:"7px", flexWrap:"wrap"}}>
                   {p.tags.map(t=>(
-                    <span key={t} style={{
-                      fontFamily:"var(--font-mono)", fontSize:"10px",
-                      padding:"3px 9px", background:"var(--bg-3)",
-                      border:"1px solid var(--border)", borderRadius:"3px", color:"var(--text-muted)",
-                    }}>{t}</span>
+                    <span key={t} style={{ fontFamily:"var(--font-mono)", fontSize:"10px", padding:"3px 9px", background:"var(--bg-3)", border:"1px solid var(--border)", borderRadius:"3px", color:"var(--text-muted)" }}>{t}</span>
                   ))}
                 </div>
-                <a href="#" onClick={e=>e.preventDefault()} style={{
-                  fontFamily:"var(--font-mono)", fontSize:"11px",
-                  color:p.accent, textDecoration:"none", letterSpacing:"0.12em",
-                  transition:"opacity 0.2s",
-                }}
-                onMouseOver={e=>(e.currentTarget as HTMLElement).style.opacity="0.7"}
-                onMouseOut={e=>(e.currentTarget as HTMLElement).style.opacity="1"}>
-                  VIEW ↗
-                </a>
+                <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em" }}>IN PROGRESS</span>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          #projects > div { padding: 0 24px !important; }
+          #projects { padding: 80px 0 !important; }
+          .projects-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }
