@@ -77,7 +77,7 @@ export default function Hero() {
       </p>
 
       {/* CTAs */}
-      <div style={{ display:"flex", gap:"12px", flexWrap:"wrap", justifyContent:"center" }}>
+      <div style={{ display:"flex", gap:"12px", flexWrap:"wrap", justifyContent:"center", marginBottom:"80px" }}>
         <button onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior:"smooth" })}
           style={{
             fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.14em",
