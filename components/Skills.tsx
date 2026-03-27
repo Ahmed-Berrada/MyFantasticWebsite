@@ -114,40 +114,40 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* Tools strip */}
-        <div className="fade-in">
-          <div style={{
-            fontFamily: "var(--font-mono)", fontSize: "10px",
-            color: "var(--text-muted)", letterSpacing: "0.22em", marginBottom: "16px",
-          }}>
-            TOOLS & TECHNOLOGIES
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-            {tools.map((tool, i) => (
-                <span key={tool} style={{
-                  fontFamily: "var(--font-mono)", fontSize: "11px",
-                  padding: "6px 12px",
-                  background: i % 7 === 0 ? "var(--accent-dim)" : "transparent",
-                  border: `1px solid ${i % 7 === 0 ? "var(--accent-glow)" : "var(--border)"}`,
-                  borderRadius: "3px",
-                  color: i % 7 === 0 ? "var(--accent)" : "var(--text-muted)",
-                  cursor: "default", transition: "all 0.2s",
-                }}
-                      onMouseOver={e => {
-                        e.currentTarget.style.borderColor = "var(--accent)";
-                        e.currentTarget.style.color = "var(--accent)";
-                        e.currentTarget.style.background = "var(--accent-dim)";
+          {/* Tools strip */}
+          <div className="fade-in">
+              <div style={{
+                  fontFamily: "var(--font-mono)", fontSize: "10px",
+                  color: "var(--text-muted)", letterSpacing: "0.22em", marginBottom: "16px",
+              }}>
+                  ALSO WORK WITH
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                  {["Git", "Jupyter", "Plotly", "Streamlit", "Postman", "VS Code", "Linux", "Bash"].map((tool, i) => (
+                      <span key={tool} style={{
+                          fontFamily: "var(--font-mono)", fontSize: "11px",
+                          padding: "6px 12px",
+                          background: i % 7 === 0 ? "var(--accent-dim)" : "transparent",
+                          border: `1px solid ${i % 7 === 0 ? "var(--accent-glow)" : "var(--border)"}`,
+                          borderRadius: "3px",
+                          color: i % 7 === 0 ? "var(--accent)" : "var(--text-muted)",
+                          cursor: "default", transition: "all 0.2s",
                       }}
-                      onMouseOut={e => {
-                        e.currentTarget.style.borderColor = i % 7 === 0 ? "var(--accent-glow)" : "var(--border)";
-                        e.currentTarget.style.color = i % 7 === 0 ? "var(--accent)" : "var(--text-muted)";
-                        e.currentTarget.style.background = i % 7 === 0 ? "var(--accent-dim)" : "transparent";
-                      }}>
-              {tool}
-            </span>
-            ))}
+                            onMouseOver={e => {
+                                e.currentTarget.style.borderColor = "var(--accent)";
+                                e.currentTarget.style.color = "var(--accent)";
+                                e.currentTarget.style.background = "var(--accent-dim)";
+                            }}
+                            onMouseOut={e => {
+                                e.currentTarget.style.borderColor = i % 7 === 0 ? "var(--accent-glow)" : "var(--border)";
+                                e.currentTarget.style.color = i % 7 === 0 ? "var(--accent)" : "var(--text-muted)";
+                                e.currentTarget.style.background = i % 7 === 0 ? "var(--accent-dim)" : "transparent";
+                            }}>
+        {tool}
+      </span>
+                  ))}
+              </div>
           </div>
-        </div>
 
         <style>{`
         @media (max-width: 768px) {
