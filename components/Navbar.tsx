@@ -32,14 +32,11 @@ export default function Navbar() {
       className="mobile-nav-pad">
         {/* Logo */}
         <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          style={{ background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:"10px" }}>
-          <div style={{
-            width:"32px", height:"32px", border:"1px solid var(--accent)",
-            display:"flex", alignItems:"center", justifyContent:"center",
-            fontFamily:"var(--font-display)", fontSize:"15px", color:"var(--accent)", fontWeight:600,
-          }}>A</div>
-          <span style={{ fontFamily:"var(--font-mono)", fontSize:"12px", color:"var(--text-dim)", letterSpacing:"0.12em" }}>
-            BERRADA
+                  style={{ background:"none", border:"none", cursor:"pointer" }}>
+          <span className="font-display" style={{
+            fontSize:"18px", color:"var(--accent)", fontStyle:"italic", letterSpacing:"0.02em",
+          }}>
+            Ahmed
           </span>
         </button>
 
@@ -59,7 +56,7 @@ export default function Navbar() {
             fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.12em",
             color:"var(--bg)", background:"var(--accent)", padding:"8px 18px",
             borderRadius:"2px", textDecoration:"none", fontWeight:500,
-          }}>RÉSUMÉ ↗</a>
+          }}>RESUME ↗</a>
         </div>
 
         {/* Hamburger */}
@@ -105,7 +102,7 @@ export default function Navbar() {
             fontFamily:"var(--font-mono)", fontSize:"12px", letterSpacing:"0.12em",
             color:"var(--bg)", background:"var(--accent)", padding:"12px",
             borderRadius:"2px", textDecoration:"none", fontWeight:500, textAlign:"center",
-          }}>RÉSUMÉ ↗</a>
+          }}>RESUME ↗</a>
         </div>
       )}
 

@@ -2,10 +2,10 @@
 import { useEffect, useRef } from "react";
 
 const timeline = [
-  { year:"Sep 2025", title:"Apprenticeship — Networks", org:"Siemens Mobility", desc:"Ongoing apprenticeship focused on network infrastructure and reliability." },
-  { year:"2024", title:"Ambassador", org:"ESIEA", desc:"Representing ESIEA through events, outreach, and student engagement." },
-  { year:"2024", title:"Internship — Cloud & Networks", org:"Maroc Telecom", desc:"Contributed to network and cloud projects including infrastructure and deployment." },
-  { year:"2023", title:"Internship — Networks", org:"Axeli", desc:"Supported network setup, monitoring, and day-to-day operational tasks." },
+  { year:"2025 - Now", title:"Apprenticeship — Validation and Automation", org:"Siemens Mobility", desc:"Apprenticeship in the Radio department, focused on validation and test automation for critical network infrastructure." },
+  { year:"2024 - Now", title:"Ambassador", org:"ESIEA", desc:"Representing ESIEA through events, outreach, and student engagement." },
+  { year:"2024 - 2024", title:"Internship — Cloud & Networks", org:"Maroc Telecom", desc:"Contributed to network and cloud projects including infrastructure and deployment." },
+  { year:"2023 - 2023", title:"Internship — Networks", org:"Axeli", desc:"Supported network setup, monitoring, and day-to-day operational tasks." },
 ];
 
 export default function About() {

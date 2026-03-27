@@ -261,12 +261,11 @@ export default function Contact() {
 
         {/* Footer */}
         <div style={{
-          marginTop: "80px", paddingTop: "28px", borderTop: "1px solid var(--border)",
-          display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px",
-        }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>© 2026 Ahmed Berrada</span>
+            marginTop: "80px", paddingTop: "28px", borderTop: "1px solid var(--border)",
+            display: "flex", justifyContent: "center",
+          }}>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>
-            Built with <span style={{ color: "var(--accent)" }}>Next.js</span> + <span style={{ color: "var(--accent)" }}>Tailwind</span>
+            © 2026 Ahmed Berrada. All rights reserved.
           </span>
         </div>
       </div>

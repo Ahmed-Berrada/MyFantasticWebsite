@@ -7,7 +7,7 @@ const categories = [
     skills: ["Python (Pandas, Polars)", "Scikit-learn", "PyTorch / TensorFlow", "SQL / PostgreSQL", "Apache Spark", "Jupyter"],
   },
   {
-    label: "Finance & Quant", icon: "◎",
+    label: "Finance", icon: "◎",
     skills: ["Quantitative Analysis", "Time-Series Forecasting", "Risk Modelling", "YFinance / Alpha Vantage", "Portfolio Analytics"],
   },
   {
