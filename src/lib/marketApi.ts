@@ -37,7 +37,16 @@ export interface StockIndicators {
 }
 
 const API_TIMEOUT_MS = 10000;
-const TEST_API_BASE_URL = process.env.NEXT_PUBLIC_MARKET_DATA_PIPELINE_API || ""; // The || "" is just to shut the error
+
+function normalizeApiUrl(url: string): string {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  return `https://${url}`;
+}
+
+const TEST_API_BASE_URL = normalizeApiUrl(process.env.NEXT_PUBLIC_MARKET_DATA_PIPELINE_API || "");
 
 function asRecord(value: unknown): JsonRecord | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
