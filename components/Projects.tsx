@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const projects = [
@@ -8,6 +9,7 @@ const projects = [
     tags:["Python","PostgreSQL","Spark","Docker"],
     metrics:[{label:"Focus",val:"Reliability"},{label:"Output",val:"Clean OHLCV"},{label:"Use",val:"Model Inputs"}],
     accent:"var(--accent)",
+    href:"/marketdatapipeline",
   },
   {
     num:"02", title:"Forecast Service API", subtitle:"Time-Series Modeling + API Delivery", category:"AI · BACKEND",
@@ -103,7 +105,16 @@ export default function Projects() {
                     <span key={t} style={{ fontFamily:"var(--font-mono)", fontSize:"10px", padding:"3px 9px", background:"var(--bg-3)", border:"1px solid var(--border)", borderRadius:"3px", color:"var(--text-muted)" }}>{t}</span>
                   ))}
                 </div>
-                <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em" }}>IN PROGRESS</span>
+                {p.href ? (
+                  <Link
+                    href={p.href}
+                    style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em", textTransform:"uppercase" }}
+                  >
+                    VIEW
+                  </Link>
+                ) : (
+                  <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em" }}>IN PROGRESS</span>
+                )}
               </div>
             </div>
           ))}
