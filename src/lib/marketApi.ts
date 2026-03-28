@@ -37,7 +37,7 @@ export interface StockIndicators {
 }
 
 const API_TIMEOUT_MS = 10000;
-const TEST_API_BASE_URL = process.env.MARKET_DATA_PIPELINE_API;
+const TEST_API_BASE_URL = process.env.NEXT_PUBLIC_MARKET_DATA_PIPELINE_API || "";
 
 function asRecord(value: unknown): JsonRecord | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
