@@ -9,7 +9,7 @@ const projects = [
     tags:["Python","PostgreSQL","Spark","Docker"],
     metrics:[{label:"Focus",val:"Reliability"},{label:"Output",val:"Clean OHLCV"},{label:"Use",val:"Model Inputs"}],
     accent:"var(--accent)",
-    href:"/marketdatapipeline",
+    href:"https://marketdatapipeline.ahmedberrada.com/",
   },
   {
     num:"02", title:"Forecast Service API", subtitle:"Time-Series Modeling + API Delivery", category:"AI · BACKEND",
