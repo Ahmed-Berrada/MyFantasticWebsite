@@ -19,7 +19,7 @@ export default function Hero() {
     <section style={{
       minHeight: "100vh", display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center", textAlign: "center",
-      padding: "0 48px", position: "relative", overflow: "hidden",
+      padding: "80px 48px 0", position: "relative", overflow: "hidden",
       background: "var(--bg)",
     }}>
       <div style={{ position:"absolute", top:"-15%", left:"-10%", width:"600px", height:"600px", borderRadius:"50%", background:"radial-gradient(circle, #1a3a6b28 0%, transparent 68%)", pointerEvents:"none" }}/>
@@ -108,7 +108,7 @@ export default function Hero() {
 
       <style>{`
         @media (max-width: 768px) {
-          section { padding: 0 24px !important; }
+          section { padding: 40px 24px 0 !important; }
         }
       `}</style>
     </section>
