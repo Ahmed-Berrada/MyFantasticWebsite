@@ -65,18 +65,9 @@ export default function Projects() {
         </p>
 
         <div className="projects-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"24px" }}>
-          {projects.map((p,i)=>(
-            <div key={i} className="fade-in"
-              onMouseEnter={()=>setHovered(i)} onMouseLeave={()=>setHovered(null)}
-              style={{
-                background:hovered===i?"var(--bg-3)":"var(--bg)",
-                border:`1px solid ${hovered===i?p.accent+"55":"var(--border)"}`,
-                borderRadius:"8px", padding:"28px", cursor:"default",
-                transition:"all 0.3s ease",
-                transform:hovered===i?"translateY(-4px)":"translateY(0)",
-                boxShadow:hovered===i?`0 12px 40px ${p.accent}18`:"none",
-                animationDelay:`${i*0.1}s`, position:"relative", overflow:"hidden",
-              }}>
+          {projects.map((p,i)=>{
+            const cardContent = (
+              <>
               {hovered===i && <div style={{ position:"absolute", top:0, left:0, right:0, height:"2px", background:`linear-gradient(90deg, transparent, ${p.accent}, transparent)` }}/>}
 
               <div style={{display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"16px"}}>
@@ -105,19 +96,48 @@ export default function Projects() {
                     <span key={t} style={{ fontFamily:"var(--font-mono)", fontSize:"10px", padding:"3px 9px", background:"var(--bg-3)", border:"1px solid var(--border)", borderRadius:"3px", color:"var(--text-muted)" }}>{t}</span>
                   ))}
                 </div>
-                {p.href ? (
-                  <Link
-                    href={p.href}
-                    style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em", textTransform:"uppercase" }}
-                  >
-                    VIEW
-                  </Link>
-                ) : (
-                  <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em" }}>IN PROGRESS</span>
-                )}
+                <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.1em", textTransform:"uppercase" }}>
+                  {p.href ? "VIEW" : "IN PROGRESS"}
+                </span>
               </div>
-            </div>
-          ))}
+              </>
+            );
+
+            const cardStyle = {
+              background:hovered===i?"var(--bg-3)":"var(--bg)",
+              border:`1px solid ${hovered===i?p.accent+"55":"var(--border)"}`,
+              borderRadius:"8px", padding:"28px", cursor:p.href?"pointer":"default",
+              transition:"all 0.3s ease",
+              transform:hovered===i?"translateY(-4px)":"translateY(0)",
+              boxShadow:hovered===i?`0 12px 40px ${p.accent}18`:"none",
+              animationDelay:`${i*0.1}s`, position:"relative" as const, overflow:"hidden" as const,
+              display:"block", textDecoration:"none",
+            };
+
+            return p.href ? (
+              <Link
+                key={i}
+                href={p.href}
+                className="fade-in"
+                aria-label={`Open project ${p.title}`}
+                onMouseEnter={()=>setHovered(i)}
+                onMouseLeave={()=>setHovered(null)}
+                style={cardStyle}
+              >
+                {cardContent}
+              </Link>
+            ) : (
+              <div
+                key={i}
+                className="fade-in"
+                onMouseEnter={()=>setHovered(i)}
+                onMouseLeave={()=>setHovered(null)}
+                style={cardStyle}
+              >
+                {cardContent}
+              </div>
+            );
+          })}
         </div>
       </div>
 
