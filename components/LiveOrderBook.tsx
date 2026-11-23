@@ -205,7 +205,7 @@ export default function LiveOrderBook() {
       </div>
 
       <style>{`
-        .tape-row { animation: tapeIn .9s ease-out; }
+        .tape-row { animation: tapeIn .45s ease-out; }
         @keyframes tapeIn { from { background: var(--signal-soft); } to { background: transparent; } }
       `}</style>
     </div>
