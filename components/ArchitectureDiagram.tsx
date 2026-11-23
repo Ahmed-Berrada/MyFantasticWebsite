@@ -48,7 +48,25 @@ export default function ArchitectureDiagram() {
 
   return (
     <div ref={ref} className="w-full">
-      <svg viewBox="0 0 640 270" className="h-auto w-full" role="img" aria-labelledby="arch-title">
+      {/* Narrow screens: the same flow, stacked. */}
+      <ol className="space-y-2 sm:hidden" aria-label="Order flow">
+        {[
+          ["FIX 4.4 · REST", "order entry"],
+          ["Sequencer", "write-ahead journal, replay on restart"],
+          ["Matching", "single writer per instrument"],
+          ["Executions · Market data", "reports and L2 depth"],
+        ].map(([title, sub], i, all) => (
+          <li key={title}>
+            <div className={`rounded-lg border px-4 py-3 ${i === 2 ? "border-ink bg-ink text-paper" : "border-line-2 bg-surface"}`}>
+              <p className="font-medium">{title}</p>
+              <p className={`font-mono text-xs ${i === 2 ? "text-[#b9bec8]" : "text-muted"}`}>{sub}</p>
+            </div>
+            {i < all.length - 1 && <div className="mx-auto h-4 w-px bg-line-2" aria-hidden />}
+          </li>
+        ))}
+      </ol>
+
+      <svg viewBox="0 0 640 270" className="hidden h-auto w-full sm:block" role="img" aria-labelledby="arch-title">
         <title id="arch-title">
           Order flow: FIX and REST gateways feed a sequencer that journals every order, then a single-writer matching
           thread per instrument publishes executions and market data.
