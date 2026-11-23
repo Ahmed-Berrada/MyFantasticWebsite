@@ -1,283 +1,138 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useState, type FormEvent } from "react";
+import { ArrowUpRight, Check, Copy, Loader2 } from "lucide-react";
+import SectionHeader from "./SectionHeader";
+import { profile } from "@/src/content/profile";
+import { useReveal } from "@/src/lib/useInView";
 
-const socials = [
-  { label: "LinkedIn", handle: "Ahmed Berrada", url: "https://www.linkedin.com/in/ahmed-berrada-293015257/", icon: "in" },
-  { label: "GitHub",   handle: "Ahmed-Berrada", url: "https://github.com/Ahmed-Berrada", icon: "gh" },
-  { label: "Email",    handle: "aberrada@et.esiea.fr", url: "mailto:aberrada@et.esiea.fr", icon: "@" },
-];
+type Status = { state: "idle" } | { state: "sending" } | { state: "sent" } | { state: "error"; message: string };
 
-type Status = "idle" | "sending" | "sent" | "error";
+const field =
+  "w-full rounded-md border border-line-2 bg-surface px-3.5 py-2.5 text-base outline-none transition-colors placeholder:text-muted focus:border-signal";
 
 export default function Contact() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [copied, setCopied]   = useState(false);
-  const [form, setForm]       = useState({ name: "", email: "", message: "" });
-  const [status, setStatus]   = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const ref = useReveal<HTMLElement>();
+  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<Status>({ state: "idle" });
 
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.1 }
-    );
-    ref.current?.querySelectorAll(".fade-in").forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText("aberrada@et.esiea.fr");
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${profile.email}`;
+    }
   };
 
-  const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) {
-      setErrorMsg("Please fill in all fields.");
-      return;
-    }
-    setErrorMsg("");
-    setStatus("sending");
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    setStatus({ state: "sending" });
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error();
-      setStatus("sent");
-    } catch {
-      setStatus("error");
-      setErrorMsg("Something went wrong. Try emailing me directly.");
+      const body: { error?: string } = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error ?? "Could not send the message.");
+      setStatus({ state: "sent" });
+    } catch (err: unknown) {
+      setStatus({ state: "error", message: err instanceof Error ? err.message : "Could not send the message." });
     }
   };
 
-  const resetForm = () => {
-    setForm({ name: "", email: "", message: "" });
-    setStatus("idle");
-    setErrorMsg("");
-  };
-
   return (
-    <section id="contact" ref={ref} style={{ background: "var(--bg-2)", borderTop: "1px solid var(--border)", padding: "130px 0 80px" }}>
-      <div style={{ maxWidth: "1140px", margin: "0 auto", padding: "0 48px" }}>
-
-        {/* Section label */}
-        <div className="fade-in" style={{
-          display: "flex", alignItems: "center", gap: "16px",
-          fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-muted)",
-          letterSpacing: "0.22em", marginBottom: "52px",
-        }}>
-          <span style={{ color: "var(--accent)" }}>04</span>
-          <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, var(--border-2), transparent)" }}/>
-          CONTACT
-          <div style={{ flex: 1, height: "1px", background: "linear-gradient(270deg, var(--border-2), transparent)" }}/>
-        </div>
-
-        <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "88px", alignItems: "start" }}>
-
-          {/* LEFT */}
-          <div>
-            <h2 className="fade-in font-display" style={{ fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.08, letterSpacing: "-0.025em", marginBottom: "24px" }}>
-              Let&apos;s build something{" "}
-              <span style={{ color: "var(--accent)", fontStyle: "italic" }}>together.</span>
-            </h2>
-            <p className="fade-in" style={{ fontSize: "15px", color: "var(--text-dim)", lineHeight: 1.9, marginBottom: "40px" }}>
-              Open to job opportunities in finance, data, and AI. Always happy to connect around interesting projects.
-            </p>
-
-            {/* Copy email */}
-            <div className="fade-in" style={{ marginBottom: "24px" }}>
-              <button onClick={copyEmail} style={{
-                display: "flex", alignItems: "center", gap: "12px",
-                background: "var(--bg-3)", border: "1px solid var(--border)",
-                borderRadius: "6px", padding: "14px 18px", cursor: "pointer",
-                width: "100%", transition: "border-color 0.2s",
-              }}
-              onMouseOver={e => e.currentTarget.style.borderColor = "var(--accent)"}
-              onMouseOut={e => e.currentTarget.style.borderColor = "var(--border)"}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--text)", flex: 1, textAlign: "left" }}>
-                  aberrada@et.esiea.fr
-                </span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", letterSpacing: "0.12em", color: copied ? "var(--accent)" : "var(--text-muted)", transition: "color 0.2s" }}>
-                  {copied ? "COPIED ✓" : "COPY"}
-                </span>
-              </button>
-            </div>
-
-            {/* Socials */}
-            <div className="fade-in" style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              {socials.map(s => (
-                <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" style={{
-                  display: "flex", alignItems: "center", gap: "12px",
-                  padding: "12px 14px", background: "var(--bg-3)",
-                  border: "1px solid var(--border)", borderRadius: "6px",
-                  textDecoration: "none", transition: "all 0.2s",
-                }}
-                onMouseOver={e => { e.currentTarget.style.borderColor = "var(--accent)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)"; }}
-                onMouseOut={e => { e.currentTarget.style.borderColor = "var(--border)"; (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; }}>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--accent)", width: "20px", textAlign: "center" }}>{s.icon}</span>
-                  <div>
-                    <div style={{ fontSize: "12px", color: "var(--text)", fontWeight: 500 }}>{s.label}</div>
-                    <div style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-muted)" }}>{s.handle}</div>
-                  </div>
+    <section id="contact" ref={ref} className="border-t border-line bg-surface py-24 md:py-32">
+      <div className="mx-auto grid max-w-6xl gap-14 px-5 md:px-8 lg:grid-cols-2 lg:gap-20">
+        <div>
+          <SectionHeader
+            index="04"
+            label="Contact"
+            title="Hiring for trading infrastructure or low-latency systems?"
+            lede="I am looking for a full-time software engineering role from September 2027, in Paris. I reply within a day."
+          />
+          <div className="reveal space-y-3">
+            <button
+              onClick={copyEmail}
+              className="group flex w-full items-center justify-between rounded-lg border border-line-2 bg-paper px-4 py-3.5 text-left transition-colors hover:border-ink"
+            >
+              <span>
+                <span className="block font-mono text-[11px] tracking-wider text-muted uppercase">Email</span>
+                <span className="text-lg">{profile.email}</span>
+              </span>
+              <span className="flex items-center gap-1.5 font-mono text-xs text-ink-2" aria-live="polite">
+                {copied ? <Check size={14} className="text-bid" /> : <Copy size={14} />}
+                {copied ? "Copied" : "Copy"}
+              </span>
+            </button>
+            <div className="grid grid-cols-2 gap-3">
+              {[profile.links.linkedin, profile.links.github].map((l) => (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center justify-between rounded-lg border border-line-2 bg-paper px-4 py-3.5 transition-colors hover:border-ink"
+                >
+                  {l.label} <ArrowUpRight size={16} />
                 </a>
               ))}
             </div>
           </div>
-
-          {/* RIGHT — form */}
-          <div className="fade-in gold-border" style={{ background: "var(--bg)", borderRadius: "8px", padding: "32px" }}>
-
-            {status === "sent" ? (
-              /* ── Success state ── */
-              <div style={{ textAlign: "center", padding: "40px 0" }}>
-                <div style={{
-                  width: "52px", height: "52px", borderRadius: "50%",
-                  background: "var(--accent-dim)", border: "1px solid var(--accent-glow)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  margin: "0 auto 20px",
-                  fontFamily: "var(--font-mono)", fontSize: "20px", color: "var(--accent)",
-                }}>✓</div>
-                <div className="font-display" style={{ fontSize: "26px", color: "var(--text)", marginBottom: "8px" }}>
-                  Message sent.
-                </div>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)", marginBottom: "32px" }}>
-                  I&apos;ll get back to you soon.
-                </div>
-                <button onClick={resetForm} style={{
-                  fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.14em",
-                  padding: "12px 24px", background: "transparent", color: "var(--text-dim)",
-                  border: "1px solid var(--border-2)", borderRadius: "4px", cursor: "pointer",
-                  transition: "all 0.2s",
-                }}
-                onMouseOver={e => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; }}
-                onMouseOut={e => { e.currentTarget.style.borderColor = "var(--border-2)"; e.currentTarget.style.color = "var(--text-dim)"; }}>
-                  SEND ANOTHER →
-                </button>
-              </div>
-
-            ) : (
-              /* ── Form state ── */
-              <>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-muted)", letterSpacing: "0.2em", marginBottom: "24px" }}>
-                  SEND A MESSAGE
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                  {[
-                    { key: "name",    label: "Your name",  type: "text"  },
-                    { key: "email",   label: "Your email", type: "email" },
-                  ].map(f => (
-                    <div key={f.key}>
-                      <label style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-muted)", letterSpacing: "0.12em", display: "block", marginBottom: "6px" }}>
-                        {f.label.toUpperCase()}
-                      </label>
-                      <input
-                        type={f.type}
-                        value={form[f.key as keyof typeof form]}
-                        onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                        disabled={status === "sending"}
-                        style={{
-                          width: "100%", background: "var(--bg-2)",
-                          border: "1px solid var(--border)", borderRadius: "4px",
-                          padding: "11px 14px", color: "var(--text)",
-                          fontSize: "14px", fontFamily: "var(--font-body)",
-                          outline: "none", transition: "border-color 0.2s",
-                          opacity: status === "sending" ? 0.6 : 1,
-                        }}
-                        onFocus={e => e.target.style.borderColor = "var(--accent)"}
-                        onBlur={e => e.target.style.borderColor = "var(--border)"}
-                      />
-                    </div>
-                  ))}
-
-                  <div>
-                    <label style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-muted)", letterSpacing: "0.12em", display: "block", marginBottom: "6px" }}>
-                      MESSAGE
-                    </label>
-                    <textarea
-                      rows={5}
-                      value={form.message}
-                      onChange={e => setForm({ ...form, message: e.target.value })}
-                      disabled={status === "sending"}
-                      style={{
-                        width: "100%", background: "var(--bg-2)",
-                        border: "1px solid var(--border)", borderRadius: "4px",
-                        padding: "11px 14px", color: "var(--text)",
-                        fontSize: "14px", fontFamily: "var(--font-body)",
-                        outline: "none", resize: "vertical", transition: "border-color 0.2s",
-                        opacity: status === "sending" ? 0.6 : 1,
-                      }}
-                      onFocus={e => e.target.style.borderColor = "var(--accent)"}
-                      onBlur={e => e.target.style.borderColor = "var(--border)"}
-                    />
-                  </div>
-
-                  {/* Error message */}
-                  {errorMsg && (
-                    <div style={{
-                      fontFamily: "var(--font-mono)", fontSize: "11px",
-                      color: "#e05c6e", padding: "10px 12px",
-                      background: "#e05c6e12", border: "1px solid #e05c6e30",
-                      borderRadius: "4px", letterSpacing: "0.03em",
-                    }}>
-                      {errorMsg}
-                    </div>
-                  )}
-
-                  {/* Submit button */}
-                  <button
-                    onClick={handleSubmit}
-                    disabled={status === "sending"}
-                    style={{
-                      fontFamily: "var(--font-mono)", fontSize: "11px", letterSpacing: "0.14em",
-                      padding: "14px", background: "var(--accent)", color: "#000",
-                      border: "none", borderRadius: "4px", cursor: status === "sending" ? "not-allowed" : "pointer",
-                      fontWeight: 600, transition: "opacity 0.2s", marginTop: "4px",
-                      opacity: status === "sending" ? 0.7 : 1,
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-                    }}
-                    onMouseOver={e => { if (status !== "sending") e.currentTarget.style.opacity = "0.87"; }}
-                    onMouseOut={e => { if (status !== "sending") e.currentTarget.style.opacity = "1"; }}
-                  >
-                    {status === "sending" ? (
-                      <>
-                        <span style={{
-                          width: "12px", height: "12px", borderRadius: "50%",
-                          border: "2px solid #00000040", borderTopColor: "#000",
-                          display: "inline-block",
-                          animation: "spin 0.7s linear infinite",
-                        }}/>
-                        SENDING...
-                      </>
-                    ) : "SEND MESSAGE →"}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
         </div>
 
-        {/* Footer */}
-        <div style={{
-            marginTop: "80px", paddingTop: "28px", borderTop: "1px solid var(--border)",
-            display: "flex", justifyContent: "center",
-          }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)" }}>
-            © 2026 Ahmed Berrada. All rights reserved.
-          </span>
+        <div className="reveal lg:pt-24">
+          {status.state === "sent" ? (
+            <div className="rounded-lg border border-line-2 bg-paper p-8" role="status">
+              <Check className="text-bid" />
+              <p className="mt-3 text-lg font-medium">Message sent.</p>
+              <p className="mt-1 text-ink-2">Thanks, I will get back to you shortly.</p>
+              <button onClick={() => setStatus({ state: "idle" })} className="mt-5 text-sm text-signal hover:underline">
+                Send another message
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="space-y-4" noValidate={false}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1.5 block text-sm text-ink-2">Name</span>
+                  <input name="name" required maxLength={100} autoComplete="name" className={field} />
+                </label>
+                <label className="block">
+                  <span className="mb-1.5 block text-sm text-ink-2">Email</span>
+                  <input name="email" type="email" required maxLength={200} autoComplete="email" className={field} />
+                </label>
+              </div>
+              <label className="block">
+                <span className="mb-1.5 block text-sm text-ink-2">Message</span>
+                <textarea name="message" required rows={6} maxLength={5000} className={`${field} resize-y`} />
+              </label>
+              {/* Honeypot: hidden from people, filled by bots. */}
+              <input name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
+              {status.state === "error" && (
+                <p className="text-sm text-ask" role="alert">
+                  {status.message} You can also email me directly.
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={status.state === "sending"}
+                className="inline-flex items-center gap-2 rounded-md bg-signal px-5 py-3 text-sm font-medium text-white transition-opacity disabled:opacity-60"
+              >
+                {status.state === "sending" && <Loader2 size={16} className="animate-spin" />}
+                {status.state === "sending" ? "Sending" : "Send message"}
+              </button>
+            </form>
+          )}
         </div>
       </div>
 
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 768px) {
-          #contact { padding: 80px 0 60px !important; }
-          #contact > div { padding: 0 24px !important; }
-          .contact-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
-        }
-      `}</style>
+      <footer className="mx-auto mt-24 flex max-w-6xl flex-wrap justify-between gap-3 border-t border-line px-5 pt-8 font-mono text-xs text-muted md:px-8">
+        <span>© {new Date().getFullYear()} {profile.name}</span>
+        <span>Built with Next.js · the order book above runs on its own engine</span>
+      </footer>
     </section>
   );
 }
