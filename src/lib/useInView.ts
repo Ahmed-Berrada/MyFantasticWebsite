@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
 
 /** True once the element has entered the viewport (stays true). */
 export function useInView<T extends Element>(threshold = 0.2): [RefObject<T | null>, boolean] {
@@ -59,14 +59,32 @@ export function useReveal<T extends HTMLElement>(): RefObject<T | null> {
   return ref;
 }
 
+const REDUCED = "(prefers-reduced-motion: reduce)";
+
+function subscribeReduced(cb: () => void): () => void {
+  const mq = window.matchMedia(REDUCED);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+
 export function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const fn = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", fn);
-    return () => mq.removeEventListener("change", fn);
-  }, []);
-  return reduced;
+  return useSyncExternalStore(
+    subscribeReduced,
+    () => window.matchMedia(REDUCED).matches,
+    () => false,
+  );
+}
+
+function subscribeScroll(cb: () => void): () => void {
+  window.addEventListener("scroll", cb, { passive: true });
+  return () => window.removeEventListener("scroll", cb);
+}
+
+/** True once the page is scrolled past `offset` pixels. */
+export function useScrolledPast(offset: number): boolean {
+  return useSyncExternalStore(
+    subscribeScroll,
+    () => window.scrollY > offset,
+    () => false,
+  );
 }

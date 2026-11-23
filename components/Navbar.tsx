@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { profile } from "@/src/content/profile";
+import { useScrolledPast } from "@/src/lib/useInView";
 
 const links = [
   { label: "Work", href: "#work" },
@@ -11,15 +12,8 @@ const links = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const scrolled = useScrolledPast(12);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 12);
-    fn();
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
 
   return (
     <nav
