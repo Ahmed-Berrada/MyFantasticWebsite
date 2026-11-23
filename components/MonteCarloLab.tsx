@@ -10,7 +10,7 @@ const BS = blackScholesCall(P);
 const STEPS = 64;
 const MAX_DRAWN = 180;
 const DRAW_PER_FRAME = 3;
-const PAIRS_PER_FRAME = 6_000;
+const PAIRS_PER_FRAME = 5_000;
 const TARGET_PATHS = 1_000_000;
 const Y_MIN = 55;
 const Y_MAX = 175;
@@ -194,7 +194,7 @@ function Cell({ label, value, accent }: { label: string; value: string; accent?:
   return (
     <div className="border-line px-4 py-2.5 odd:border-r sm:not-last:border-r">
       <p className="font-mono text-[10px] tracking-wider text-muted uppercase">{label}</p>
-      <p className={`font-mono text-sm tabular ${accent ? "text-signal" : ""}`}>{value}</p>
+      <p className={`font-mono text-[13px] whitespace-nowrap tabular ${accent ? "text-signal" : ""}`}>{value}</p>
     </div>
   );
 }
