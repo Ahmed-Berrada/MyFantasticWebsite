@@ -50,8 +50,8 @@ export default function Contact() {
           <SectionHeader
             index="04"
             label="Contact"
-            title="Hiring for trading infrastructure or low-latency systems?"
-            lede="I am looking for a full-time software engineering role from September 2027, in Paris. I reply within a day."
+            title={<>Hiring for trading infrastructure or low&#8209;latency systems?</>}
+            lede="I am looking for a full-time software engineering role from September 2027, in Paris."
           />
           <div className="reveal space-y-3">
             <button
