@@ -1,41 +1,33 @@
 # AGENTS.md
 
-## Project Snapshot
-- Stack: Next.js 16 App Router + React 19 + TypeScript strict mode.
-- App is a single-page portfolio assembled in `src/app/page.tsx` from `Navbar`, `Hero`, `About`, `Projects`, `Skills`, `Contact`.
-- Styling is mostly inline style objects inside components, with design tokens in `src/app/globals.css`.
-- `CLAUDE.md` delegates to this file (`@AGENTS.md`), so keep this file current.
+## Project snapshot
+- Portfolio for ahmedberrada.com. Audience: hiring managers in fintech and low-latency systems.
+- Stack: Next.js 16 App Router, React 19, TypeScript strict, Tailwind v4, vitest. Deployed on Vercel.
+- Single page assembled in `src/app/page.tsx`: `Navbar`, `Hero`, `Work`, `Experience`, `Stack`, `Contact`.
 
-## Architecture and Data Flow
-- Main rendering flow: `src/app/layout.tsx` -> `src/app/page.tsx` -> section components in `components/`.
-- Section navigation depends on DOM ids and lowercase link labels (`Navbar.go()` + `scrollIntoView`): keep ids like `about`, `projects`, `skills`, `contact` aligned with `links` in `components/Navbar.tsx`.
-- Contact flow: `components/Contact.tsx` sends `POST /api/contact` with `{ name, email, message }`; backend handler is `src/app/api/contact/route.ts`.
-- Email backend uses Resend via dynamic import and requires `RESEND_API_KEY`.
-- Market data client lives in `src/lib/marketApi.ts` (Railway API, timeout + payload normalization). It is currently not imported by UI components.
+## Design direction (keep it)
+- Light "engineering spec sheet": paper `--paper`, ink `--ink`, one action colour `--signal` (cobalt).
+  `--bid` / `--ask` are for market data only; `--amber` for "running" states.
+- Fonts: IBM Plex Sans + IBM Plex Mono via `next/font` (`--font-sans`, `--font-mono`). Numbers use `.tabular`.
+- Motion only when it demonstrates the work (live order book, message flow, GBM paths, CI run, latency bars).
+  No decorative gradients, blobs or parallax. Every animated component pauses off-screen and honours
+  `prefers-reduced-motion` (`usePrefersReducedMotion`).
+- Tokens live in `src/app/globals.css` (`:root` + `@theme inline`). Use Tailwind classes such as `text-ink-2`, `bg-sunken`.
 
-## Developer Workflows
-- Install deps: `npm install`
-- Dev server: `npm run dev`
-- Lint: `npm run lint`
-- Production build/start: `npm run build` then `npm run start`
-- There is no test script configured in `package.json`.
+## Content
+- All copy for positions, roles, education and stack: `src/content/profile.ts` (sourced from the owner's CV).
+- Projects shown: Order Book (Order_Book + lob-engine) and the GPU Monte Carlo pricer only. Do not add others unless asked.
+- Figures quoted (163 ns, 3.46M ops/s, 295 s / 7.4 s / 0.46 s) come from the CV; keep them in sync with it.
 
-## Project-Specific Conventions
-- Use `"use client"` for interactive sections; all files in `components/` currently run on client side.
-- Keep visual system consistent by reusing CSS variables from `:root` in `src/app/globals.css` (`--bg`, `--accent`, `--text-dim`, etc.).
-- Animation pattern is standardized: elements use `.fade-in`, then `IntersectionObserver` adds `.visible` (see `About`, `Projects`, `Skills`, `Contact`).
-- Responsive behavior is often defined via component-local `<style>{`@media ...`}</style>` blocks, not separate CSS modules.
-- Path alias `@/*` maps to project root (see `tsconfig.json`), e.g. `import Navbar from "@/components/Navbar"`.
-- Tailwind is installed, but the current UI mostly does not use utility classes.
+## Code map
+- `src/lib/orderbook/engine.ts`: price-time priority book (intrusive FIFO per level, O(1) cancel). `flow.ts`: seeded synthetic flow.
+- `src/lib/montecarlo.ts`: Black-Scholes and antithetic Monte Carlo estimator.
+- `src/lib/useInView.ts`: `useInView`, `useOnScreen`, `useReveal` (adds `.is-visible` to `.reveal` children), `usePrefersReducedMotion`, `useScrolledPast`.
+- Section ids `work`, `experience`, `stack`, `contact` must match the links in `components/Navbar.tsx`.
+- Contact: `components/Contact.tsx` posts `{ name, email, message, company }` to `src/app/api/contact/route.ts`
+  (`company` is a honeypot). Needs `RESEND_API_KEY`; recipient `CONTACT_TO` (default ahmed.berrada@proton.me), sender `CONTACT_FROM`.
+- Share image and favicon are generated: `src/app/opengraph-image.tsx`, `src/app/icon.tsx`.
 
-## Integration and Risk Notes
-- `src/app/api/contact/route.ts` sends to fixed recipient `aberrada@et.esiea.fr` and returns simple JSON `{ success: true }` or `{ error: string }`.
-- `src/lib/marketApi.ts` uses hardcoded base URL `https://marketdatapipeline-production.up.railway.app` and resilient parsing helpers (`asRecord`, `asNumber`, `normalizeOhlcv`).
-- `components/Projects.tsx` links one card to `/marketdatapipeline`, but no corresponding route exists under `src/app/`.
-- Fonts are loaded via Google Fonts `@import` in `src/app/globals.css`; no `next/font` usage in current implementation.
-
-## Agent Editing Guardrails
-- Preserve section ids and navbar labels when renaming sections; breaking this silently breaks smooth-scroll navigation.
-- For contact changes, update both `components/Contact.tsx` and `src/app/api/contact/route.ts` contract together.
-- Prefer extending existing inline-style/component patterns over introducing a new styling paradigm in a small change.
-- Keep edits minimal and localized: this repo favors self-contained components with local state/effects.
+## Workflows
+- `npm run dev`, `npm run lint`, `npm test` (vitest), `npm run build`.
+- Commit and push every small change. Redesign work happens on a branch; Vercel builds a preview per push.
