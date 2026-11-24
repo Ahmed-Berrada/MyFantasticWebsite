@@ -1,4 +1,5 @@
 import RadioLink from "./RadioLink";
+import SplitFlap from "./SplitFlap";
 
 const highlights = [
   {
@@ -23,6 +24,7 @@ export default function Siemens() {
   return (
     <section id="siemens" className="border-t border-line-2 py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
+        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-20">
         <div className="max-w-[46rem]">
           <p className="text-ink-2">Since September 2025, apprenticeship until August 2027</p>
           <h2 className="mt-4 font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em] [font-variation-settings:'wdth'_88]">
@@ -35,7 +37,15 @@ export default function Siemens() {
           </p>
         </div>
 
-        <div className="mt-14 max-w-5xl">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:gap-x-8">
+            <SplitFlap value="300+" label="test scenarios" />
+            <SplitFlap value="200+" label="message types" />
+            <SplitFlap value="9" label="validators use it" />
+            <SplitFlap value="4.2" label="CRG release delivered" />
+          </div>
+        </div>
+
+        <div className="mt-16 max-w-5xl">
           <RadioLink />
         </div>
 
