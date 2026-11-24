@@ -50,10 +50,10 @@ export default function PipelineRun() {
   const finished = t >= total;
 
   return (
-    <div ref={ref} className="self-start overflow-hidden rounded-xl border border-line-2 bg-surface lg:sticky lg:top-24">
+    <div ref={ref} className="self-start overflow-hidden rounded-xl border border-line-2 bg-sheet lg:sticky lg:top-24">
       <div className="flex items-center justify-between border-b border-line px-4 py-3 font-mono text-xs">
         <span className="text-ink-2">test-campaign · nightly</span>
-        <span className={finished ? "text-bid" : "text-amber"}>{finished ? "passed" : "running"}</span>
+        <span className={finished ? "text-bid" : "text-running"}>{finished ? "passed" : "running"}</span>
       </div>
 
       <ol className="px-4 py-3">
@@ -63,7 +63,7 @@ export default function PipelineRun() {
               {state[i] === "done" ? (
                 <Check size={15} className="text-bid" aria-label="done" />
               ) : state[i] === "running" ? (
-                <Loader2 size={15} className="animate-spin text-amber" aria-label="running" />
+                <Loader2 size={15} className="animate-spin text-running" aria-label="running" />
               ) : (
                 <span className="mt-1 ml-1 block size-2 rounded-full bg-line-2" aria-label="queued" />
               )}

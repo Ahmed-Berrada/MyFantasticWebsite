@@ -1,20 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans, Martian_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
-const plexSans = IBM_Plex_Sans({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex-sans",
+  axes: ["opsz", "wdth"],
+  variable: "--font-bricolage",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
+const body = Instrument_Sans({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
+  axes: ["wdth"],
+  variable: "--font-instrument",
+  display: "swap",
+});
+
+const mono = Martian_Mono({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-martian",
   display: "swap",
 });
 
@@ -35,12 +42,13 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-export const viewport: Viewport = { themeColor: "#f6f5f1" };
+export const viewport: Viewport = { themeColor: "#eceef0" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <body>
+        <a href="#main" className="skip-link">Skip to content</a>
         {children}
         <Analytics />
         <SpeedInsights />

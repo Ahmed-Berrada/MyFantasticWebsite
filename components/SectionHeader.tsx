@@ -9,7 +9,7 @@ export default function SectionHeader({ index, label, title, lede }: SectionHead
   return (
     <header className="reveal mb-12 max-w-3xl md:mb-16">
       <p className="mb-5 flex items-center gap-3 font-mono text-xs tracking-[0.14em] text-muted uppercase">
-        <span className="text-signal">{index}</span>
+        <span className="text-ink">{index}</span>
         <span className="h-px w-8 bg-line-2" aria-hidden />
         {label}
       </p>

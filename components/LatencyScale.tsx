@@ -50,12 +50,12 @@ export default function LatencyScale() {
                 <div className="relative h-5 flex-1">
                   <div
                     className={`absolute inset-y-0 left-0 rounded-r-sm transition-[width] duration-1000 ease-out ${
-                      r.highlight ? "bg-signal" : "bg-line-2"
+                      r.highlight ? "bg-accent" : "bg-line-2"
                     }`}
                     style={{ width: seen ? `${pos(r.ns)}%` : "0%", transitionDelay: `${i * 90}ms` }}
                   />
                 </div>
-                <span className={`w-16 shrink-0 text-right font-mono text-xs tabular ${r.highlight ? "text-signal" : "text-muted"}`}>
+                <span className={`w-16 shrink-0 text-right font-mono text-xs tabular ${r.highlight ? "text-ink" : "text-muted"}`}>
                   {r.display}
                 </span>
               </div>

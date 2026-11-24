@@ -9,7 +9,7 @@ export default function Experience() {
   const [lead, ...earlier] = positions;
 
   return (
-    <section id="experience" ref={ref} className="border-t border-line bg-surface py-24 md:py-32">
+    <section id="experience" ref={ref} className="border-t border-line bg-sheet py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <SectionHeader
           index="02"
@@ -28,7 +28,7 @@ export default function Experience() {
             <ul className="mt-6 space-y-3.5">
               {lead.points.map((p) => (
                 <li key={p} className="grid grid-cols-[1rem_1fr] leading-relaxed text-ink-2">
-                  <span className="mt-[11px] block h-px w-2 bg-signal" aria-hidden />
+                  <span className="mt-[11px] block h-px w-2 bg-accent" aria-hidden />
                   {p}
                 </li>
               ))}

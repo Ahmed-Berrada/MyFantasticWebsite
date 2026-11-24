@@ -12,7 +12,7 @@ export default function Stack() {
         <dl className="reveal grid border-t border-line sm:grid-cols-2 lg:grid-cols-3">
           {stack.map((g) => (
             <div key={g.group} className="border-b border-line py-6 sm:pr-8">
-              <dt className="font-mono text-xs tracking-wider text-signal uppercase">{g.group}</dt>
+              <dt className="font-mono text-xs tracking-wider text-ink uppercase">{g.group}</dt>
               <dd className="mt-3">
                 <ul className="space-y-1.5">
                   {g.items.map((i) => (

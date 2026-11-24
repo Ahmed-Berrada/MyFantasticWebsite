@@ -56,7 +56,7 @@ export default function Work() {
             <ol className="space-y-6">
               {orderBookDecisions.map((d, i) => (
                 <li key={d.title} className="grid grid-cols-[2rem_1fr]">
-                  <span className="font-mono text-sm text-signal tabular">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="font-mono text-sm text-ink tabular">{String(i + 1).padStart(2, "0")}</span>
                   <div>
                     <p className="font-medium">{d.title}</p>
                     <p className="mt-1 leading-relaxed text-ink-2">{d.body}</p>
@@ -136,7 +136,7 @@ export function RepoLink({ href, label }: { href: string; label: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1 rounded-md border border-line-2 bg-surface px-3 py-1.5 font-mono text-xs transition-colors hover:border-ink"
+      className="inline-flex items-center gap-1 rounded-md border border-line-2 bg-sheet px-3 py-1.5 font-mono text-xs transition-colors hover:border-ink"
     >
       {label} <ArrowUpRight size={13} />
     </a>

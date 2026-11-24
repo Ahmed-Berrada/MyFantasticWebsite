@@ -21,13 +21,13 @@ export default function SpeedupChart() {
                 <span className={r.highlight ? "font-medium" : ""}>{r.label}</span>{" "}
                 <span className="font-mono text-xs text-muted">{r.stack}</span>
               </span>
-              <span className={`font-mono text-sm tabular ${r.highlight ? "text-signal" : "text-ink-2"}`}>
+              <span className={`font-mono text-sm tabular ${r.highlight ? "text-ink" : "text-ink-2"}`}>
                 {r.seconds} s · {Math.round(base / r.seconds)}×
               </span>
             </div>
             <div className="h-2.5 rounded-sm bg-sunken">
               <div
-                className={`h-full rounded-sm transition-[width] duration-1000 ease-out ${r.highlight ? "bg-signal" : "bg-line-2"}`}
+                className={`h-full rounded-sm transition-[width] duration-1000 ease-out ${r.highlight ? "bg-accent" : "bg-line-2"}`}
                 style={{
                   // Keep the GPU bar visible: a linear scale makes the point, with a 0.6% floor.
                   width: seen ? `${Math.max(0.6, (r.seconds / base) * 100)}%` : "0%",

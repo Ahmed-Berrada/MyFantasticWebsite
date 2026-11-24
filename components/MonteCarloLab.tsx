@@ -48,7 +48,7 @@ export default function MonteCarloLab() {
     ctx.clearRect(0, 0, w, HEIGHT);
 
     const css = getComputedStyle(document.documentElement);
-    const signal = css.getPropertyValue("--signal").trim();
+    const signal = css.getPropertyValue("--ink").trim();
     const grey = css.getPropertyValue("--line-2").trim();
     const ink = css.getPropertyValue("--ink-2").trim();
 
@@ -155,7 +155,7 @@ export default function MonteCarloLab() {
   const err = stats.paths ? Math.abs(stats.price - BS) : null;
 
   return (
-    <div ref={wrapRef} className="overflow-hidden rounded-xl border border-line-2 bg-surface">
+    <div ref={wrapRef} className="overflow-hidden rounded-xl border border-line-2 bg-sheet">
       <div className="flex items-center justify-between border-b border-line px-4 py-3">
         <p className="font-mono text-xs text-ink-2">
           European call · S₀ 100 · K 100 · σ 20% · r 5% · 1y
@@ -194,7 +194,7 @@ function Cell({ label, value, accent }: { label: string; value: string; accent?:
   return (
     <div className="border-line px-4 py-2.5 odd:border-r sm:not-last:border-r">
       <p className="font-mono text-[10px] tracking-wider text-muted uppercase">{label}</p>
-      <p className={`font-mono text-[13px] whitespace-nowrap tabular ${accent ? "text-signal" : ""}`}>{value}</p>
+      <p className={`font-mono text-[13px] whitespace-nowrap tabular ${accent ? "text-ink" : ""}`}>{value}</p>
     </div>
   );
 }

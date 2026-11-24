@@ -30,12 +30,12 @@ const paths = {
 };
 
 const dots: { path: keyof typeof paths; begin: number; color: string; dur?: number }[] = [
-  { path: "fix", begin: 0, color: "var(--signal)" },
-  { path: "fix", begin: 0.8, color: "var(--signal)" },
-  { path: "rest", begin: 0.4, color: "var(--signal)" },
+  { path: "fix", begin: 0, color: "var(--accent)" },
+  { path: "fix", begin: 0.8, color: "var(--accent)" },
+  { path: "rest", begin: 0.4, color: "var(--accent)" },
   { path: "seq", begin: 0.2, color: "var(--ink)", dur: 0.8 },
   { path: "seq", begin: 0.6, color: "var(--ink)", dur: 0.8 },
-  { path: "wal", begin: 0.1, color: "var(--amber)", dur: 0.9 },
+  { path: "wal", begin: 0.1, color: "var(--running)", dur: 0.9 },
   { path: "exec", begin: 0.5, color: "var(--bid)" },
   { path: "md", begin: 0.9, color: "var(--bid)" },
   { path: "md", begin: 0.1, color: "var(--bid)" },
@@ -57,7 +57,7 @@ export default function ArchitectureDiagram() {
           ["Executions · Market data", "reports and L2 depth"],
         ].map(([title, sub], i, all) => (
           <li key={title}>
-            <div className={`rounded-lg border px-4 py-3 ${i === 2 ? "border-ink bg-ink text-paper" : "border-line-2 bg-surface"}`}>
+            <div className={`rounded-lg border px-4 py-3 ${i === 2 ? "border-ink bg-ink text-ground" : "border-line-2 bg-sheet"}`}>
               <p className="font-medium">{title}</p>
               <p className={`font-mono text-xs ${i === 2 ? "text-[#b9bec8]" : "text-muted"}`}>{sub}</p>
             </div>
@@ -83,10 +83,10 @@ export default function ArchitectureDiagram() {
               width={n.w}
               height={n.h}
               rx={8}
-              fill={n.tone === "core" ? "var(--ink)" : "var(--surface)"}
+              fill={n.tone === "core" ? "var(--ink)" : "var(--sheet)"}
               stroke={n.tone === "core" ? "var(--ink)" : "var(--line-2)"}
             />
-            <text x={n.x + 14} y={n.y + 24} fontSize={16} fontWeight={500} fill={n.tone === "core" ? "var(--paper)" : "var(--ink)"} fontFamily="var(--font-sans)">
+            <text x={n.x + 14} y={n.y + 24} fontSize={16} fontWeight={500} fill={n.tone === "core" ? "var(--ground)" : "var(--ink)"} fontFamily="var(--font-sans)">
               {n.title}
             </text>
             <text x={n.x + 14} y={n.y + 42} fontSize={12.5} fill={n.tone === "core" ? "#b9bec8" : "var(--muted)"} fontFamily="var(--font-mono)">

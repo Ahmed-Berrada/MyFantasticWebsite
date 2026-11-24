@@ -127,7 +127,7 @@ export default function LiveOrderBook() {
   const bestAsk = snap?.depth.asks[0]?.price;
 
   return (
-    <div ref={panelRef} className="overflow-hidden rounded-xl border border-line-2 bg-surface shadow-[0_1px_0_#0000000a,0_24px_60px_-28px_#0b0d1240]">
+    <div ref={panelRef} className="overflow-hidden rounded-xl border border-line-2 bg-sheet shadow-[0_1px_0_#0000000a,0_24px_60px_-28px_#0b0d1240]">
       {/* Title bar */}
       <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <div className="flex min-w-0 items-center gap-2.5">
@@ -197,7 +197,7 @@ export default function LiveOrderBook() {
         <button
           onClick={runBenchmark}
           disabled={bench.state === "running"}
-          className="inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 font-mono text-xs text-paper transition-opacity hover:opacity-85 disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 font-mono text-xs text-ground transition-opacity hover:opacity-85 disabled:opacity-50"
         >
           <Zap size={12} />
           {bench.state === "done" ? "Run again" : "Benchmark 1M orders"}
@@ -206,7 +206,7 @@ export default function LiveOrderBook() {
 
       <style>{`
         .tape-row { animation: tapeIn .45s ease-out; }
-        @keyframes tapeIn { from { background: var(--signal-soft); } to { background: transparent; } }
+        @keyframes tapeIn { from { background: var(--accent-soft); } to { background: transparent; } }
       `}</style>
     </div>
   );
@@ -259,7 +259,7 @@ function BenchResult({ bench }: { bench: Bench }) {
     return (
       <div className="flex min-w-40 flex-1 items-center gap-2" role="status">
         <div className="h-1 flex-1 overflow-hidden rounded bg-line">
-          <div className="h-full bg-signal transition-[width]" style={{ width: `${bench.progress * 100}%` }} />
+          <div className="h-full bg-accent transition-[width]" style={{ width: `${bench.progress * 100}%` }} />
         </div>
         <span className="font-mono text-[11px] text-muted tabular">{Math.round(bench.progress * 100)}%</span>
       </div>
