@@ -37,28 +37,6 @@ export function useOnScreen<T extends Element>(): [RefObject<T | null>, boolean]
   return [ref, on];
 }
 
-/** Adds `is-visible` to every `.reveal` child of the returned ref when it scrolls in. */
-export function useReveal<T extends HTMLElement>(): RefObject<T | null> {
-  const ref = useRef<T>(null);
-  useEffect(() => {
-    const root = ref.current;
-    if (!root) return;
-    const obs = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
-            obs.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.12 },
-    );
-    root.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-  return ref;
-}
-
 const REDUCED = "(prefers-reduced-motion: reduce)";
 
 function subscribeReduced(cb: () => void): () => void {
