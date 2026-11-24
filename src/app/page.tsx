@@ -4,6 +4,7 @@ import Siemens from "@/components/Siemens";
 import Work from "@/components/Work";
 import Background from "@/components/Background";
 import Contact from "@/components/Contact";
+import ScrollRail from "@/components/ScrollRail";
 import { availableCvs } from "@/src/content/cv";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
   return (
     <>
       <Navbar cvs={cvs} />
+      <ScrollRail />
       <main id="main">
         <Hero />
         <Siemens />

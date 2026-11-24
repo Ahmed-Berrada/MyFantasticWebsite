@@ -1,7 +1,7 @@
 /**
  * Limit order book with price-time priority.
  *
- * Mirrors the layout of the C++ lob-engine: each price level holds an intrusive
+ * Mirrors the layout of the C++17 version of the engine: each price level holds an intrusive
  * doubly linked FIFO of orders, and an id -> order map gives O(1) cancel.
  * Prices are integer ticks so comparisons are exact.
  */

@@ -13,7 +13,7 @@ const rows: Row[] = [
   { label: "L1 cache reference", ns: 1, display: "~1 ns" },
   { label: "Mutex lock / unlock", ns: 25, display: "~25 ns" },
   { label: "Main memory reference", ns: 100, display: "~100 ns" },
-  { label: "Match one order (lob-engine, median)", ns: 163, display: "163 ns", highlight: true },
+  { label: "Match one order (C++17 engine, median)", ns: 163, display: "163 ns", highlight: true },
   { label: "Round trip within a datacenter", ns: 500_000, display: "~500 µs" },
   { label: "Round trip Paris ↔ New York", ns: 70_000_000, display: "~70 ms" },
 ];

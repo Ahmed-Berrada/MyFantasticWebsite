@@ -1,4 +1,5 @@
-import PipelineRun from "./PipelineRun";
+import RadioLink from "./RadioLink";
+import SplitFlap from "./SplitFlap";
 
 const highlights = [
   {
@@ -23,21 +24,29 @@ export default function Siemens() {
   return (
     <section id="siemens" className="border-t border-line-2 py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:gap-24">
-          <div>
-            <p className="text-ink-2">Since September 2025, apprenticeship until August 2027</p>
-            <h2 className="mt-4 font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em] [font-variation-settings:'wdth'_88]">
-              Siemens Mobility
-            </h2>
-            <p className="mt-3 text-lg text-ink-2">Software engineer. Châtillon, France.</p>
-            <p className="mt-10 max-w-[38rem] text-xl leading-relaxed text-pretty">
-              New York City Transit is moving its Crosstown line to CBTC signalling over 5G radio. I work on the
-              safety-critical radio software, and I build the simulator it is tested against.
-            </p>
+        <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-20">
+        <div className="max-w-[46rem]">
+          <p className="text-ink-2">Since September 2025, apprenticeship until August 2027</p>
+          <h2 className="mt-4 font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em] [font-variation-settings:'wdth'_88]">
+            Siemens Mobility
+          </h2>
+          <p className="mt-3 text-lg text-ink-2">Software engineer. Châtillon, France.</p>
+          <p className="mt-10 max-w-[38rem] text-xl leading-relaxed text-pretty">
+            New York City Transit is moving its Crosstown line to CBTC signalling over 5G radio. I work on the
+            safety-critical radio software, and I build the simulator it is tested against.
+          </p>
+        </div>
+
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:gap-x-8">
+            <SplitFlap value="300+" label="test scenarios" />
+            <SplitFlap value="200+" label="message types" />
+            <SplitFlap value="9" label="validators use it" />
+            <SplitFlap value="4.2" label="CRG release delivered" />
           </div>
-          <div className="lg:pt-3">
-            <PipelineRun />
-          </div>
+        </div>
+
+        <div className="mt-16 max-w-5xl">
+          <RadioLink />
         </div>
 
         <div className="mt-20 grid gap-x-16 gap-y-12 border-t border-line pt-12 md:grid-cols-2">

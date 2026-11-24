@@ -1,0 +1,274 @@
+"use client";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { crc32mpeg2 } from "@/src/lib/crc";
+import { prng } from "@/src/lib/orderbook/flow";
+import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
+
+type Source = "CC" | "ZC" | "WRG" | "you";
+
+interface Frame {
+  source: Source;
+  type: number;
+  seq: number;
+  payload: number[];
+  bytes: number[];
+  crc: number;
+  fields: { name: string; from: number; to: number }[];
+}
+
+const TYPE: Record<Source, { code: number; meaning: string }> = {
+  CC: { code: 0x21, meaning: "position report" },
+  ZC: { code: 0x42, meaning: "movement authority" },
+  WRG: { code: 0x13, meaning: "link status" },
+  you: { code: 0x7e, meaning: "typed by you" },
+};
+
+/** UDP header + illustrative message (type, seq, payload) + CRC-32/MPEG-2 over the message. */
+function buildFrame(source: Source, seq: number, payload: number[]): Frame {
+  const type = TYPE[source].code;
+  const message = [type, (seq >> 8) & 0xff, seq & 0xff, ...payload];
+  const crc = crc32mpeg2(message);
+  const udpLen = 8 + message.length + 4;
+  const header = [0xc3, 0x51, 0xc3, 0x52, (udpLen >> 8) & 0xff, udpLen & 0xff, 0x00, 0x00];
+  const bytes = [...header, ...message, crc >>> 24, (crc >>> 16) & 0xff, (crc >>> 8) & 0xff, crc & 0xff];
+  const p0 = 11;
+  return {
+    source,
+    type,
+    seq,
+    payload,
+    bytes,
+    crc,
+    fields: [
+      { name: "src port", from: 0, to: 2 },
+      { name: "dst port", from: 2, to: 4 },
+      { name: "length", from: 4, to: 6 },
+      { name: "udp sum", from: 6, to: 8 },
+      { name: "type", from: 8, to: 9 },
+      { name: "seq", from: 9, to: 11 },
+      { name: "payload", from: p0, to: p0 + payload.length },
+      { name: "crc-32/mpeg-2", from: p0 + payload.length, to: p0 + payload.length + 4 },
+    ],
+  };
+}
+
+const hex = (n: number, w = 2) => n.toString(16).toUpperCase().padStart(w, "0");
+
+// Scene geometry (SVG units)
+const TRACK_Y = 58;
+const MASTS = [190, 450];
+const ZC = { x: 548, y: 112 };
+const CRG = { x: 262, y: 148, w: 116, h: 40 };
+const CRG_IN = { x: CRG.x + CRG.w / 2, y: CRG.y };
+const LOOP_MS = 14000;
+const MSG_EVERY_MS = 1700;
+const TRAVEL_MS = 700;
+
+export default function RadioLink() {
+  const reduced = usePrefersReducedMotion();
+  const [ref, onScreen] = useOnScreen<HTMLDivElement>();
+  const rand = useMemo(() => prng(2025), []);
+  const seqRef = useRef(1040);
+  const [now, setNow] = useState(0);
+  const [frame, setFrame] = useState<Frame>(() => buildFrame("CC", 1040, [0x00, 0x2f, 0x9a, 0x11, 0x04, 0x63]));
+  const [revealed, setRevealed] = useState(Infinity);
+  const [hover, setHover] = useState<number | null>(null);
+  const [typed, setTyped] = useState<number[] | null>(null);
+  const pulse = useRef<{ source: Source; from: { x: number; y: number }; via?: { x: number; y: number }; start: number } | null>(null);
+  const lastTyped = useRef(-Infinity);
+  const nextMsg = useRef(0);
+
+  const trainX = (t: number) => 40 + ((t % LOOP_MS) / LOOP_MS) * 520;
+
+  // Animation clock + automatic messages
+  useEffect(() => {
+    if (!onScreen) return;
+    let raf = 0;
+    const t0 = performance.now() - now;
+    const tick = (wall: number) => {
+      const t = wall - t0;
+      setNow(t);
+      if (!reduced && t >= nextMsg.current && wall - lastTyped.current > 4000) {
+        nextMsg.current = t + MSG_EVERY_MS;
+        const r = rand();
+        const source: Source = r < 0.5 ? "CC" : r < 0.8 ? "ZC" : "WRG";
+        const tx = trainX(t);
+        const mast = MASTS.reduce((a, b) => (Math.abs(b - tx) < Math.abs(a - tx) ? b : a));
+        pulse.current =
+          source === "CC"
+            ? { source, from: { x: tx + 27, y: TRACK_Y - 10 }, via: { x: mast, y: 22 }, start: t }
+            : source === "ZC"
+              ? { source, from: { x: ZC.x, y: ZC.y }, start: t }
+              : { source, from: { x: mast, y: 22 }, start: t };
+      }
+      const p = pulse.current;
+      if (p && t - p.start >= TRAVEL_MS) {
+        pulse.current = null;
+        const len = 5 + Math.floor(rand() * 6);
+        const payload = Array.from({ length: len }, () => Math.floor(rand() * 256));
+        seqRef.current = (seqRef.current + 1) & 0xffff;
+        setFrame(buildFrame(p.source, seqRef.current, payload));
+        setRevealed(0);
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- clock resumes from `now`
+  }, [onScreen, reduced, rand]);
+
+  // Bytes appear left to right, like a frame on the wire.
+  useEffect(() => {
+    if (revealed >= frame.bytes.length) return;
+    if (reduced) {
+      setRevealed(Infinity);
+      return;
+    }
+    const id = setTimeout(() => setRevealed((r) => r + 1), 18);
+    return () => clearTimeout(id);
+  }, [revealed, frame, reduced]);
+
+  // Typing writes the payload; the CRC follows every byte.
+  useEffect(() => {
+    if (!onScreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement | null;
+      if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      let next: number[] | null = null;
+      if (e.key === "Backspace") next = (typed ?? []).slice(0, -1);
+      else if (e.key.length === 1 && e.key.charCodeAt(0) < 128) next = [...(typed ?? []), e.key.charCodeAt(0)].slice(-12);
+      if (!next) return;
+      lastTyped.current = performance.now();
+      pulse.current = null;
+      setTyped(next);
+      seqRef.current = (seqRef.current + 1) & 0xffff;
+      setFrame(buildFrame("you", seqRef.current, next));
+      setRevealed(Infinity);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onScreen, typed]);
+
+  const tx = reduced ? 300 : trainX(now);
+  const p = pulse.current;
+  let dot: { x: number; y: number } | null = null;
+  let ripple = 0;
+  if (p) {
+    const k = Math.min(1, (now - p.start) / TRAVEL_MS);
+    ripple = k;
+    const a = p.from;
+    const pts = p.via ? [a, p.via, CRG_IN] : [a, CRG_IN];
+    const seg = k * (pts.length - 1);
+    const i = Math.min(pts.length - 2, Math.floor(seg));
+    const f = seg - i;
+    dot = { x: pts[i].x + (pts[i + 1].x - pts[i].x) * f, y: pts[i].y + (pts[i + 1].y - pts[i].y) * f };
+  }
+
+  const fieldOf = (i: number) => frame.fields.find((f) => i >= f.from && i < f.to)!;
+  const hoverField = hover !== null ? fieldOf(hover) : null;
+  const shown = Math.min(revealed, frame.bytes.length);
+  const verified = shown >= frame.bytes.length;
+
+  return (
+    <div ref={ref} className="overflow-hidden rounded-[6px] border border-line-2 bg-sheet shadow-[0_24px_50px_-30px_#1b2a4a55]">
+      <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 font-mono text-xs">
+        <span className="text-ink-2">
+          radio link<span className="hidden sm:inline"> / CRG under test</span>
+        </span>
+        <span className="text-muted">dashed = simulated</span>
+      </div>
+
+      <svg viewBox="0 0 640 200" className="block h-auto w-full" role="img" aria-label="Simulated train, radio gateways and zone controller sending radio messages to the CRG software under test.">
+        {/* track */}
+        <line x1="16" x2="624" y1={TRACK_Y} y2={TRACK_Y} stroke="var(--ink-2)" strokeWidth="1.5" />
+        {Array.from({ length: 39 }, (_, i) => (
+          <line key={i} x1={20 + i * 16} x2={20 + i * 16} y1={TRACK_Y - 3} y2={TRACK_Y + 3} stroke="var(--line-2)" />
+        ))}
+
+        {/* radio gateways */}
+        {MASTS.map((m) => (
+          <g key={m}>
+            <line x1={m} x2={m} y1={22} y2={TRACK_Y - 6} stroke="var(--ink-2)" strokeDasharray="3 3" />
+            <path d={`M${m - 7},30 L${m},16 L${m + 7},30`} fill="none" stroke="var(--ink-2)" strokeDasharray="3 2" />
+            <text x={m + 10} y={22} fontSize="11" fontFamily="var(--font-martian)" fill="var(--muted)">WRG</text>
+          </g>
+        ))}
+
+        {/* train (CC onboard) */}
+        <g transform={`translate(${tx},${TRACK_Y - 15})`}>
+          <rect width="54" height="12" rx="3" fill="var(--sheet)" stroke="var(--ink)" strokeDasharray="4 2" />
+          <rect x="6" y="3" width="8" height="4" fill="var(--ink-2)" />
+          <rect x="20" y="3" width="8" height="4" fill="var(--ink-2)" />
+          <rect x="34" y="3" width="8" height="4" fill="var(--ink-2)" />
+          <text x="0" y="-5" fontSize="11" fontFamily="var(--font-martian)" fill="var(--muted)">CC</text>
+        </g>
+        {p?.source === "CC" && ripple < 1 && (
+          <circle cx={p.from.x} cy={p.from.y} r={6 + ripple * 26} fill="none" stroke="var(--ink)" strokeOpacity={1 - ripple} />
+        )}
+
+        {/* zone controller */}
+        <rect x={ZC.x - 22} y={ZC.y - 14} width="56" height="28" rx="4" fill="var(--sheet)" stroke="var(--ink-2)" strokeDasharray="4 2" />
+        <text x={ZC.x - 10} y={ZC.y + 4} fontSize="12" fontFamily="var(--font-martian)" fill="var(--ink-2)">ZC</text>
+
+        {/* links to the CRG */}
+        <path d={`M${ZC.x - 22},${ZC.y} C${ZC.x - 120},${ZC.y} ${CRG_IN.x + 60},${CRG.y - 30} ${CRG_IN.x},${CRG.y}`} fill="none" stroke="var(--line-2)" />
+        {MASTS.map((m) => (
+          <path key={m} d={`M${m},${TRACK_Y + 4} C${m},${TRACK_Y + 50} ${CRG_IN.x},${CRG.y - 40} ${CRG_IN.x},${CRG.y}`} fill="none" stroke="var(--line-2)" />
+        ))}
+
+        {/* CRG: the real software under test */}
+        <rect x={CRG.x} y={CRG.y} width={CRG.w} height={CRG.h} rx="5" fill="var(--ink)" />
+        <text x={CRG.x + 14} y={CRG.y + 18} fontSize="13" fontWeight="600" fontFamily="var(--font-instrument)" fill="var(--ground)">CRG</text>
+        <text x={CRG.x + 14} y={CRG.y + 32} fontSize="10" fontFamily="var(--font-martian)" fill="#b9bec8">under test</text>
+        {verified && frame && (
+          <circle cx={CRG.x + CRG.w - 14} cy={CRG.y + 14} r="4" fill="var(--accent)" />
+        )}
+
+        {dot && <circle cx={dot.x} cy={dot.y} r="5" fill="var(--accent)" stroke="var(--ink)" strokeWidth="1.5" />}
+      </svg>
+
+      {/* The frame, byte by byte */}
+      <div className="border-t border-line px-4 pt-4 pb-3">
+        <div className="flex flex-wrap gap-y-3" onMouseLeave={() => setHover(null)}>
+          {frame.fields.map((f) => (
+            <div key={f.name} className="mr-2">
+              <div className="flex">
+                {frame.bytes.slice(f.from, f.to).map((b, j) => {
+                  const i = f.from + j;
+                  const on = i < shown;
+                  const isPayload = f.name === "payload";
+                  const isCrc = f.name.startsWith("crc");
+                  return (
+                    <span
+                      key={i}
+                      onMouseEnter={() => setHover(i)}
+                      className={`w-[22px] text-center font-mono text-[11px] leading-6 tabular transition-colors duration-150 ${
+                        hover === i ? "bg-ink text-ground" : isCrc && verified ? "bg-accent text-ink" : isPayload ? "bg-sunken" : ""
+                      } ${on ? "opacity-100" : "opacity-0"}`}
+                    >
+                      {hex(b)}
+                    </span>
+                  );
+                })}
+              </div>
+              <p className={`mt-0.5 font-mono text-[10px] ${hoverField === f ? "text-ink" : "text-muted"}`}>{f.name}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-3 min-h-5 font-mono text-[11px] text-ink-2" aria-live="polite">
+          {hover !== null
+            ? `byte ${hover}, ${hoverField!.name}: 0x${hex(frame.bytes[hover])}${
+                frame.bytes[hover] >= 32 && frame.bytes[hover] < 127 ? ` '${String.fromCharCode(frame.bytes[hover])}'` : ""
+              }`
+            : `${frame.source} to CRG, ${TYPE[frame.source].meaning}, seq ${frame.seq}, ${frame.payload.length} B payload, crc 0x${hex(frame.crc, 8)} ${verified ? "verified" : "…"}`}
+        </p>
+      </div>
+      <p className="border-t border-line bg-sunken px-4 py-2 text-xs text-muted">
+        {typed ? "Your keys are the payload. Change one byte and the CRC changes completely." : "Type anything to write the payload yourself."}{" "}
+        Illustrative frame layout, not the real protocol.
+      </p>
+    </div>
+  );
+}

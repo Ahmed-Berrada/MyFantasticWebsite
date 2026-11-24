@@ -4,8 +4,8 @@ Source of my portfolio. **Right first. Then fast.**
 
 The hero is a live train graph (a Marey diagram): move the pointer to read the timetable, type to put timed
 pulses on a signal lane, each labelled with how long this page took to get your key on screen. Further down,
-a price-time priority matching engine (TypeScript port of the layout in my C++
-[lob-engine](https://github.com/Ahmed-Berrada/lob-engine)) and a Monte Carlo pricer run live in the page.
+a price-time priority matching engine (TypeScript port of the layout used in the C++17 version of
+[Order_Book](https://github.com/Ahmed-Berrada/Order_Book)) and a Monte Carlo pricer run live in the page.
 
 ## Run
 
