@@ -1,4 +1,5 @@
-import { certification, education, positions, sideRoles, stack } from "@/src/content/profile";
+import MetroLine from "./MetroLine";
+import { certification, education, stack } from "@/src/content/profile";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -10,7 +11,6 @@ function Row({ title, children }: { title: string; children: React.ReactNode }) 
 }
 
 export default function Background() {
-  const earlier = positions.slice(1);
   return (
     <section id="background" className="border-t border-line-2 py-24 md:py-36">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
@@ -18,42 +18,16 @@ export default function Background() {
           Background
         </h2>
 
+        <div className="mb-20">
+          <MetroLine />
+        </div>
+
         <Row title="Education">
           <p className="text-lg">{education.school}</p>
           <p className="text-ink-2">
             {education.degree}, {education.period}.
           </p>
           <p className="mt-4 max-w-[40rem] text-ink-2">{education.coursework}</p>
-        </Row>
-
-        <Row title="Before Siemens">
-          <ul className="space-y-4">
-            {earlier.map((p) => (
-              <li key={p.org}>
-                <p className="text-lg">
-                  {p.org}, <span className="text-ink-2">{p.role.toLowerCase()}</span>
-                </p>
-                <p className="text-muted">
-                  {p.period}, {p.place}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </Row>
-
-        <Row title="Outside work">
-          <ul className="space-y-4">
-            {sideRoles.map((r) => (
-              <li key={r.org}>
-                <p className="text-lg">
-                  {r.role}, {r.org}
-                </p>
-                <p className="text-ink-2">
-                  {r.note} <span className="text-muted">{r.period}.</span>
-                </p>
-              </li>
-            ))}
-          </ul>
         </Row>
 
         <Row title="Tools">
