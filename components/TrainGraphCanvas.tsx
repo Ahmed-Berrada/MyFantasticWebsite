@@ -7,9 +7,11 @@ const SIM_SPEED = 9; // simulated seconds per real second
 const LANE_H = 64; // keyboard lane height, px
 const ORIGIN_S = 6 * 3600 + 41 * 60; // the simulated clock starts at 06:41
 const MAX_PULSES = 48;
+const LANE_PX_PER_S = 60; // the key lane is zoomed in: 60 px per real second
 
 interface Pulse {
   t: number; // sim time when the key was pressed
+  real: number; // performance.now() at the key press
   label: string;
   ms: number | null; // key press -> next frame
   seq: number;
@@ -61,13 +63,20 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
   useEffect(() => {
     const s = state.current;
     const record = (label: string, stamp: number) => {
-      const pulse: Pulse = { t: s.now, label, ms: null, seq: ++s.seq };
+      const pulse: Pulse = { t: s.now, real: performance.now(), label, ms: null, seq: ++s.seq };
       s.pulses.push(pulse);
       if (s.pulses.length > MAX_PULSES) s.pulses.shift();
-      requestAnimationFrame((frame) => {
-        pulse.ms = Math.max(0, frame - stamp);
-        const done = s.pulses.filter((p) => p.ms !== null).map((p) => p.ms!).sort((a, b) => a - b);
-        onLatency?.(pulse.ms, done[Math.floor(done.length / 2)], done.length);
+      // rAF runs before the frame renders; a message posted from it lands just after,
+      // which approximates "the pulse is on screen".
+      requestAnimationFrame(() => {
+        const ch = new MessageChannel();
+        ch.port1.onmessage = () => {
+          pulse.ms = Math.max(0, performance.now() - stamp);
+          const done = s.pulses.filter((p) => p.ms !== null).map((p) => p.ms!).sort((a, b) => a - b);
+          onLatency?.(pulse.ms, done[Math.floor(done.length / 2)], done.length);
+          ch.port1.close();
+        };
+        ch.port2.postMessage(0);
       });
       setHint(false);
     };
@@ -250,8 +259,10 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
       ctx.lineWidth = 1.25;
       ctx.beginPath();
       ctx.moveTo(0, base);
-      const pulses = [...s.pulses].sort((a, b) => a.t - b.t);
-      const px = (pl: Pulse, k: number) => (reduced ? width - 60 - (pulses.length - 1 - k) * 34 : xOf(pl.t));
+      const pulses = [...s.pulses].sort((a, b) => a.real - b.real);
+      const realNow = performance.now();
+      const px = (pl: Pulse, k: number) =>
+        reduced ? width - 60 - (pulses.length - 1 - k) * 34 : width - 40 - ((realNow - pl.real) / 1000) * LANE_PX_PER_S;
       pulses.forEach((pl, k) => {
         const x = px(pl, k);
         if (x < -20) return;
@@ -267,9 +278,11 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
         const x = px(pl, k);
         if (x < -20) return;
         const newest = pl.seq === s.seq;
+        const next = pulses[k + 1];
+        const room = newest || !next || px(next, k + 1) - x > 36;
         ctx.fillStyle = newest ? colors.ink : colors.muted;
-        ctx.fillText(pl.label, x, base - 26);
-        if (pl.ms !== null) ctx.fillText(`${pl.ms.toFixed(1)}`, x, base + 13);
+        if (room || pl.label.length === 1) ctx.fillText(pl.label, x, base - 26);
+        if (pl.ms !== null && room) ctx.fillText(`${pl.ms.toFixed(1)} ms`, x, base + 13);
       });
     }
 
