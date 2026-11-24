@@ -56,7 +56,7 @@ export default function Work() {
             </p>
           </header>
 
-          <div className="grid gap-14 pt-12 lg:grid-cols-[minmax(0,500px)_1fr] lg:gap-20">
+          <div className="grid grid-cols-1 gap-14 pt-12 lg:grid-cols-[minmax(0,500px)_1fr] lg:gap-20 [&>*]:min-w-0">
             <div>
               <LiveOrderBook />
               <p className="mt-3 text-sm text-muted">
@@ -107,7 +107,7 @@ export default function Work() {
             <Repo href="https://github.com/Ahmed-Berrada/Monte-Carlo-Option-Pricing">Monte-Carlo-Option-Pricing</Repo>
           </header>
 
-          <div className="grid gap-14 pt-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-20">
+          <div className="grid grid-cols-1 gap-14 pt-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-20 [&>*]:min-w-0">
             <div>
               <MonteCarloLab />
               <p className="mt-3 text-sm text-muted">
