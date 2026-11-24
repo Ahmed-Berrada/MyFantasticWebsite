@@ -26,14 +26,14 @@ const mono = Martian_Mono({
 });
 
 const description =
-  "Software engineer focused on low-latency trading systems and safety-critical automation. Order book matching engine (C++17 / Java 21, 163 ns median), GPU Monte Carlo pricer. Siemens Mobility, ESIEA 2027.";
+  "Software engineer building systems that have to be right and fast: safety-critical rail software at Siemens Mobility, plus low-latency engines (order book matching at 163 ns median) and GPU compute. ESIEA 2027, Paris.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ahmedberrada.com"),
-  title: "Ahmed Berrada · Low-latency & critical systems engineer",
+  title: "Ahmed Berrada, software engineer for critical and low-latency systems",
   description,
   openGraph: {
-    title: "Ahmed Berrada · Low-latency & critical systems engineer",
+    title: "Ahmed Berrada, software engineer for critical and low-latency systems",
     description,
     url: "https://www.ahmedberrada.com",
     siteName: "Ahmed Berrada",

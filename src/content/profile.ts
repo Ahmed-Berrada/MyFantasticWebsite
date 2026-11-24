@@ -26,8 +26,8 @@ export interface SideRole {
 
 export const profile = {
   name: "Ahmed Berrada",
-  headline: "Software engineer · low-latency & critical systems",
-  availability: "Open to full-time roles from September 2027 · Paris",
+  headline: "Software engineer for critical and low-latency systems",
+  availability: "Looking for a permanent full-time role from September 2027, in Paris",
   email: "ahmed.berrada@proton.me",
   links: {
     github: { label: "GitHub", href: "https://github.com/Ahmed-Berrada" },
@@ -39,7 +39,7 @@ export const positions: Position[] = [
   {
     period: "Sep 2025 – Aug 2027",
     role: "Software Engineer, Simulation & Tooling (apprenticeship)",
-    org: "Siemens Mobility · CBTC rail signalling",
+    org: "Siemens Mobility, CBTC rail signalling",
     place: "Châtillon, France",
     points: [
       "New York City Transit Crosstown line modernisation, Siemens Mobility's first 5G CBTC radio solution. On the team from the very first release.",
