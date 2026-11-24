@@ -204,7 +204,7 @@ export default function LiveOrderBook() {
 
       <style>{`
         .tape-row { animation: tapeIn .45s ease-out; }
-        @keyframes tapeIn { from { background: var(--accent-soft); } to { background: transparent; } }
+        @keyframes tapeIn { from { background: var(--sunken); } to { background: transparent; } }
       `}</style>
     </div>
   );
