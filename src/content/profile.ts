@@ -91,7 +91,6 @@ export const education = {
   degree: "Engineering degree (Master's level), Computer Science, Artificial Intelligence track",
   period: "2022 – 2027",
   coursework: "Mathematics (probability, statistics, optimisation), algorithms, software development, architecture.",
-  reading: ["Shreve, Stochastic Calculus for Finance", "Hull, Options, Futures and Other Derivatives", "Joshi, C++ Design Patterns and Derivatives Pricing"],
 };
 
 export const certification = "AWS Certified AI Practitioner, October 2026";

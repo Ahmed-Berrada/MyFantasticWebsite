@@ -24,9 +24,6 @@ export default function Background() {
             {education.degree}, {education.period}.
           </p>
           <p className="mt-4 max-w-[40rem] text-ink-2">{education.coursework}</p>
-          <p className="mt-4 max-w-[40rem] text-ink-2">
-            On the side: {education.reading.join("; ")}.
-          </p>
         </Row>
 
         <Row title="Before Siemens">
