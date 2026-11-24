@@ -341,7 +341,7 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
         aria-label="A live train graph: each line is a train running between stations over time. Moving the pointer reads the timetable; pressing keys draws timed pulses on a signal lane."
       />
       {hint && (
-        <p className="pointer-events-none absolute bottom-[22px] left-0 text-sm text-muted">
+        <p className="pointer-events-none absolute right-10 bottom-[22px] text-right text-sm text-muted">
           Type anything. Each key is timed from press to the next frame.
         </p>
       )}

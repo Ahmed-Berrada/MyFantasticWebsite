@@ -16,9 +16,11 @@ export default function Hero() {
 
   return (
     <section id="top" className="relative flex flex-col overflow-hidden pt-20 lg:block lg:min-h-[100dvh]">
-      {/* The instrument: full-bleed on wide screens, fading out behind the text. */}
-      <div className="relative order-2 mx-5 mb-16 h-[400px] lg:absolute lg:inset-x-0 lg:top-16 lg:m-0 lg:h-[calc(100dvh-4rem)] lg:[mask-image:linear-gradient(90deg,transparent_0%,transparent_22%,#000_52%)]">
-        <TrainGraphCanvas onLatency={onLatency} />
+      {/* The instrument shares the page's centred column, fading out behind the text. */}
+      <div className="relative order-2 mx-5 mb-16 h-[400px] lg:absolute lg:inset-x-0 lg:top-16 lg:mx-auto lg:mb-0 lg:h-[calc(100dvh-4rem)] lg:max-w-7xl lg:px-8">
+        <div className="h-full w-full lg:[mask-image:linear-gradient(90deg,transparent_0%,transparent_26%,#000_50%)]">
+          <TrainGraphCanvas onLatency={onLatency} />
+        </div>
       </div>
 
       <div className="pointer-events-none relative order-1 mx-auto w-full max-w-7xl px-5 pt-10 pb-12 md:px-8 lg:pt-[14vh] lg:pb-20">
