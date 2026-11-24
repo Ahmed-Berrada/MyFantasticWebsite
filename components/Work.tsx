@@ -50,10 +50,7 @@ export default function Work() {
               <h3 className="font-display text-4xl leading-tight font-medium tracking-tight md:text-5xl">A matching engine</h3>
               <p className="mt-2 text-lg text-ink-2">Deterministic price-time priority, in Java 21 and C++17.</p>
             </div>
-            <p className="flex gap-6">
-              <Repo href="https://github.com/Ahmed-Berrada/Order_Book">Order_Book</Repo>
-              <Repo href="https://github.com/Ahmed-Berrada/lob-engine">lob-engine</Repo>
-            </p>
+            <Repo href="https://github.com/Ahmed-Berrada/Order_Book">Order_Book on GitHub</Repo>
           </header>
 
           <div className="grid grid-cols-1 gap-14 pt-12 lg:grid-cols-[minmax(0,500px)_1fr] lg:gap-20 [&>*]:min-w-0">

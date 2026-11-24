@@ -20,7 +20,7 @@
 
 ## Content
 - Copy for positions, roles, education and tools: `src/content/profile.ts` (from the owner's CV).
-- Projects shown: Order Book (Order_Book + lob-engine) and the GPU Monte Carlo pricer only. Do not add others unless asked.
+- Projects shown: Order Book (Order_Book repo only; never mention or link lob-engine) and the GPU Monte Carlo pricer only. Do not add others unless asked.
 - Quoted figures (163 ns, 3.46M ops/s, 295 s / 7.4 s / 0.46 s) come from the CV. Live numbers are labelled as live.
 
 ## Code map
