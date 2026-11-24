@@ -1,8 +1,8 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Siemens from "@/components/Siemens";
 import Work from "@/components/Work";
-import Experience from "@/components/Experience";
-import Stack from "@/components/Stack";
+import Background from "@/components/Background";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -11,9 +11,9 @@ export default function Home() {
       <Navbar />
       <main id="main">
         <Hero />
+        <Siemens />
         <Work />
-        <Experience />
-        <Stack />
+        <Background />
         <Contact />
       </main>
     </>

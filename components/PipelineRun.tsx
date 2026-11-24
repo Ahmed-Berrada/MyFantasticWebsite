@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Check, Loader2 } from "lucide-react";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
 
 const stages = [
-  { name: "Pipeline triggered", detail: "GitLab CI · dedicated runner", ms: 900 },
-  { name: "Boot CRG under test", detail: "QEMU/KVM · isolated Linux network namespaces", ms: 1400 },
-  { name: "Start stimulation", detail: "CRG Message Generator simulates CC · ZC · WRG", ms: 1200 },
-  { name: "Run test campaign", detail: "Robot Framework · one requirement per scenario", ms: 4200 },
+  { name: "Pipeline triggered", detail: "GitLab CI, dedicated runner", ms: 900 },
+  { name: "Boot CRG under test", detail: "QEMU/KVM, isolated Linux network namespaces", ms: 1400 },
+  { name: "Start stimulation", detail: "CRG Message Generator plays CC, ZC and WRG", ms: 1200 },
+  { name: "Run test campaign", detail: "Robot Framework, one requirement per scenario", ms: 4200 },
   { name: "Archive results", detail: "Reports and logs stored per release", ms: 900 },
 ];
 const SCENARIOS = 200;
@@ -50,9 +49,9 @@ export default function PipelineRun() {
   const finished = t >= total;
 
   return (
-    <div ref={ref} className="self-start overflow-hidden rounded-xl border border-line-2 bg-sheet lg:sticky lg:top-24">
+    <div ref={ref} className="self-start overflow-hidden rounded-[6px] border border-line-2 bg-sheet lg:sticky lg:top-24">
       <div className="flex items-center justify-between border-b border-line px-4 py-3 font-mono text-xs">
-        <span className="text-ink-2">test-campaign · nightly</span>
+        <span className="text-ink-2">test-campaign / nightly</span>
         <span className={finished ? "text-bid" : "text-running"}>{finished ? "passed" : "running"}</span>
       </div>
 
@@ -61,9 +60,9 @@ export default function PipelineRun() {
           <li key={s.name} className="grid grid-cols-[1.5rem_1fr] gap-x-2 py-2">
             <span className="mt-0.5">
               {state[i] === "done" ? (
-                <Check size={15} className="text-bid" aria-label="done" />
+                <span className="block font-mono text-sm leading-5 text-bid" aria-label="done">✓</span>
               ) : state[i] === "running" ? (
-                <Loader2 size={15} className="animate-spin text-running" aria-label="running" />
+                <span className="mt-1 block size-3 animate-spin rounded-full border-[1.5px] border-running border-t-transparent" aria-label="running" />
               ) : (
                 <span className="mt-1 ml-1 block size-2 rounded-full bg-line-2" aria-label="queued" />
               )}
@@ -87,7 +86,7 @@ export default function PipelineRun() {
           </li>
         ))}
       </ol>
-      <p className="border-t border-line bg-sunken px-4 py-2 text-[11px] text-muted">Illustration of the pipeline I built. No project data.</p>
+      <p className="border-t border-line bg-sunken px-4 py-2 text-xs text-muted">An illustration of the pipeline I built. No project data.</p>
     </div>
   );
 }

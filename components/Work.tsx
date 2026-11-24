@@ -1,125 +1,127 @@
-"use client";
-import { ArrowUpRight } from "lucide-react";
-import SectionHeader from "./SectionHeader";
 import ArchitectureDiagram from "./ArchitectureDiagram";
 import LatencyScale from "./LatencyScale";
+import LiveOrderBook from "./LiveOrderBook";
 import MonteCarloLab from "./MonteCarloLab";
 import SpeedupChart from "./SpeedupChart";
-import { useReveal } from "@/src/lib/useInView";
 
 const orderBookDecisions = [
   {
     title: "One writer per instrument",
-    body: "LMAX-style: a single thread owns each book, so the hot path takes no locks and event order is deterministic.",
+    body: "A single thread owns each book, LMAX-style. The hot path takes no locks and the order of events is deterministic.",
   },
   {
     title: "Journal first, then match",
-    body: "Every accepted order is appended to a write-ahead journal. After a crash, replaying it rebuilds the exact same book.",
+    body: "Every accepted order goes to a write-ahead journal before it is matched. After a crash, replaying the journal rebuilds the exact same book.",
   },
   {
-    title: "Venue-style order entry",
-    body: "FIX 4.4 sessions through QuickFIX/J, plus a REST interface described with OpenAPI.",
+    title: "Orders in the way a venue takes them",
+    body: "FIX 4.4 sessions through QuickFIX/J, and a REST interface described with OpenAPI.",
   },
   {
-    title: "Correctness enforced by tooling",
-    body: "Property-based tests (jqwik), mutation testing (PIT), ArchUnit rules and JaCoCo coverage, all gated in CI.",
+    title: "Correctness checked by machines",
+    body: "Property-based tests (jqwik), mutation testing (PIT), ArchUnit rules and JaCoCo coverage, all enforced in CI.",
   },
 ];
 
-export default function Work() {
-  const ref = useReveal<HTMLElement>();
-
+function Repo({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <section id="work" ref={ref} className="border-t border-line py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <SectionHeader
-          index="01"
-          label="Selected work"
-          title="Two systems, measured end to end."
-          lede="I build trading infrastructure the way safety-critical software is built: deterministic, journaled, and tested until it is boring."
-        />
+    <a href={href} target="_blank" rel="noreferrer" className="link">
+      {children}
+    </a>
+  );
+}
 
-        {/* ---- Order book ---- */}
-        <article className="reveal">
-          <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
+export default function Work() {
+  return (
+    <section id="work" className="border-t border-line-2 py-24 md:py-36">
+      <div className="mx-auto max-w-7xl px-5 md:px-8">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-24">
+          <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em]">Engines</h2>
+          <p className="text-xl leading-relaxed text-pretty text-ink-2">
+            Side projects where the same rules meet a stopwatch. Markets make a good test: a matching engine has to be
+            correct before it is fast, and fast enough that nanoseconds show.
+          </p>
+        </div>
+
+        {/* Matching engine */}
+        <article className="mt-24">
+          <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 border-b border-line pb-6">
             <div>
-              <p className="font-mono text-xs text-muted">Project A · Java 21 · C++17 · FIX 4.4</p>
-              <h3 className="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">Order Book: limit order book matching engine</h3>
+              <h3 className="font-display text-4xl leading-tight font-medium tracking-tight md:text-5xl">A matching engine</h3>
+              <p className="mt-2 text-lg text-ink-2">Price-time priority, in Java 21 with a C++17 prototype.</p>
             </div>
-            <div className="flex gap-2">
-              <RepoLink href="https://github.com/Ahmed-Berrada/Order_Book" label="Order_Book" />
-              <RepoLink href="https://github.com/Ahmed-Berrada/lob-engine" label="lob-engine" />
+            <p className="flex gap-6">
+              <Repo href="https://github.com/Ahmed-Berrada/Order_Book">Order_Book</Repo>
+              <Repo href="https://github.com/Ahmed-Berrada/lob-engine">lob-engine</Repo>
+            </p>
+          </header>
+
+          <div className="grid gap-14 pt-12 lg:grid-cols-[minmax(0,500px)_1fr] lg:gap-20">
+            <div>
+              <LiveOrderBook />
+              <p className="mt-3 text-sm text-muted">
+                The same data structure, ported to TypeScript and running in this page. The benchmark button times one
+                million orders on your machine.
+              </p>
+            </div>
+            <div className="space-y-8">
+              {orderBookDecisions.map((d) => (
+                <div key={d.title}>
+                  <h4 className="text-lg font-semibold">{d.title}</h4>
+                  <p className="mt-1.5 leading-relaxed text-ink-2">{d.body}</p>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="grid gap-12 pt-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
-            <ol className="space-y-6">
-              {orderBookDecisions.map((d, i) => (
-                <li key={d.title} className="grid grid-cols-[2rem_1fr]">
-                  <span className="font-mono text-sm text-ink tabular">{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <p className="font-medium">{d.title}</p>
-                    <p className="mt-1 leading-relaxed text-ink-2">{d.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div>
-              <p className="mb-4 font-mono text-xs tracking-wider text-muted uppercase">Message path</p>
+          <div className="mt-20">
+            <h4 className="text-lg font-semibold">The path an order takes</h4>
+            <div className="mt-6 max-w-4xl">
               <ArchitectureDiagram />
             </div>
           </div>
 
-          <div className="mt-14 grid gap-10 border-t border-line pt-10 lg:grid-cols-[1fr_2fr] lg:gap-16">
+          <div className="mt-20 grid gap-12 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-20">
             <div>
-              <p className="font-mono text-xs tracking-wider text-muted uppercase">C++17 prototype</p>
+              <p className="font-display text-[clamp(56px,7vw,96px)] leading-none font-semibold tracking-[-0.03em] tabular">163 ns</p>
               <p className="mt-3 text-lg leading-relaxed text-ink-2">
-                Pool allocator and intrusive lists keep each order in pre-allocated memory, so cancel is{" "}
-                <span className="font-mono text-ink">O(1)</span> and nothing is allocated on the hot path.
+                Median time to match an order in the C++ prototype, at 3.46 million orders a second. A pool allocator and
+                intrusive lists keep every order in memory allocated up front, so cancel is O(1) and the hot path never
+                allocates.
               </p>
-              <dl className="mt-6 grid grid-cols-2 gap-4">
-                <div>
-                  <dt className="text-sm text-muted">Median latency</dt>
-                  <dd className="font-mono text-2xl">163 ns</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-muted">Throughput</dt>
-                  <dd className="font-mono text-2xl">3.46M/s</dd>
-                </div>
-              </dl>
             </div>
             <div>
-              <p className="mb-1 font-mono text-xs tracking-wider text-muted uppercase">Latency in context</p>
+              <h4 className="mb-5 text-lg font-semibold">How long 163 ns is</h4>
               <LatencyScale />
             </div>
           </div>
         </article>
 
-        {/* ---- Monte Carlo ---- */}
-        <article className="reveal mt-28">
-          <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
+        {/* Monte Carlo */}
+        <article className="mt-36">
+          <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 border-b border-line pb-6">
             <div>
-              <p className="font-mono text-xs text-muted">Project B · Python · NumPy · Numba CUDA · CuPy</p>
-              <h3 className="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">GPU-accelerated Monte Carlo option pricer</h3>
+              <h3 className="font-display text-4xl leading-tight font-medium tracking-tight md:text-5xl">A GPU option pricer</h3>
+              <p className="mt-2 text-lg text-ink-2">Monte Carlo in Python, NumPy, Numba CUDA and CuPy.</p>
             </div>
-            <RepoLink href="https://github.com/Ahmed-Berrada/Monte-Carlo-Option-Pricing" label="Monte-Carlo-Option-Pricing" />
-          </div>
+            <Repo href="https://github.com/Ahmed-Berrada/Monte-Carlo-Option-Pricing">Monte-Carlo-Option-Pricing</Repo>
+          </header>
 
-          <div className="grid gap-12 pt-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
+          <div className="grid gap-14 pt-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-20">
             <div>
               <MonteCarloLab />
               <p className="mt-3 text-sm text-muted">
-                Running live in your browser: antithetic variates, Box-Muller normals, converging on the closed-form price.
+                Running here as you watch: antithetic variates and Box-Muller normals, converging on the closed-form
+                Black-Scholes price.
               </p>
             </div>
             <div>
-              <p className="text-lg leading-relaxed text-ink-2">
-                Prices European options by simulating geometric Brownian motion under the risk-neutral measure. Every path
-                is independent, so the problem is embarrassingly parallel. Moving it from Python loops to NumPy, then to
-                the GPU, cuts the same run from five minutes to under half a second.
+              <p className="text-xl leading-relaxed text-pretty">
+                Every simulated path is independent of every other, which makes the problem embarrassingly parallel.
+                Moving the same simulation from Python loops to NumPy, then to the GPU, takes it from five minutes to under
+                half a second.
               </p>
-              <div className="mt-10">
-                <p className="mb-4 font-mono text-xs tracking-wider text-muted uppercase">Same simulation, three runtimes</p>
+              <div className="mt-12">
                 <SpeedupChart />
               </div>
             </div>
@@ -127,18 +129,5 @@ export default function Work() {
         </article>
       </div>
     </section>
-  );
-}
-
-export function RepoLink({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-1 rounded-md border border-line-2 bg-sheet px-3 py-1.5 font-mono text-xs transition-colors hover:border-ink"
-    >
-      {label} <ArrowUpRight size={13} />
-    </a>
   );
 }
