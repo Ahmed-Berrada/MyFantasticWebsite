@@ -1,11 +1,11 @@
 # ahmedberrada.com
 
-Source of my portfolio: **trading systems, engineered like safety-critical software.**
+Source of my portfolio. **Right first. Then fast.**
 
-The hero runs a real price-time priority matching engine in your browser (TypeScript port of the layout
-used in my C++ [lob-engine](https://github.com/Ahmed-Berrada/lob-engine): intrusive FIFO per price level,
-O(1) cancel, seeded and replayable order flow). The Monte Carlo section prices a European call live with
-antithetic variates and converges on Black-Scholes.
+The hero is a live train graph (a Marey diagram): move the pointer to read the timetable, type to put timed
+pulses on a signal lane, each labelled with how long this page took to get your key on screen. Further down,
+a price-time priority matching engine (TypeScript port of the layout in my C++
+[lob-engine](https://github.com/Ahmed-Berrada/lob-engine)) and a Monte Carlo pricer run live in the page.
 
 ## Run
 
@@ -20,4 +20,4 @@ The contact form needs `RESEND_API_KEY`. Optional: `CONTACT_TO`, `CONTACT_FROM`.
 
 ## Stack
 
-Next.js 16, React 19, TypeScript, Tailwind CSS v4, vitest. Deployed on Vercel.
+Next.js 16, React 19, TypeScript, Tailwind CSS v4, vitest. Deployed on Vercel. Type: Bricolage Grotesque, Instrument Sans, Martian Mono.
