@@ -30,10 +30,10 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.ahmedberrada.com"),
-  title: "Ahmed Berrada, software engineer for critical and low-latency systems",
+  title: "Ahmed Berrada, software engineer for critical systems and performance",
   description,
   openGraph: {
-    title: "Ahmed Berrada, software engineer for critical and low-latency systems",
+    title: "Ahmed Berrada, software engineer for critical systems and performance",
     description,
     url: "https://www.ahmedberrada.com",
     siteName: "Ahmed Berrada",

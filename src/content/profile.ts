@@ -26,7 +26,7 @@ export interface SideRole {
 
 export const profile = {
   name: "Ahmed Berrada",
-  headline: "Software engineer for critical and low-latency systems",
+  headline: "Software engineer, critical systems and performance",
   availability: "Looking for a permanent full-time role from September 2027, in Paris",
   email: "ahmed.berrada@proton.me",
   links: {
@@ -38,17 +38,16 @@ export const profile = {
 export const positions: Position[] = [
   {
     period: "Sep 2025 – Aug 2027",
-    role: "Software Engineer, Simulation & Tooling (apprenticeship)",
+    role: "Software Engineer (apprenticeship)",
     org: "Siemens Mobility, CBTC rail signalling",
     place: "Châtillon, France",
     points: [
-      "New York City Transit Crosstown line modernisation, Siemens Mobility's first 5G CBTC radio solution. On the team from the very first release.",
-      "Designed and built in Python the CRG Message Generator: it simulates onboard and wayside equipment (CC, ZC, WRG) and injects radio messages into the CRG software. The CRG cannot be tested without it.",
-      "Built a Robot Framework automation layer that runs the full campaign (about 200 scenarios, one requirement each) and lets non-developer engineers write their own scenarios.",
-      "Built the infrastructure from scratch: GitLab CI/CD and runners, automatic archiving of reports and logs, CRG virtualisation with QEMU/KVM and Linux network namespaces. Test bench owner.",
-      "Delivered for CRG release 4.2 and adopted by the team. Safety-critical context (CENELEC EN 50128), Scrum, daily work in English with the development team in India.",
+      "5G radio CBTC modernisation of the Crosstown line of the New York City subway (MTA). Safety-critical software (CENELEC EN 50128); Scrum, in English, with the radio, embedded software and test teams (France and India).",
+      "Designed and built in Python the CRG Message Generator: it simulates onboard and wayside equipment (CC, ZC, WRG) and generates byte-exact radio messages (UDP framing, CRC-32/MPEG-2) from YAML/XML configuration. 200+ message types, 300+ scenarios, conformance checked by a pytest suite. Delivered for CRG 4.2.",
+      "Robot Framework library with business-level keywords, used by 9 validators (5 developers, 4 trained non-developers) who write and run their own scenarios.",
+      "Built with the team, from scratch, the execution environment: GitLab CI/CD and runners, CRG virtualised with QEMU/KVM and Linux network namespaces, automatic archiving of reports and logs. Test bench owner.",
     ],
-    tags: ["Python", "Robot Framework", "GitLab CI", "QEMU/KVM", "Linux netns", "EN 50128"],
+    tags: ["Python", "pytest", "Robot Framework", "GitLab CI/CD", "QEMU/KVM", "Linux netns", "EN 50128"],
   },
   {
     period: "Summer 2024",
@@ -89,17 +88,19 @@ export const sideRoles: SideRole[] = [
 
 export const education = {
   school: "ESIEA, Graduate School of Engineering",
-  degree: "Master of Engineering (Diplôme d'Ingénieur), Computer Science, AI major",
-  period: "Expected 2027",
-  coursework: "Algorithms, machine learning, probability & statistics, distributed systems, cloud, C++.",
+  degree: "Engineering degree (Master's level), Computer Science, Artificial Intelligence track",
+  period: "2022 – 2027",
+  coursework: "Mathematics (probability, statistics, optimisation), algorithms, software development, architecture.",
   reading: ["Shreve, Stochastic Calculus for Finance", "Hull, Options, Futures and Other Derivatives", "Joshi, C++ Design Patterns and Derivatives Pricing"],
 };
 
+export const certification = "AWS Certified AI Practitioner, October 2026";
+
 export const stack: { group: string; items: string[] }[] = [
-  { group: "Languages", items: ["C++17", "Java 21", "Python", "SQL", "Bash"] },
-  { group: "Critical systems", items: ["Requirements-based testing", "Simulation and stimulation tools", "Robot Framework", "CENELEC EN 50128 context"] },
-  { group: "Correctness", items: ["Property-based tests (jqwik)", "Mutation testing (PIT)", "ArchUnit, JUnit 5", "Deterministic replay"] },
-  { group: "Performance", items: ["Pool allocators, intrusive lists", "Single-writer threading (LMAX)", "JMH benchmarks", "Numba CUDA, CuPy"] },
-  { group: "Infrastructure", items: ["Linux, network namespaces", "QEMU/KVM", "GitLab CI, GitHub Actions", "Docker"] },
-  { group: "Markets and data", items: ["Order books and matching", "FIX 4.4 (QuickFIX/J)", "Monte Carlo pricing", "NumPy, Polars, PostgreSQL, Spark"] },
+  { group: "Languages", items: ["C++", "Java", "Python", "SQL", "Bash"] },
+  { group: "Critical systems", items: ["Simulation and stimulation tools", "pytest, Robot Framework", "Byte-level protocols (UDP, CRC)", "CENELEC EN 50128 context"] },
+  { group: "Correctness", items: ["Property-based tests (jqwik)", "Mutation testing (PIT)", "ArchUnit, JUnit 5, JaCoCo", "Deterministic replay"] },
+  { group: "Performance", items: ["No allocation on the hot path", "Pool allocators, intrusive lists", "Single-writer threading (LMAX)", "CUDA (Numba, CuPy)"] },
+  { group: "Infrastructure", items: ["Linux, Git", "GitLab CI/CD, GitHub Actions", "Docker, QEMU/KVM", "Spring Boot, AWS"] },
+  { group: "Markets and data", items: ["Order books and matching", "FIX 4.4 (QuickFIX/J)", "Option pricing, Monte Carlo", "NumPy, Pandas, scikit-learn, PyTorch"] },
 ];

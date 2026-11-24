@@ -1,4 +1,4 @@
-import { education, positions, sideRoles, stack } from "@/src/content/profile";
+import { certification, education, positions, sideRoles, stack } from "@/src/content/profile";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -21,7 +21,7 @@ export default function Background() {
         <Row title="Education">
           <p className="text-lg">{education.school}</p>
           <p className="text-ink-2">
-            {education.degree}, {education.period.toLowerCase()}.
+            {education.degree}, {education.period}.
           </p>
           <p className="mt-4 max-w-[40rem] text-ink-2">{education.coursework}</p>
           <p className="mt-4 max-w-[40rem] text-ink-2">
@@ -68,7 +68,8 @@ export default function Background() {
               </div>
             ))}
           </dl>
-          <p className="mt-8 text-ink-2">French (C2), English (C1, my daily working language), Arabic (native).</p>
+          <p className="mt-8 text-ink-2">{certification}.</p>
+          <p className="mt-2 text-ink-2">French (C2), English (C1, my daily working language), Arabic (native).</p>
         </Row>
       </div>
     </section>
