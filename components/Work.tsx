@@ -15,7 +15,7 @@ const orderBookDecisions = [
   },
   {
     title: "Orders in the way a venue takes them",
-    body: "FIX 4.4 sessions through QuickFIX/J, and a REST interface described with OpenAPI.",
+    body: "FIX 4.4 order entry through QuickFIX/J, plus a REST API.",
   },
   {
     title: "Correctness checked by machines",
@@ -48,7 +48,7 @@ export default function Work() {
           <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4 border-b border-line pb-6">
             <div>
               <h3 className="font-display text-4xl leading-tight font-medium tracking-tight md:text-5xl">A matching engine</h3>
-              <p className="mt-2 text-lg text-ink-2">Price-time priority, in Java 21 with a C++17 prototype.</p>
+              <p className="mt-2 text-lg text-ink-2">Deterministic price-time priority, in Java 21 and C++17.</p>
             </div>
             <p className="flex gap-6">
               <Repo href="https://github.com/Ahmed-Berrada/Order_Book">Order_Book</Repo>
@@ -85,7 +85,7 @@ export default function Work() {
             <div>
               <p className="font-display text-[clamp(56px,7vw,96px)] leading-none font-semibold tracking-[-0.03em] tabular">163 ns</p>
               <p className="mt-3 text-lg leading-relaxed text-ink-2">
-                Median time to match an order in the C++ prototype, at 3.46 million orders a second. A pool allocator and
+                Median latency of the C++17 version, at 3.46 million operations a second. A pool allocator and
                 intrusive lists keep every order in memory allocated up front, so cancel is O(1) and the hot path never
                 allocates.
               </p>
@@ -117,9 +117,9 @@ export default function Work() {
             </div>
             <div>
               <p className="text-xl leading-relaxed text-pretty">
-                Every simulated path is independent of every other, which makes the problem embarrassingly parallel.
-                Moving the same simulation from Python loops to NumPy, then to the GPU, takes it from five minutes to under
-                half a second.
+                European options under geometric Brownian motion. Every simulated path is independent of every other,
+                so the work maps onto a GPU. On CuPy the same simulation runs 16 times faster than vectorised NumPy: 0.46 s
+                instead of 7.4 s, against 295 s in pure Python.
               </p>
               <div className="mt-12">
                 <SpeedupChart />

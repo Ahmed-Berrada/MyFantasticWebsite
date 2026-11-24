@@ -13,7 +13,7 @@ interface Node {
 
 const nodes: Node[] = [
   { x: 4, y: 52, w: 132, h: 54, title: "FIX 4.4", sub: "QuickFIX/J" },
-  { x: 4, y: 186, w: 132, h: 54, title: "REST", sub: "OpenAPI" },
+  { x: 4, y: 186, w: 132, h: 54, title: "REST", sub: "API" },
   { x: 176, y: 119, w: 132, h: 54, title: "Sequencer", sub: "WAL journal" },
   { x: 348, y: 119, w: 132, h: 54, title: "Matching", sub: "single writer", tone: "core" },
   { x: 520, y: 52, w: 116, h: 54, title: "Executions", sub: "reports" },

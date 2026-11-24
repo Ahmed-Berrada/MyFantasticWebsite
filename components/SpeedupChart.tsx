@@ -10,6 +10,7 @@ const runs = [
 export default function SpeedupChart() {
   const [ref, seen] = useInView<HTMLDivElement>(0.4);
   const base = runs[0].seconds;
+  const numpy = runs[1].seconds;
 
   return (
     <figure ref={ref}>
@@ -22,7 +23,7 @@ export default function SpeedupChart() {
                 <span className="font-mono text-xs text-muted">{r.stack}</span>
               </span>
               <span className={`font-mono text-sm tabular ${r.highlight ? "text-ink" : "text-ink-2"}`}>
-                {r.seconds} s, {Math.round(base / r.seconds)}×
+                {r.seconds} s{r.highlight ? `, ${Math.round(numpy / r.seconds)}× NumPy` : ""}
               </span>
             </div>
             <div className="h-2.5 rounded-sm bg-sunken">
