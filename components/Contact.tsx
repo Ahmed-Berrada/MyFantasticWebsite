@@ -1,5 +1,6 @@
 "use client";
 import { useState, type FormEvent } from "react";
+import ProximityText from "./ProximityText";
 import { profile } from "@/src/content/profile";
 import type { CvFile } from "@/src/content/cv";
 
@@ -45,7 +46,7 @@ export default function Contact({ cvs }: { cvs: CvFile[] }) {
       <div className="mx-auto grid max-w-7xl gap-16 px-5 md:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,32rem)] lg:gap-24">
         <div>
           <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em] text-balance">
-            Building something that cannot fail, or cannot wait?
+            <ProximityText text="Building something that cannot fail, or cannot wait?" rest={{ wght: 560, wdth: 88 }} peak={{ wght: 800, wdth: 100 }} radius={160} />
           </h2>
           <p className="mt-8 max-w-[34rem] text-xl leading-relaxed text-ink-2 text-pretty">
             I am looking for a permanent software engineering role from September 2027, in Paris. Critical systems,

@@ -68,6 +68,8 @@ export default function ProximityText({
       measure();
     });
     ro.observe(root);
+    // Content above may change height after load; page positions move with it.
+    ro.observe(document.body);
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
     return () => {
