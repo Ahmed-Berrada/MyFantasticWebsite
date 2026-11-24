@@ -16,7 +16,7 @@ interface Props {
 /** One departure-board row: each character flips through the charset until it lands. */
 export default function SplitFlap({ value, width = 4, label }: Props) {
   const target = value.padStart(width, " ");
-  const [ref, seen] = useInView<HTMLDivElement>(0.6);
+  const [ref, seen] = useInView<HTMLDivElement>(0.15);
   const reduced = usePrefersReducedMotion();
   const [chars, setChars] = useState<string[]>(() => Array.from(target, () => " "));
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
