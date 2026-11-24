@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RotateCcw } from "lucide-react";
 import { blackScholesCall, boxMuller, CallEstimator, type OptionParams } from "@/src/lib/montecarlo";
 import { prng } from "@/src/lib/orderbook/flow";
 import { useInView, usePrefersReducedMotion } from "@/src/lib/useInView";
@@ -155,18 +154,18 @@ export default function MonteCarloLab() {
   const err = stats.paths ? Math.abs(stats.price - BS) : null;
 
   return (
-    <div ref={wrapRef} className="overflow-hidden rounded-xl border border-line-2 bg-sheet">
+    <div ref={wrapRef} className="overflow-hidden rounded-[6px] border border-line-2 bg-sheet">
       <div className="flex items-center justify-between border-b border-line px-4 py-3">
         <p className="font-mono text-xs text-ink-2">
-          European call · S₀ 100 · K 100 · σ 20% · r 5% · 1y
+          european call, S₀ 100, K 100, σ 20%, r 5%, 1 year
         </p>
         <button
           onClick={() => setRun((r) => r + 1)}
           disabled={!done}
-          className="grid size-8 place-items-center rounded-md border border-line text-ink-2 transition-colors hover:border-ink disabled:opacity-40"
+          className="rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink disabled:opacity-40"
           aria-label="Run the simulation again"
         >
-          <RotateCcw size={14} />
+          run again
         </button>
       </div>
       <canvas
@@ -177,14 +176,14 @@ export default function MonteCarloLab() {
         aria-label="Simulated geometric Brownian motion price paths, coloured by whether they finish above the strike, with the distribution of terminal prices."
       />
       <div className="grid grid-cols-2 border-t border-line sm:grid-cols-4">
-        <Cell label="Paths" value={stats.paths.toLocaleString("en-US")} />
+        <Cell label="paths" value={stats.paths.toLocaleString("en-US")} />
         <Cell
-          label="Monte Carlo"
+          label="monte carlo"
           value={stats.paths ? `${stats.price.toFixed(3)} ± ${stats.ci.toFixed(3)}` : "–"}
           accent
         />
-        <Cell label="Black-Scholes" value={BS.toFixed(3)} />
-        <Cell label="Abs. error" value={err == null ? "–" : err.toFixed(4)} />
+        <Cell label="black-scholes" value={BS.toFixed(3)} />
+        <Cell label="abs. error" value={err == null ? "–" : err.toFixed(4)} />
       </div>
     </div>
   );
@@ -193,7 +192,7 @@ export default function MonteCarloLab() {
 function Cell({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="border-line px-4 py-2.5 odd:border-r sm:not-last:border-r">
-      <p className="font-mono text-[10px] tracking-wider text-muted uppercase">{label}</p>
+      <p className="font-mono text-[10px] text-muted">{label}</p>
       <p className={`font-mono text-[13px] whitespace-nowrap tabular ${accent ? "text-ink" : ""}`}>{value}</p>
     </div>
   );

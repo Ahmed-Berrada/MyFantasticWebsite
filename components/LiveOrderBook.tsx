@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pause, Play, Zap } from "lucide-react";
 import { OrderFlow } from "@/src/lib/orderbook/flow";
 import type { Depth, Trade } from "@/src/lib/orderbook/engine";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
@@ -127,7 +126,7 @@ export default function LiveOrderBook() {
   const bestAsk = snap?.depth.asks[0]?.price;
 
   return (
-    <div ref={panelRef} className="overflow-hidden rounded-xl border border-line-2 bg-sheet shadow-[0_1px_0_#0000000a,0_24px_60px_-28px_#0b0d1240]">
+    <div ref={panelRef} className="overflow-hidden rounded-[6px] border border-line-2 bg-sheet shadow-[0_24px_50px_-30px_#1b2a4a55]">
       {/* Title bar */}
       <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <div className="flex min-w-0 items-center gap-2.5">
@@ -137,25 +136,25 @@ export default function LiveOrderBook() {
           </span>
           <p className="truncate font-mono text-xs text-ink-2">
             <span className="font-medium text-ink">{running ? "LIVE" : "PAUSED"}</span>
-            <span className="mx-2 text-line-2">|</span>
-            matching engine · in your browser
+            <span className="mx-2 text-line-2">/</span>
+            matching engine, in this tab
           </p>
         </div>
         <button
           onClick={() => setUserPaused(!paused)}
-          className="grid size-8 shrink-0 place-items-center rounded-md border border-line text-ink-2 transition-colors hover:border-ink hover:text-ink"
+          className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px"
           aria-label={paused ? "Resume order flow" : "Pause order flow"}
         >
-          {paused ? <Play size={14} /> : <Pause size={14} />}
+          {paused ? "run" : "pause"}
         </button>
       </div>
 
       <div className="grid sm:grid-cols-[1.25fr_1fr]">
         {/* Ladder */}
         <div className="border-line sm:border-r">
-          <div className="grid grid-cols-[1fr_1fr] px-4 pt-3 pb-1.5 font-mono text-[10px] tracking-wider text-muted uppercase">
-            <span>Price</span>
-            <span className="text-right">Size</span>
+          <div className="grid grid-cols-[1fr_1fr] px-4 pt-3 pb-1.5 font-mono text-[10px] text-muted">
+            <span>price</span>
+            <span className="text-right">size</span>
           </div>
           <Ladder levels={asks} side="ask" maxQty={maxQty} pad={LEVELS} loading={!snap} />
           <div className="flex items-center justify-between border-y border-line bg-sunken px-4 py-1.5 font-mono text-[11px] text-ink-2 tabular">
@@ -169,9 +168,9 @@ export default function LiveOrderBook() {
 
         {/* Trade tape */}
         <div className="hidden sm:block">
-          <div className="grid grid-cols-[1fr_auto] px-4 pt-3 pb-1.5 font-mono text-[10px] tracking-wider text-muted uppercase">
-            <span>Trades</span>
-            <span>Qty</span>
+          <div className="grid grid-cols-[1fr_auto] px-4 pt-3 pb-1.5 font-mono text-[10px] text-muted">
+            <span>trades</span>
+            <span>qty</span>
           </div>
           <ul className="px-2">
             {(snap?.tape ?? []).map((t) => (
@@ -188,19 +187,18 @@ export default function LiveOrderBook() {
 
       {/* Stats + benchmark */}
       <div className="grid grid-cols-3 border-t border-line">
-        <Stat label="Orders" value={snap ? fmt(snap.ops) : "–"} />
-        <Stat label="Trades" value={snap ? fmt(snap.trades) : "–"} />
-        <Stat label="Resting" value={snap ? fmt(snap.resting) : "–"} />
+        <Stat label="orders" value={snap ? fmt(snap.ops) : "–"} />
+        <Stat label="trades" value={snap ? fmt(snap.trades) : "–"} />
+        <Stat label="resting" value={snap ? fmt(snap.resting) : "–"} />
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-sunken px-4 py-3">
         <BenchResult bench={bench} />
         <button
           onClick={runBenchmark}
           disabled={bench.state === "running"}
-          className="inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 font-mono text-xs text-ground transition-opacity hover:opacity-85 disabled:opacity-50"
+          className="rounded-[3px] bg-ink px-3 py-1.5 font-mono text-xs text-ground transition-colors hover:bg-accent hover:text-ink active:translate-y-px disabled:opacity-50"
         >
-          <Zap size={12} />
-          {bench.state === "done" ? "Run again" : "Benchmark 1M orders"}
+          {bench.state === "done" ? "run again" : "time 1M orders"}
         </button>
       </div>
 
@@ -248,7 +246,7 @@ function Ladder({ levels, side, maxQty, pad, loading }: LadderProps) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="border-line px-4 py-2.5 not-last:border-r">
-      <p className="font-mono text-[10px] tracking-wider text-muted uppercase">{label}</p>
+      <p className="font-mono text-[10px] text-muted">{label}</p>
       <p className="font-mono text-sm tabular">{value}</p>
     </div>
   );
@@ -268,13 +266,13 @@ function BenchResult({ bench }: { bench: Bench }) {
   if (bench.state === "done") {
     return (
       <p className="font-mono text-xs text-ink-2 tabular" role="status">
-        <span className="font-medium text-ink">{bench.nsPerOp.toFixed(0)} ns</span>/order ·{" "}
-        {(bench.opsPerSec / 1e6).toFixed(2)}M orders/s <span className="text-muted">(JavaScript)</span>
+        <span className="font-medium text-ink">{bench.nsPerOp.toFixed(0)} ns</span> per order,{" "}
+        {(bench.opsPerSec / 1e6).toFixed(2)}M a second <span className="text-muted">in JavaScript</span>
       </p>
     );
   }
   if (bench.state === "error") {
     return <p className="font-mono text-xs text-ask" role="alert">{bench.message}</p>;
   }
-  return <p className="font-mono text-xs text-muted">Seed {SEED} · replayable flow</p>;
+  return <p className="font-mono text-xs text-muted">seed {SEED}, replayable</p>;
 }

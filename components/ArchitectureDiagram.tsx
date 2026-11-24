@@ -51,10 +51,10 @@ export default function ArchitectureDiagram() {
       {/* Narrow screens: the same flow, stacked. */}
       <ol className="space-y-2 sm:hidden" aria-label="Order flow">
         {[
-          ["FIX 4.4 · REST", "order entry"],
+          ["FIX 4.4 and REST", "order entry"],
           ["Sequencer", "write-ahead journal, replay on restart"],
           ["Matching", "single writer per instrument"],
-          ["Executions · Market data", "reports and L2 depth"],
+          ["Executions and market data", "reports and L2 depth"],
         ].map(([title, sub], i, all) => (
           <li key={title}>
             <div className={`rounded-lg border px-4 py-3 ${i === 2 ? "border-ink bg-ink text-ground" : "border-line-2 bg-sheet"}`}>
@@ -99,7 +99,7 @@ export default function ArchitectureDiagram() {
         <g>
           <rect x={188} y={226} width={108} height={34} rx={6} fill="var(--sunken)" stroke="var(--line-2)" strokeDasharray="4 3" />
           <text x={242} y={247} fontSize={12} textAnchor="middle" fill="var(--ink-2)" fontFamily="var(--font-mono)">
-            journal · replay
+            journal, replay
           </text>
         </g>
 

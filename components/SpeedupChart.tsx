@@ -22,7 +22,7 @@ export default function SpeedupChart() {
                 <span className="font-mono text-xs text-muted">{r.stack}</span>
               </span>
               <span className={`font-mono text-sm tabular ${r.highlight ? "text-ink" : "text-ink-2"}`}>
-                {r.seconds} s · {Math.round(base / r.seconds)}×
+                {r.seconds} s, {Math.round(base / r.seconds)}×
               </span>
             </div>
             <div className="h-2.5 rounded-sm bg-sunken">
