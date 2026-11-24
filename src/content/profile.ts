@@ -97,9 +97,9 @@ export const education = {
 
 export const stack: { group: string; items: string[] }[] = [
   { group: "Languages", items: ["C++17", "Java 21", "Python", "SQL", "Bash"] },
-  { group: "Trading systems", items: ["Order books & matching", "FIX 4.4 (QuickFIX/J)", "Write-ahead journals & replay", "Option pricing, Monte Carlo"] },
-  { group: "Performance", items: ["Pool allocators, intrusive lists", "Single-writer threading (LMAX)", "JMH, benchmarks", "Numba CUDA, CuPy"] },
-  { group: "Testing & automation", items: ["Property-based tests (jqwik)", "Mutation testing (PIT)", "ArchUnit, JUnit 5", "Robot Framework"] },
+  { group: "Critical systems", items: ["Requirements-based testing", "Simulation and stimulation tools", "Robot Framework", "CENELEC EN 50128 context"] },
+  { group: "Correctness", items: ["Property-based tests (jqwik)", "Mutation testing (PIT)", "ArchUnit, JUnit 5", "Deterministic replay"] },
+  { group: "Performance", items: ["Pool allocators, intrusive lists", "Single-writer threading (LMAX)", "JMH benchmarks", "Numba CUDA, CuPy"] },
   { group: "Infrastructure", items: ["Linux, network namespaces", "QEMU/KVM", "GitLab CI, GitHub Actions", "Docker"] },
-  { group: "Data", items: ["NumPy, Pandas, Polars", "PostgreSQL", "Spark", "PyTorch, scikit-learn"] },
+  { group: "Markets and data", items: ["Order books and matching", "FIX 4.4 (QuickFIX/J)", "Monte Carlo pricing", "NumPy, Polars, PostgreSQL, Spark"] },
 ];
