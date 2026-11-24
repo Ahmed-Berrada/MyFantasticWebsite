@@ -1,13 +1,14 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import { profile } from "@/src/content/profile";
+import type { CvFile } from "@/src/content/cv";
 
 type Status = { state: "idle" } | { state: "sending" } | { state: "sent" } | { state: "error"; message: string };
 
 const field =
   "w-full rounded-[3px] border border-line-2 bg-sheet px-3.5 py-3 text-base outline-none transition-colors duration-150 placeholder:text-muted focus:border-ink";
 
-export default function Contact() {
+export default function Contact({ cvs }: { cvs: CvFile[] }) {
   const [copied, setCopied] = useState(false);
   const [status, setStatus] = useState<Status>({ state: "idle" });
 
@@ -70,6 +71,11 @@ export default function Contact() {
             <a href={profile.links.github.href} target="_blank" rel="noreferrer" className="link">
               GitHub
             </a>
+            {cvs.map((c) => (
+              <a key={c.href} href={c.href} className="link">
+                {c.label}
+              </a>
+            ))}
           </p>
         </div>
 

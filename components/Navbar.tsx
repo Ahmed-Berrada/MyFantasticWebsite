@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { profile } from "@/src/content/profile";
+import type { CvFile } from "@/src/content/cv";
 import { useScrolledPast } from "@/src/lib/useInView";
 
 const links = [
@@ -10,7 +11,8 @@ const links = [
   { label: "Contact", href: "#contact" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ cvs }: { cvs: CvFile[] }) {
+  const cv = cvs[0];
   const scrolled = useScrolledPast(12);
   const [open, setOpen] = useState(false);
 
@@ -35,6 +37,11 @@ export default function Navbar() {
           <a href={profile.links.github.href} target="_blank" rel="noreferrer" className="link">
             GitHub
           </a>
+          {cv && (
+            <a href={cv.href} className="rounded-[3px] bg-ink px-3.5 py-1.5 text-ground transition-colors hover:bg-accent hover:text-ink">
+              CV
+            </a>
+          )}
         </div>
 
         <button
@@ -49,7 +56,7 @@ export default function Navbar() {
 
       {open && (
         <div id="mobile-menu" className="border-t border-line px-5 pb-4 md:hidden">
-          {[...links, { label: "GitHub", href: profile.links.github.href }].map((l) => (
+          {[...links, { label: "GitHub", href: profile.links.github.href }, ...cvs.map((c) => ({ label: c.label, href: c.href }))].map((l) => (
             <a
               key={l.href}
               href={l.href}
