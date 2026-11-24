@@ -6,10 +6,10 @@ const stages = [
   { name: "Pipeline triggered", detail: "GitLab CI, dedicated runner", ms: 900 },
   { name: "Boot CRG under test", detail: "QEMU/KVM, isolated Linux network namespaces", ms: 1400 },
   { name: "Start stimulation", detail: "CRG Message Generator plays CC, ZC and WRG", ms: 1200 },
-  { name: "Run test campaign", detail: "Robot Framework, one requirement per scenario", ms: 4200 },
-  { name: "Archive results", detail: "Reports and logs stored per release", ms: 900 },
+  { name: "Run scenarios", detail: "Robot Framework library, pytest conformance suite", ms: 4200 },
+  { name: "Archive results", detail: "JUnit-XML reports and logs, archived automatically", ms: 900 },
 ];
-const SCENARIOS = 200;
+const SCENARIOS = 300;
 const CAMPAIGN = 3;
 const HOLD_MS = 3500;
 
@@ -51,7 +51,7 @@ export default function PipelineRun() {
   return (
     <div ref={ref} className="self-start overflow-hidden rounded-[6px] border border-line-2 bg-sheet lg:sticky lg:top-24">
       <div className="flex items-center justify-between border-b border-line px-4 py-3 font-mono text-xs">
-        <span className="text-ink-2">test-campaign / nightly</span>
+        <span className="text-ink-2">test-campaign</span>
         <span className={finished ? "text-bid" : "text-running"}>{finished ? "passed" : "running"}</span>
       </div>
 
