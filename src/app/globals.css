@@ -1,76 +1,110 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/*
+ * Whiteprint + safety yellow.
+ * Cool drawing-office greys, true ink, and one hazard-yellow used only as a fill
+ * (cursor bands, highlights, the thing that is happening right now).
+ * Green / red appear only inside market-data instruments.
+ */
 :root {
-  --bg:        #07090f;
-  --bg-2:      #0d1117;
-  --bg-3:      #131a26;
-  --border:    #1e2d45;
-  --border-2:  #243452;
-  --accent:    #c8a84b;
-  --accent-2:  #e8c96a;
-  --accent-dim:#c8a84b18;
-  --accent-glow:#c8a84b35;
-  --navy:      #1a3a6b;
-  --navy-light:#2a5298;
-  --text:      #e9ecf2;
-  --text-muted:#5a6a82;
-  --text-dim:  #8a9ab2;
-  --font-display: 'Playfair Display', serif;
-  --font-mono:    'JetBrains Mono', monospace;
-  --font-body:    'Inter', sans-serif;
+  --ground: #eceef0;
+  --sheet: #f7f8f9;
+  --sunken: #e2e5e9;
+  --ink: #121417;
+  --ink-2: #3b4048;
+  --muted: #5d636d;
+  --line: #d3d7dd;
+  --line-2: #b9bfc8;
+  --accent: #ffc400;
+  --accent-soft: #ffc40033;
+  --bid: #1c7a4b;
+  --bid-soft: #1c7a4b1f;
+  --ask: #c23a2b;
+  --ask-soft: #c23a2b1a;
+  --running: #a86a00;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; background: var(--bg); }
+@theme inline {
+  --color-ground: var(--ground);
+  --color-sheet: var(--sheet);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-bid: var(--bid);
+  --color-bid-soft: var(--bid-soft);
+  --color-ask: var(--ask);
+  --color-ask-soft: var(--ask-soft);
+  --color-running: var(--running);
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-martian), ui-monospace, monospace;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  background: var(--ground);
+}
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
-::selection { background: var(--accent); color: #000; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+::selection { background: var(--accent); color: var(--ink); }
 
-body::before {
-  content: '';
+/* Paper grain: breaks the flat digital surface. */
+body::after {
+  content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
-  opacity: 0.3;
+  z-index: 60;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.font-display { font-family: var(--font-display); }
-.font-mono    { font-family: var(--font-mono); }
+.tabular { font-variant-numeric: tabular-nums; }
 
-.gold-border {
-  position: relative;
+/* Links read as links: ink underline that thickens into a yellow band on hover. */
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--line-2);
+  transition: text-decoration-color 160ms ease, background-size 220ms var(--ease-out-quint);
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 0;
 }
-.gold-border::before {
-  content: '';
+.link:hover { text-decoration-color: var(--ink); background-size: 100% 40%; }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--accent);
+  border-radius: 2px;
+}
+
+.skip-link {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, var(--accent), transparent 50%, var(--navy-light));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+  left: 16px;
+  top: -48px;
+  z-index: 70;
+  background: var(--ink);
+  color: var(--ground);
+  padding: 8px 12px;
 }
+.skip-link:focus { top: 12px; }
 
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(28px); }
-  to   { opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
-.fade-in { opacity: 0; }
-.fade-in.visible { animation: fadeUp 0.7s ease forwards; }

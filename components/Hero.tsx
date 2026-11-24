@@ -1,116 +1,60 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import ProximityText from "./ProximityText";
+import TrainGraphCanvas from "./TrainGraphCanvas";
+import { profile } from "@/src/content/profile";
 
-const roles = ["Finance.", "AI.", "Data."];
+interface Latency {
+  last: number;
+  median: number;
+  count: number;
+}
 
 export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [fade, setFade] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFade(false);
-      setTimeout(() => { setRoleIndex(i => (i + 1) % roles.length); setFade(true); }, 350);
-    }, 2200);
-    return () => clearInterval(interval);
-  }, []);
+  const [lat, setLat] = useState<Latency | null>(null);
+  const onLatency = useCallback((last: number, median: number, count: number) => setLat({ last, median, count }), []);
 
   return (
-    <section style={{
-      minHeight: "100vh", display: "flex", flexDirection: "column",
-      alignItems: "center", justifyContent: "center", textAlign: "center",
-      padding: "80px 48px 0", position: "relative", overflow: "hidden",
-      background: "var(--bg)",
-    }}>
-      <div style={{ position:"absolute", top:"-15%", left:"-10%", width:"600px", height:"600px", borderRadius:"50%", background:"radial-gradient(circle, #1a3a6b28 0%, transparent 68%)", pointerEvents:"none" }}/>
-      <div style={{ position:"absolute", bottom:"-10%", right:"-5%", width:"500px", height:"500px", borderRadius:"50%", background:"radial-gradient(circle, #c8a84b0d 0%, transparent 65%)", pointerEvents:"none" }}/>
-
-      {/* Pill */}
-      <div style={{
-        display:"inline-flex", alignItems:"center", gap:"8px",
-        border:"1px solid var(--border-2)", borderRadius:"100px",
-        padding:"6px 16px", marginBottom:"52px", background:"var(--bg-2)",
-      }}>
-        <div style={{ width:"5px", height:"5px", borderRadius:"50%", background:"var(--accent)", boxShadow:"0 0 8px var(--accent)" }}/>
-        <span style={{ fontFamily:"var(--font-mono)", fontSize:"10px", color:"var(--text-muted)", letterSpacing:"0.18em" }}>
-          CS STUDENT · CLASS OF 2027
-        </span>
+    <section id="top" className="relative flex flex-col overflow-hidden pt-20 lg:block lg:min-h-[100dvh]">
+      {/* The instrument: full-bleed on wide screens, fading out behind the text. */}
+      <div className="relative order-2 mx-5 mb-16 h-[400px] lg:absolute lg:inset-x-0 lg:top-16 lg:m-0 lg:h-[calc(100dvh-4rem)] lg:[mask-image:linear-gradient(90deg,transparent_0%,transparent_22%,#000_52%)]">
+        <TrainGraphCanvas onLatency={onLatency} />
       </div>
 
-      {/* Name */}
-      <h1 className="font-display hero-name" style={{
-        fontSize:"clamp(58px, 12vw, 120px)",
-        lineHeight:0.92, letterSpacing:"-0.035em",
-        marginBottom:"32px", color:"var(--text)",
-      }}>
-        Ahmed<br/>
-        <span style={{ color:"var(--accent)", fontStyle:"italic" }}>Berrada</span>
-      </h1>
+      <div className="pointer-events-none relative order-1 mx-auto w-full max-w-7xl px-5 pt-10 pb-12 md:px-8 lg:pt-[14vh] lg:pb-20">
+        <div className="max-w-[34rem] [&_a]:pointer-events-auto">
+          <p className="text-ink-2">{profile.name}, software engineer</p>
 
-      {/* Role switcher */}
-      <div style={{
-        display:"flex", alignItems:"center", justifyContent:"center",
-        gap:"14px", marginBottom:"36px", height:"32px",
-      }}>
-        <div style={{ width:"32px", height:"1px", background:"linear-gradient(90deg, transparent, var(--border-2))" }}/>
-        <span style={{ fontFamily:"var(--font-mono)", fontSize:"13px", color:"var(--text-dim)", letterSpacing:"0.1em" }}>
-          Breaking into
-        </span>
-        <span className="font-display" style={{
-          fontSize:"22px", color:"var(--accent)", fontStyle:"italic",
-          letterSpacing:"-0.01em", minWidth:"80px", textAlign:"left",
-          opacity: fade ? 1 : 0, transform: fade ? "translateY(0)" : "translateY(6px)",
-          transition:"opacity 0.35s ease, transform 0.35s ease",
-        }}>
-          {roles[roleIndex]}
-        </span>
-        <div style={{ width:"32px", height:"1px", background:"linear-gradient(90deg, var(--border-2), transparent)" }}/>
+          <h1 className="mt-5 font-display text-[clamp(64px,10vw,150px)] leading-[0.86] tracking-[-0.035em]">
+            <ProximityText text="Right first." className="block" />
+            <ProximityText text="Then fast." className="block" />
+          </h1>
+
+          <p className="mt-8 max-w-[31rem] text-lg leading-relaxed text-ink-2 text-pretty">
+            At Siemens Mobility I build the simulation and test automation behind a safety-critical 5G train radio for
+            the New York City subway. On my own time I write matching engines and GPU code, and measure them in
+            nanoseconds. Either way the discipline is the same: deterministic, measured, tested until it is boring.
+          </p>
+
+          <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <a
+              href="#siemens"
+              className="rounded-[3px] bg-ink px-5 py-3 font-medium text-ground transition-colors duration-200 hover:bg-accent hover:text-ink active:translate-y-px"
+            >
+              See the work
+            </a>
+            <a href={`mailto:${profile.email}`} className="link">
+              {profile.email}
+            </a>
+          </div>
+
+          <p className="mt-10 max-w-[30rem] text-sm text-muted" aria-live="polite">
+            {lat
+              ? `Your last key reached the screen ${lat.last.toFixed(1)} ms after you pressed it. Median over ${lat.count} ${lat.count === 1 ? "key" : "keys"}: ${lat.median.toFixed(1)} ms.`
+              : profile.availability + "."}
+          </p>
+        </div>
       </div>
-
-      {/* Tagline */}
-      <p style={{
-        fontSize:"15px", color:"var(--text-muted)", lineHeight:1.8,
-        maxWidth:"420px", marginBottom:"52px", fontWeight:300,
-      }}>
-        Building at the intersection of markets, machine learning,
-        and data — one project at a time.
-      </p>
-
-      {/* CTAs */}
-      <div style={{ display:"flex", gap:"12px", flexWrap:"wrap", justifyContent:"center", marginBottom:"80px" }}>
-        <button onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior:"smooth" })}
-          style={{
-            fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.14em",
-            padding:"13px 28px", background:"var(--accent)", color:"#000",
-            border:"none", borderRadius:"2px", cursor:"pointer", fontWeight:600, transition:"all 0.2s",
-          }}
-          onMouseOver={e => { e.currentTarget.style.opacity="0.85"; e.currentTarget.style.transform="translateY(-2px)"; }}
-          onMouseOut={e => { e.currentTarget.style.opacity="1"; e.currentTarget.style.transform="translateY(0)"; }}>
-          VIEW PROJECTS
-        </button>
-        <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior:"smooth" })}
-          style={{
-            fontFamily:"var(--font-mono)", fontSize:"11px", letterSpacing:"0.14em",
-            padding:"13px 28px", background:"transparent", color:"var(--text-dim)",
-            border:"1px solid var(--border-2)", borderRadius:"2px", cursor:"pointer", transition:"all 0.2s",
-          }}
-          onMouseOver={e => { e.currentTarget.style.borderColor="var(--accent)"; e.currentTarget.style.color="var(--accent)"; }}
-          onMouseOut={e => { e.currentTarget.style.borderColor="var(--border-2)"; e.currentTarget.style.color="var(--text-dim)"; }}>
-          GET IN TOUCH
-        </button>
-      </div>
-
-      <div style={{ position:"absolute", bottom:0, left:0, right:0, height:"1px", background:"linear-gradient(90deg, transparent, var(--border-2) 30%, var(--accent-glow) 50%, var(--border-2) 70%, transparent)" }}/>
-      <div style={{ position:"absolute", bottom:"28px", left:"50%", transform:"translateX(-50%)", display:"flex", flexDirection:"column", alignItems:"center", gap:"8px", fontFamily:"var(--font-mono)", fontSize:"9px", color:"var(--text-muted)", letterSpacing:"0.22em" }}>
-        SCROLL
-        <div style={{ width:"1px", height:"32px", background:"linear-gradient(to bottom, var(--text-muted), transparent)" }}/>
-      </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          section { padding: 40px 24px 0 !important; }
-        }
-      `}</style>
     </section>
   );
 }
