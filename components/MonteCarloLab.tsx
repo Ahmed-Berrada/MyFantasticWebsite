@@ -1,25 +1,14 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { blackScholesCall, boxMuller, CallEstimator, type OptionParams } from "@/src/lib/montecarlo";
-import { prng } from "@/src/lib/orderbook/flow";
 import { useInView, usePrefersReducedMotion } from "@/src/lib/useInView";
 import { fmtDec, fmtInt } from "@/src/lib/format";
+import { BINS, BS, P, STEPS, Y_MAX, Y_MIN } from "@/src/lib/mcsim";
+import type { WorkerIn, WorkerOut } from "@/src/lib/montecarlo.worker";
 import type { Dict } from "@/src/content";
 import type { Lang } from "@/src/content/types";
 
-const P: OptionParams = { s0: 100, k: 100, r: 0.05, sigma: 0.2, t: 1 };
-const BS = blackScholesCall(P);
-const STEPS = 64;
-const MAX_DRAWN = 180;
-const DRAW_PER_FRAME = 3;
-const PAIRS_PER_FRAME = 5_000;
-const SNAPSHOT_FRAMES = MAX_DRAWN / DRAW_PER_FRAME;
-const SNAPSHOT_PAIRS = 1_700;
-const TARGET_PATHS = 1_000_000;
-const Y_MIN = 55;
-const Y_MAX = 175;
-const BINS = 48;
 const HEIGHT = 300;
+const SEED = 17;
 
 interface Stats {
   paths: number;
@@ -27,49 +16,30 @@ interface Stats {
   ci: number;
 }
 
-interface Sim {
+interface View {
   paths: Float64Array[];
   hist: Uint32Array;
-  est: CallEstimator;
-  rand: () => number;
 }
 
-const newSim = (seed: number): Sim => ({ paths: [], hist: new Uint32Array(BINS), est: new CallEstimator(P), rand: prng(seed) });
-
-/** Simulate one frame's worth of work: a few drawn paths, a histogram sample, and `pairs` priced pairs. */
-function stepSim(s: Sim, pairs: number): void {
-  const dt = P.t / STEPS;
-  const drift = (P.r - (P.sigma * P.sigma) / 2) * dt;
-  const vol = P.sigma * Math.sqrt(dt);
-  for (let n = 0; n < DRAW_PER_FRAME && s.paths.length < MAX_DRAWN; n++) {
-    const path = new Float64Array(STEPS + 1);
-    path[0] = P.s0;
-    for (let i = 1; i <= STEPS; i++) path[i] = path[i - 1] * Math.exp(drift + vol * boxMuller(s.rand));
-    s.paths.push(path);
-  }
-  const tDrift = (P.r - (P.sigma * P.sigma) / 2) * P.t;
-  const tVol = P.sigma * Math.sqrt(P.t);
-  for (let i = 0; i < 400; i++) {
-    const st = P.s0 * Math.exp(tDrift + tVol * boxMuller(s.rand));
-    const b = Math.floor(((st - Y_MIN) / (Y_MAX - Y_MIN)) * BINS);
-    if (b >= 0 && b < BINS) s.hist[b]++;
-  }
-  s.est.simulate(pairs, s.rand);
-}
-
+/**
+ * The simulation runs in a Web Worker, so the page stays responsive however slow the device is.
+ * This component only draws what the worker sends: price paths, the terminal-price histogram and the estimate.
+ */
 export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; lang: Lang }) {
   const reduced = usePrefersReducedMotion();
   const [wrapRef, seen] = useInView<HTMLDivElement>(0.25);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sim = useRef<Sim | null>(null);
+  const workerRef = useRef<Worker | null>(null);
+  const view = useRef<View>({ paths: [], hist: new Uint32Array(BINS) });
+  const frame = useRef(0);
   const runs = useRef(0);
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [stats, setStats] = useState<Stats>({ paths: 0, price: 0, ci: Infinity });
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
-    const s = sim.current;
-    if (!canvas || !s) return;
+    if (!canvas) return;
+    const s = view.current;
     const dpr = window.devicePixelRatio || 1;
     const w = canvas.clientWidth;
     if (canvas.width !== Math.round(w * dpr)) {
@@ -128,55 +98,59 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
     ctx.fillText("K = 100", 6, y(P.k) - 6);
   }, []);
 
-  const publish = useCallback(() => {
-    const e = sim.current!.est;
-    setStats({ paths: e.paths, price: e.price, ci: e.ci95 });
-  }, []);
-
-  // A cheap snapshot as soon as the lab is visible, so the panel is never empty. No animation, no loop.
-  useEffect(() => {
-    if (!seen || sim.current) return;
-    sim.current = newSim(17);
-    for (let i = 0; i < SNAPSHOT_FRAMES; i++) stepSim(sim.current, SNAPSHOT_PAIRS);
-    draw();
-    publish();
-  }, [seen, draw, publish]);
-
-  // The animated run: one frame of work per animation frame, until the target is reached.
-  useEffect(() => {
-    if (phase !== "running") return;
-    sim.current = newSim(17 + runs.current);
-    let raf = 0;
-    const loop = () => {
-      stepSim(sim.current!, PAIRS_PER_FRAME);
+  /** Coalesce bursts of worker messages into one repaint per animation frame. */
+  const scheduleDraw = useCallback(() => {
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
       draw();
-      publish();
-      if (sim.current!.est.paths < TARGET_PATHS) raf = requestAnimationFrame(loop);
-      else setPhase("done");
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, [phase, draw, publish]);
+    });
+  }, [draw]);
 
-  // Started only on request. With reduced motion the result is computed at once and shown without animation.
-  const start = () => {
-    runs.current += 1;
-    if (reduced) {
-      sim.current = newSim(17 + runs.current);
-      while (sim.current.est.paths < TARGET_PATHS) stepSim(sim.current, PAIRS_PER_FRAME);
-      draw();
-      publish();
-      setPhase("done");
-    } else {
-      setPhase("running");
+  // Start the worker when the lab first scrolls into view; it answers with a first snapshot.
+  useEffect(() => {
+    if (!seen || workerRef.current) return;
+    let worker: Worker;
+    try {
+      worker = new Worker(new URL("../src/lib/montecarlo.worker.ts", import.meta.url), { type: "module" });
+    } catch {
+      return; // no worker support: the panel stays empty rather than freezing the page
     }
-  };
+    worker.onmessage = (e: MessageEvent<WorkerOut>) => {
+      const m = e.data;
+      if (m.reset) view.current = { paths: [], hist: new Uint32Array(BINS) };
+      view.current.paths.push(...m.newPaths);
+      view.current.hist = m.hist;
+      setStats({ paths: m.paths, price: m.price, ci: m.ci });
+      if (m.done) setPhase("done");
+      scheduleDraw();
+    };
+    workerRef.current = worker;
+    worker.postMessage({ type: "snapshot", seed: SEED } satisfies WorkerIn);
+  }, [seen, scheduleDraw]);
+
+  useEffect(
+    () => () => {
+      workerRef.current?.terminate();
+      workerRef.current = null;
+      cancelAnimationFrame(frame.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     const ro = new ResizeObserver(() => draw());
     if (canvasRef.current) ro.observe(canvasRef.current);
     return () => ro.disconnect();
   }, [draw]);
+
+  // Only on request. With reduced motion the worker answers once, with the finished result.
+  const start = () => {
+    if (!workerRef.current) return;
+    runs.current += 1;
+    setPhase("running");
+    workerRef.current.postMessage({ type: "run", seed: SEED + runs.current, instant: reduced } satisfies WorkerIn);
+  };
 
   const err = stats.paths ? Math.abs(stats.price - BS) : null;
 
