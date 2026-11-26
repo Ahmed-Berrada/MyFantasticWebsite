@@ -4,35 +4,49 @@
 - Portfolio for ahmedberrada.com. Positioning: software that has to be right, then fast. Safety-critical work at
   Siemens Mobility first; low-latency engines (finance as one application) second. Not a finance-only site.
 - Stack: Next.js 16 App Router, React 19, TypeScript strict, Tailwind v4, vitest. Deployed on Vercel.
-- Page (`src/app/page.tsx`): `Navbar`, `Hero`, `Siemens`, `Work` ("Engines"), `Background`, `Contact`.
+- Two languages: English at `/`, French under `/fr`. Route groups `(en)` and `(fr)/fr` each have their own root layout
+  (`<html lang>`), both using `components/RootShell.tsx`. Pages are thin: they call `components/*Page.tsx` with a `lang`.
+- No contact form (removed on purpose): email, LinkedIn, GitHub and the two CV PDFs in `public/cv`.
+
+## Content rules (the site's credibility depends on them)
+- All copy lives in `src/content`: `en.ts` is the source, `fr.ts` is typed against it (`Dict`), case studies in
+  `work.en.ts` / `work.fr.ts`, notes in `writing.en.ts` / `writing.fr.ts`. `content.test.ts` checks that both languages
+  have the same shape, placeholders, figures and valid internal links. Change both languages together.
+- French typography (no-break space before `? ! : ;`) is applied at load by `src/content/index.ts`. Write plain spaces.
+- Every number must trace to the CV (v3), a repository README or CI, or `src/content/bench` (measured with
+  `scripts/bench-lob-engine.sh`). Do not round up, merge projects or quote a figure under a project it does not belong to:
+  the C++ latency figures belong to **lob-engine**, the Java correctness work to **Order Book** (no performance numbers
+  there until its phase 6).
+- Quote the published lob-engine figures next to the reproduced ones, and say which is which. The README does not record
+  its hardware; the reproductions are from an HP ProBook 450 G7 (i7-10510U, powersave governor, no pinning).
+- Siemens work is internal: only what the CV says. Illustrative frames are labelled as such. No real frames or code.
+- No invented testimonials, logos or client claims. The AWS certificate and the `/consulting` page are deliberately not on the site.
+- Projects shown: lob-engine, Order Book, market data pipeline, GPU option pricer (last, demoted).
 
 ## Design direction (keep it)
-- Whiteprint greys + true ink + one safety yellow (`--accent`) used as a fill only (cursor band, highlighted
-  train, hover state). `--bid` / `--ask` only inside market-data instruments.
-- Type: Bricolage Grotesque (display, variable wght/wdth/opsz), Instrument Sans (body), Martian Mono only inside
-  instruments. Headlines in sentence case.
-- The hero is the one bold moment: `TrainGraphCanvas` (Marey train graph, cursor time probe, keyboard latency lane)
-  and `ProximityText` (letters swell toward the pointer). Everything else stays quiet.
-- Avoid template tells (see the frontend-design skill): no uppercase eyebrows, no 01/02 numbering unless the content
-  is a sequence, no "A · B · C" meta strings, no arrow glyphs on links, no single coloured word in a headline,
-  no fade-up on every section, no icon set. Links use the `.link` class.
-- Every animated component pauses off-screen and honours `prefers-reduced-motion`.
-
-## Content
-- Copy for positions, roles, education and tools: `src/content/profile.ts` (from the owner's CV).
-- Projects shown: Order Book (Order_Book repo only; never mention or link lob-engine) and the GPU Monte Carlo pricer only. Do not add others unless asked.
-- Quoted figures (163 ns, 3.46M ops/s, 295 s / 7.4 s / 0.46 s) come from the CV. Live numbers are labelled as live.
+- Whiteprint greys + true ink + one safety yellow (`--accent`) as a fill only. `--bid` / `--ask` only inside market-data
+  instruments. Type: Bricolage Grotesque (display), Instrument Sans (body), Martian Mono inside instruments.
+- The hero is the one bold moment: `TrainGraphCanvas` (pointer reads the timetable) and `ProximityText`. Everything else stays quiet.
+- Avoid template tells: no uppercase eyebrows, no 01/02 numbering unless the content is a sequence, no `A · B · C`
+  meta strings, no arrow glyphs on links, no icon set, no fade-up on every section. Links use `.link`.
+- Demos start only when asked (order book, Monte Carlo). The Monte Carlo simulation runs in a Web Worker
+  (`src/lib/montecarlo.worker.ts`); keep heavy work off the main thread. Everything animated pauses off-screen and
+  honours `prefers-reduced-motion`.
 
 ## Code map
-- `src/lib/traingraph.ts`: train graph model (stations, runs, dwells, train state). Tests beside it.
-- `src/lib/orderbook/engine.ts`: price-time priority book (intrusive FIFO per level, O(1) cancel). `flow.ts`: seeded flow.
-- `src/lib/montecarlo.ts`: Black-Scholes and antithetic Monte Carlo estimator.
-- `src/lib/useInView.ts`: `useInView`, `useOnScreen`, `usePrefersReducedMotion`, `useScrolledPast`.
-- Section ids `siemens`, `work`, `background`, `contact` must match `components/Navbar.tsx`.
-- Contact: `components/Contact.tsx` posts `{ name, email, message, company }` to `src/app/api/contact/route.ts`
-  (`company` is a honeypot). Needs `RESEND_API_KEY`; recipient `CONTACT_TO` (default ahmed.berrada@proton.me), sender `CONTACT_FROM`.
-- Share image and favicon are generated: `src/app/opengraph-image.tsx`, `src/app/icon.tsx`.
+- `src/lib/traingraph.ts`: Marey train graph model. `src/lib/orderbook/*`: price-time priority book and seeded flow.
+- `src/lib/montecarlo.ts` + `mcsim.ts` + `montecarlo.worker.ts`: estimator, demo simulation, worker.
+- `src/lib/crc.ts`: CRC-32/MPEG-2 (checked against `0x0376E6E7`). `src/lib/seo.ts`: canonical host, hreflang, JSON-LD.
+- `src/content/bench/*.json`: measured benchmark runs (source of the results table and histogram).
+- `components/figures/*`: figures referenced by id from case-study blocks (`Figure.tsx` maps ids).
+- Share images are generated per page (`opengraph-image.tsx` next to each route; `src/lib/og.tsx`).
+
+## SEO and hosting
+- Canonical host is `https://www.ahmedberrada.com`; the apex redirects to it (`next.config.ts`). Every page has a canonical
+  tag and hreflang (en, fr, x-default); the sitemap lists all pages in both languages with dates from the content.
+- A not-found file sits inside each dynamic segment (`[...slug]`, `work/[slug]`, `writing/[slug]`) so 404s render in the
+  language's layout.
 
 ## Workflows
-- `npm run dev`, `npm run lint`, `npm test` (vitest), `npm run build`.
-- Commit and push every small change. Redesign work happens on a branch; Vercel builds a preview per push.
+- `npm run dev`, `npm run lint`, `npm test`, `npm run build`. Do not read `node_modules`.
+- Commit and push every small change. Work on a branch, check the Vercel preview, then merge to `main`.
