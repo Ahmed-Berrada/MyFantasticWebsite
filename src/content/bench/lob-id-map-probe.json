@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-26",
+  "what": "Scratch copy of lob-engine d4336d9, benchmark as committed (50 M ops, no warm-up), two runs each. The repository was not changed.",
+  "unmodified": {
+    "maxNs": [67834700, 68224200],
+    "atOperation": 26749413,
+    "idsInCancelList": 9361000,
+    "throughputMops": [3.24, 3.26],
+    "p50Ns": [227, 226],
+    "p999Ns": [1325, 1346]
+  },
+  "idMapPresized": {
+    "change": "std::unordered_map<OrderId, Order*> orders_{30000000}; (bucket count passed to the constructor)",
+    "maxNs": [1055640, 1438410],
+    "throughputMops": [4.24, 4.25],
+    "p50Ns": [191, 189],
+    "p999Ns": [1181, 1212]
+  }
+}
