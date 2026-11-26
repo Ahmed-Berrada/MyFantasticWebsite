@@ -1,20 +1,14 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { blackScholesCall, boxMuller, CallEstimator, type OptionParams } from "@/src/lib/montecarlo";
-import { prng } from "@/src/lib/orderbook/flow";
 import { useInView, usePrefersReducedMotion } from "@/src/lib/useInView";
+import { fmtDec, fmtInt } from "@/src/lib/format";
+import { BINS, BS, P, STEPS, Y_MAX, Y_MIN } from "@/src/lib/mcsim";
+import type { WorkerIn, WorkerOut } from "@/src/lib/montecarlo.worker";
+import type { Dict } from "@/src/content";
+import type { Lang } from "@/src/content/types";
 
-const P: OptionParams = { s0: 100, k: 100, r: 0.05, sigma: 0.2, t: 1 };
-const BS = blackScholesCall(P);
-const STEPS = 64;
-const MAX_DRAWN = 180;
-const DRAW_PER_FRAME = 3;
-const PAIRS_PER_FRAME = 5_000;
-const TARGET_PATHS = 1_000_000;
-const Y_MIN = 55;
-const Y_MAX = 175;
-const BINS = 48;
 const HEIGHT = 300;
+const SEED = 17;
 
 interface Stats {
   paths: number;
@@ -22,20 +16,30 @@ interface Stats {
   ci: number;
 }
 
-export default function MonteCarloLab() {
+interface View {
+  paths: Float64Array[];
+  hist: Uint32Array;
+}
+
+/**
+ * The simulation runs in a Web Worker, so the page stays responsive however slow the device is.
+ * This component only draws what the worker sends: price paths, the terminal-price histogram and the estimate.
+ */
+export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; lang: Lang }) {
   const reduced = usePrefersReducedMotion();
   const [wrapRef, seen] = useInView<HTMLDivElement>(0.25);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [run, setRun] = useState(0);
+  const workerRef = useRef<Worker | null>(null);
+  const view = useRef<View>({ paths: [], hist: new Uint32Array(BINS) });
+  const frame = useRef(0);
+  const runs = useRef(0);
+  const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [stats, setStats] = useState<Stats>({ paths: 0, price: 0, ci: Infinity });
-
-  // Mutable simulation state, rebuilt on each run.
-  const sim = useRef<{ paths: Float64Array[]; hist: Uint32Array; est: CallEstimator; rand: () => number } | null>(null);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
-    const s = sim.current;
-    if (!canvas || !s) return;
+    if (!canvas) return;
+    const s = view.current;
     const dpr = window.devicePixelRatio || 1;
     const w = canvas.clientWidth;
     if (canvas.width !== Math.round(w * dpr)) {
@@ -47,19 +51,19 @@ export default function MonteCarloLab() {
     ctx.clearRect(0, 0, w, HEIGHT);
 
     const css = getComputedStyle(document.documentElement);
-    const signal = css.getPropertyValue("--ink").trim();
+    const strong = css.getPropertyValue("--ink").trim();
     const grey = css.getPropertyValue("--line-2").trim();
-    const ink = css.getPropertyValue("--ink-2").trim();
+    const ink2 = css.getPropertyValue("--ink-2").trim();
+    const mono = getComputedStyle(canvas).getPropertyValue("--font-martian").trim() || "monospace";
 
     const histW = Math.min(90, w * 0.18);
     const plotW = w - histW - 8;
     const y = (v: number) => HEIGHT - ((v - Y_MIN) / (Y_MAX - Y_MIN)) * HEIGHT;
 
-    // Paths
     ctx.lineWidth = 1;
     for (const path of s.paths) {
       const itm = path[STEPS] > P.k;
-      ctx.strokeStyle = itm ? signal : grey;
+      ctx.strokeStyle = itm ? strong : grey;
       ctx.globalAlpha = itm ? 0.35 : 0.55;
       ctx.beginPath();
       for (let i = 0; i <= STEPS; i++) {
@@ -71,78 +75,68 @@ export default function MonteCarloLab() {
     }
     ctx.globalAlpha = 1;
 
-    // Terminal distribution
     const max = Math.max(1, ...s.hist);
     const binH = HEIGHT / BINS;
     for (let b = 0; b < BINS; b++) {
       const v = Y_MIN + ((b + 0.5) / BINS) * (Y_MAX - Y_MIN);
-      ctx.fillStyle = v > P.k ? signal : grey;
+      ctx.fillStyle = v > P.k ? strong : grey;
       ctx.globalAlpha = v > P.k ? 0.7 : 0.9;
       const len = (s.hist[b] / max) * histW;
       ctx.fillRect(w - histW, HEIGHT - (b + 1) * binH + 0.5, len, binH - 1);
     }
     ctx.globalAlpha = 1;
 
-    // Strike
     ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = ink;
+    ctx.strokeStyle = ink2;
     ctx.beginPath();
     ctx.moveTo(0, y(P.k));
     ctx.lineTo(w, y(P.k));
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = ink;
-    ctx.font = "11px var(--font-plex-mono), monospace";
+    ctx.fillStyle = ink2;
+    ctx.font = `11px ${mono}`;
     ctx.fillText("K = 100", 6, y(P.k) - 6);
   }, []);
 
-  const stepSim = useCallback((drawn: number) => {
-    const s = sim.current!;
-    const dt = P.t / STEPS;
-    const drift = (P.r - (P.sigma * P.sigma) / 2) * dt;
-    const vol = P.sigma * Math.sqrt(dt);
-    for (let n = 0; n < DRAW_PER_FRAME && drawn + n < MAX_DRAWN; n++) {
-      const path = new Float64Array(STEPS + 1);
-      path[0] = P.s0;
-      for (let i = 1; i <= STEPS; i++) path[i] = path[i - 1] * Math.exp(drift + vol * boxMuller(s.rand));
-      s.paths.push(path);
-    }
-    // Histogram from a sample of terminal prices, priced alongside.
-    const tDrift = (P.r - (P.sigma * P.sigma) / 2) * P.t;
-    const tVol = P.sigma * Math.sqrt(P.t);
-    for (let i = 0; i < 400; i++) {
-      const st = P.s0 * Math.exp(tDrift + tVol * boxMuller(s.rand));
-      const b = Math.floor(((st - Y_MIN) / (Y_MAX - Y_MIN)) * BINS);
-      if (b >= 0 && b < BINS) s.hist[b]++;
-    }
-    s.est.simulate(PAIRS_PER_FRAME, s.rand);
-  }, []);
+  /** Coalesce bursts of worker messages into one repaint per animation frame. */
+  const scheduleDraw = useCallback(() => {
+    if (frame.current) return;
+    frame.current = requestAnimationFrame(() => {
+      frame.current = 0;
+      draw();
+    });
+  }, [draw]);
 
+  // Start the worker when the lab first scrolls into view; it answers with a first snapshot.
   useEffect(() => {
-    if (!seen) return;
-    sim.current = { paths: [], hist: new Uint32Array(BINS), est: new CallEstimator(P), rand: prng(17 + run) };
-    const publish = () => {
-      const e = sim.current!.est;
-      setStats({ paths: e.paths, price: e.price, ci: e.ci95 });
-    };
-
-    if (reduced) {
-      while (sim.current.est.paths < TARGET_PATHS) stepSim(sim.current.paths.length);
-      draw();
-      publish();
-      return;
+    if (!seen || workerRef.current) return;
+    let worker: Worker;
+    try {
+      worker = new Worker(new URL("../src/lib/montecarlo.worker.ts", import.meta.url), { type: "module" });
+    } catch {
+      return; // no worker support: the panel stays empty rather than freezing the page
     }
-
-    let raf = 0;
-    const loop = () => {
-      stepSim(sim.current!.paths.length);
-      draw();
-      publish();
-      if (sim.current!.est.paths < TARGET_PATHS) raf = requestAnimationFrame(loop);
+    worker.onmessage = (e: MessageEvent<WorkerOut>) => {
+      const m = e.data;
+      if (m.reset) view.current = { paths: [], hist: new Uint32Array(BINS) };
+      view.current.paths.push(...m.newPaths);
+      view.current.hist = m.hist;
+      setStats({ paths: m.paths, price: m.price, ci: m.ci });
+      if (m.done) setPhase("done");
+      scheduleDraw();
     };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, [seen, run, reduced, draw, stepSim]);
+    workerRef.current = worker;
+    worker.postMessage({ type: "snapshot", seed: SEED } satisfies WorkerIn);
+  }, [seen, scheduleDraw]);
+
+  useEffect(
+    () => () => {
+      workerRef.current?.terminate();
+      workerRef.current = null;
+      cancelAnimationFrame(frame.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     const ro = new ResizeObserver(() => draw());
@@ -150,40 +144,34 @@ export default function MonteCarloLab() {
     return () => ro.disconnect();
   }, [draw]);
 
-  const done = stats.paths >= TARGET_PATHS;
+  // Only on request. With reduced motion the worker answers once, with the finished result.
+  const start = () => {
+    if (!workerRef.current) return;
+    runs.current += 1;
+    setPhase("running");
+    workerRef.current.postMessage({ type: "run", seed: SEED + runs.current, instant: reduced } satisfies WorkerIn);
+  };
+
   const err = stats.paths ? Math.abs(stats.price - BS) : null;
 
   return (
     <div ref={wrapRef} className="overflow-hidden rounded-[6px] border border-line-2 bg-sheet">
-      <div className="flex items-center justify-between border-b border-line px-4 py-3">
-        <p className="font-mono text-xs text-ink-2">
-          european call, S₀ 100, K 100, σ 20%, r 5%, 1 year
-        </p>
+      <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+        <p className="font-mono text-xs text-ink-2">{t.header}</p>
         <button
-          onClick={() => setRun((r) => r + 1)}
-          disabled={!done}
-          className="rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink disabled:opacity-40"
-          aria-label="Run the simulation again"
+          onClick={start}
+          disabled={phase === "running"}
+          className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px disabled:opacity-40"
         >
-          run again
+          {t.run}
         </button>
       </div>
-      <canvas
-        ref={canvasRef}
-        className="block w-full"
-        style={{ height: HEIGHT }}
-        role="img"
-        aria-label="Simulated geometric Brownian motion price paths, coloured by whether they finish above the strike, with the distribution of terminal prices."
-      />
+      <canvas ref={canvasRef} className="block w-full" style={{ height: HEIGHT }} role="img" aria-label={t.aria} />
       <div className="grid grid-cols-2 border-t border-line sm:grid-cols-4">
-        <Cell label="paths" value={stats.paths.toLocaleString("en-US")} />
-        <Cell
-          label="monte carlo"
-          value={stats.paths ? `${stats.price.toFixed(3)} ± ${stats.ci.toFixed(3)}` : "–"}
-          accent
-        />
-        <Cell label="black-scholes" value={BS.toFixed(3)} />
-        <Cell label="abs. error" value={err == null ? "–" : err.toFixed(4)} />
+        <Cell label={t.paths} value={fmtInt(stats.paths, lang)} />
+        <Cell label={t.monteCarlo} value={stats.paths ? `${fmtDec(stats.price, lang, 3)} ± ${fmtDec(stats.ci, lang, 3)}` : "–"} accent />
+        <Cell label={t.blackScholes} value={fmtDec(BS, lang, 3)} />
+        <Cell label={t.absError} value={err == null ? "–" : fmtDec(err, lang, 4)} />
       </div>
     </div>
   );

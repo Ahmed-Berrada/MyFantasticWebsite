@@ -3,8 +3,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { crc32mpeg2 } from "@/src/lib/crc";
 import { prng } from "@/src/lib/orderbook/flow";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
+import { fill } from "@/src/lib/format";
+import type { Dict } from "@/src/content";
 
 type Source = "CC" | "ZC" | "WRG" | "you";
+type FieldId = "srcPort" | "dstPort" | "length" | "udpSum" | "type" | "seq" | "payload" | "crc";
 
 interface Frame {
   source: Source;
@@ -13,19 +16,14 @@ interface Frame {
   payload: number[];
   bytes: number[];
   crc: number;
-  fields: { name: string; from: number; to: number }[];
+  fields: { id: FieldId; from: number; to: number }[];
 }
 
-const TYPE: Record<Source, { code: number; meaning: string }> = {
-  CC: { code: 0x21, meaning: "position report" },
-  ZC: { code: 0x42, meaning: "movement authority" },
-  WRG: { code: 0x13, meaning: "link status" },
-  you: { code: 0x7e, meaning: "typed by you" },
-};
+const CODE: Record<Source, number> = { CC: 0x21, ZC: 0x42, WRG: 0x13, you: 0x7e };
 
 /** UDP header + illustrative message (type, seq, payload) + CRC-32/MPEG-2 over the message. */
 function buildFrame(source: Source, seq: number, payload: number[]): Frame {
-  const type = TYPE[source].code;
+  const type = CODE[source];
   const message = [type, (seq >> 8) & 0xff, seq & 0xff, ...payload];
   const crc = crc32mpeg2(message);
   const udpLen = 8 + message.length + 4;
@@ -40,14 +38,14 @@ function buildFrame(source: Source, seq: number, payload: number[]): Frame {
     bytes,
     crc,
     fields: [
-      { name: "src port", from: 0, to: 2 },
-      { name: "dst port", from: 2, to: 4 },
-      { name: "length", from: 4, to: 6 },
-      { name: "udp sum", from: 6, to: 8 },
-      { name: "type", from: 8, to: 9 },
-      { name: "seq", from: 9, to: 11 },
-      { name: "payload", from: p0, to: p0 + payload.length },
-      { name: "crc-32/mpeg-2", from: p0 + payload.length, to: p0 + payload.length + 4 },
+      { id: "srcPort", from: 0, to: 2 },
+      { id: "dstPort", from: 2, to: 4 },
+      { id: "length", from: 4, to: 6 },
+      { id: "udpSum", from: 6, to: 8 },
+      { id: "type", from: 8, to: 9 },
+      { id: "seq", from: 9, to: 11 },
+      { id: "payload", from: p0, to: p0 + payload.length },
+      { id: "crc", from: p0 + payload.length, to: p0 + payload.length + 4 },
     ],
   };
 }
@@ -64,7 +62,7 @@ const LOOP_MS = 14000;
 const MSG_EVERY_MS = 1700;
 const TRAVEL_MS = 700;
 
-export default function RadioLink() {
+export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
   const reduced = usePrefersReducedMotion();
   const [ref, onScreen] = useOnScreen<HTMLDivElement>();
   const rand = useMemo(() => prng(2025), []);
@@ -174,12 +172,13 @@ export default function RadioLink() {
     <div ref={ref} className="overflow-hidden rounded-[6px] border border-line-2 bg-sheet shadow-[0_24px_50px_-30px_#1b2a4a55]">
       <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 font-mono text-xs">
         <span className="text-ink-2">
-          radio link<span className="hidden sm:inline"> / CRG under test</span>
+          {t.title}
+          <span className="hidden sm:inline">{t.titleLong}</span>
         </span>
-        <span className="text-muted">dashed = simulated</span>
+        <span className="text-muted">{t.simulated}</span>
       </div>
 
-      <svg viewBox="0 0 640 200" className="block h-auto w-full" role="img" aria-label="Simulated train, radio gateways and zone controller sending radio messages to the CRG software under test.">
+      <svg viewBox="0 0 640 200" className="block h-auto w-full" role="img" aria-label={t.aria}>
         {/* track */}
         <line x1="16" x2="624" y1={TRACK_Y} y2={TRACK_Y} stroke="var(--ink-2)" strokeWidth="1.5" />
         {Array.from({ length: 39 }, (_, i) => (
@@ -220,7 +219,7 @@ export default function RadioLink() {
         {/* CRG: the real software under test */}
         <rect x={CRG.x} y={CRG.y} width={CRG.w} height={CRG.h} rx="5" fill="var(--ink)" />
         <text x={CRG.x + 14} y={CRG.y + 18} fontSize="13" fontWeight="600" fontFamily="var(--font-instrument)" fill="var(--ground)">CRG</text>
-        <text x={CRG.x + 14} y={CRG.y + 32} fontSize="10" fontFamily="var(--font-martian)" fill="#b9bec8">under test</text>
+        <text x={CRG.x + 14} y={CRG.y + 32} fontSize="10" fontFamily="var(--font-martian)" fill="#b9bec8">{t.crgSub}</text>
         {verified && frame && (
           <circle cx={CRG.x + CRG.w - 14} cy={CRG.y + 14} r="4" fill="var(--accent)" />
         )}
@@ -232,13 +231,13 @@ export default function RadioLink() {
       <div className="border-t border-line px-4 pt-4 pb-3">
         <div className="flex flex-wrap gap-y-3" onMouseLeave={() => setHover(null)}>
           {frame.fields.map((f) => (
-            <div key={f.name} className="mr-2">
+            <div key={f.id} className="mr-2">
               <div className="flex">
                 {frame.bytes.slice(f.from, f.to).map((b, j) => {
                   const i = f.from + j;
                   const on = i < shown;
-                  const isPayload = f.name === "payload";
-                  const isCrc = f.name.startsWith("crc");
+                  const isPayload = f.id === "payload";
+                  const isCrc = f.id === "crc";
                   return (
                     <span
                       key={i}
@@ -252,22 +251,30 @@ export default function RadioLink() {
                   );
                 })}
               </div>
-              <p className={`mt-0.5 font-mono text-[10px] ${hoverField === f ? "text-ink" : "text-muted"}`}>{f.name}</p>
+              <p className={`mt-0.5 font-mono text-[10px] ${hoverField === f ? "text-ink" : "text-muted"}`}>{t.fields[f.id]}</p>
             </div>
           ))}
         </div>
 
         <p className="mt-3 min-h-5 font-mono text-[11px] text-ink-2" aria-live="polite">
           {hover !== null
-            ? `byte ${hover}, ${hoverField!.name}: 0x${hex(frame.bytes[hover])}${
-                frame.bytes[hover] >= 32 && frame.bytes[hover] < 127 ? ` '${String.fromCharCode(frame.bytes[hover])}'` : ""
-              }`
-            : `${frame.source} to CRG, ${TYPE[frame.source].meaning}, seq ${frame.seq}, ${frame.payload.length} B payload, crc 0x${hex(frame.crc, 8)} ${verified ? "verified" : "…"}`}
+            ? fill(t.hover, {
+                i: hover,
+                field: t.fields[hoverField!.id],
+                hex: `0x${hex(frame.bytes[hover])}${frame.bytes[hover] >= 32 && frame.bytes[hover] < 127 ? ` '${String.fromCharCode(frame.bytes[hover])}'` : ""}`,
+              })
+            : fill(t.status, {
+                source: t.source[frame.source],
+                meaning: t.meaning[frame.source],
+                seq: frame.seq,
+                n: frame.payload.length,
+                crc: `0x${hex(frame.crc, 8)}`,
+                state: verified ? t.verified : t.pending,
+              })}
         </p>
       </div>
       <p className="border-t border-line bg-sunken px-4 py-2 text-xs text-muted">
-        {typed ? "Your keys are the payload. Change one byte and the CRC changes completely." : "Type anything to write the payload yourself."}{" "}
-        Illustrative frame layout, not the real protocol.
+        {typed ? t.typed : t.idle} {t.illustrative}
       </p>
     </div>
   );

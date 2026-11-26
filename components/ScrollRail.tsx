@@ -1,16 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const sections = [
-  { id: "top", label: "Start" },
-  { id: "siemens", label: "Siemens" },
-  { id: "work", label: "Engines" },
-  { id: "background", label: "Background" },
-  { id: "contact", label: "Contact" },
-];
+interface Section {
+  id: string;
+  label: string;
+}
 
 /** A thin rail on the right edge: a train marks how far down the page you are; stations jump to sections. */
-export default function ScrollRail() {
+export default function ScrollRail({ sections, aria }: { sections: Section[]; aria: string }) {
   const [p, setP] = useState(0);
   const [stops, setStops] = useState<number[]>([]);
 
@@ -43,10 +40,10 @@ export default function ScrollRail() {
       ro.disconnect();
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [sections]);
 
   return (
-    <nav aria-label="Page progress" className="fixed top-24 right-5 bottom-10 z-40 hidden w-6 xl:block">
+    <nav aria-label={aria} className="fixed top-24 right-5 bottom-10 z-40 hidden w-6 xl:block">
       <span aria-hidden className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-line-2" />
       <span aria-hidden className="absolute top-0 left-1/2 w-[2px] -translate-x-1/2 bg-ink" style={{ height: `${p * 100}%` }} />
       {sections.map((s, i) => {
