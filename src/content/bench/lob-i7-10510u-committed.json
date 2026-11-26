@@ -6,7 +6,8 @@
   "os": "Ubuntu 24.04.5 LTS",
   "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
   "governor": "powersave",
-  "pinnedCpu": null
+  "pinnedCpu": null,
+  "model": "HP ProBook 450 G7"
  },
  "method": {
   "name": "committed",

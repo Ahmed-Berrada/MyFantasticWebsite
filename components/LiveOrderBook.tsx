@@ -3,6 +3,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { OrderFlow } from "@/src/lib/orderbook/flow";
 import type { Depth, Trade } from "@/src/lib/orderbook/engine";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
+import type { Dict } from "@/src/content";
+import type { Lang } from "@/src/content/types";
+import { fill } from "@/src/lib/format";
 
 const SEED = 2027;
 const LEVELS = 7;
@@ -24,9 +27,9 @@ interface Snapshot {
 }
 
 const px = (ticks: number) => (ticks / 100).toFixed(2);
-const fmt = (n: number) => n.toLocaleString("en-US");
+const fmt = (n: number, lang: Lang) => n.toLocaleString(lang === "fr" ? "fr-FR" : "en-US");
 
-export default function LiveOrderBook() {
+export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookUi"]; lang: Lang }) {
   const reduced = usePrefersReducedMotion();
   const [panelRef, onScreen] = useOnScreen<HTMLDivElement>();
   const flowRef = useRef<OrderFlow | null>(null);
@@ -101,17 +104,16 @@ export default function LiveOrderBook() {
             <span className={`relative inline-flex size-2 rounded-full ${running ? "bg-bid" : "bg-line-2"}`} />
           </span>
           <p className="truncate font-mono text-xs text-ink-2">
-            <span className="font-medium text-ink">{running ? "LIVE" : "PAUSED"}</span>
+            <span className="font-medium text-ink">{running ? t.live : t.paused}</span>
             <span className="mx-2 text-line-2">/</span>
-            matching engine, in this tab
+            {t.sub}
           </p>
         </div>
         <button
           onClick={() => setUserPaused(!paused)}
           className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px"
-          aria-label={paused ? "Resume order flow" : "Pause order flow"}
         >
-          {paused ? "run" : "pause"}
+          {paused ? t.run : t.pause}
         </button>
       </div>
 
@@ -119,32 +121,32 @@ export default function LiveOrderBook() {
         {/* Ladder */}
         <div className="border-line sm:border-r">
           <div className="grid grid-cols-[1fr_1fr] px-4 pt-3 pb-1.5 font-mono text-[10px] text-muted">
-            <span>price</span>
-            <span className="text-right">size</span>
+            <span>{t.price}</span>
+            <span className="text-right">{t.size}</span>
           </div>
-          <Ladder levels={asks} side="ask" maxQty={maxQty} pad={LEVELS} loading={!snap} />
+          <Ladder label={t.asks} levels={asks} side="ask" maxQty={maxQty} pad={LEVELS} loading={!snap} />
           <div className="flex items-center justify-between border-y border-line bg-sunken px-4 py-1.5 font-mono text-[11px] text-ink-2 tabular">
             <span>
-              spread {bestBid != null && bestAsk != null ? px(bestAsk - bestBid) : "–"}
+              {t.spread} {bestBid != null && bestAsk != null ? px(bestAsk - bestBid) : "–"}
             </span>
-            <span>mid {bestBid != null && bestAsk != null ? px((bestAsk + bestBid) / 2) : "–"}</span>
+            <span>{t.mid} {bestBid != null && bestAsk != null ? px((bestAsk + bestBid) / 2) : "–"}</span>
           </div>
-          <Ladder levels={bids} side="bid" maxQty={maxQty} pad={LEVELS} loading={!snap} />
+          <Ladder label={t.bids} levels={bids} side="bid" maxQty={maxQty} pad={LEVELS} loading={!snap} />
         </div>
 
         {/* Trade tape */}
         <div className="hidden sm:block">
           <div className="grid grid-cols-[1fr_auto] px-4 pt-3 pb-1.5 font-mono text-[10px] text-muted">
-            <span>trades</span>
-            <span>qty</span>
+            <span>{t.trades}</span>
+            <span>{t.qty}</span>
           </div>
           <ul className="px-2">
-            {(snap?.tape ?? []).map((t) => (
-              <li key={t.seq} className="tape-row grid grid-cols-[1fr_auto] rounded px-2 py-[3px] font-mono text-xs tabular">
-                <span className={t.aggressor === "buy" ? "text-bid" : "text-ask"}>
-                  {t.aggressor === "buy" ? "▲" : "▼"} {px(t.price)}
+            {(snap?.tape ?? []).map((row) => (
+              <li key={row.seq} className="tape-row grid grid-cols-[1fr_auto] rounded px-2 py-[3px] font-mono text-xs tabular">
+                <span className={row.aggressor === "buy" ? "text-bid" : "text-ask"}>
+                  {row.aggressor === "buy" ? "▲" : "▼"} {px(row.price)}
                 </span>
-                <span className="text-ink-2">{t.qty}</span>
+                <span className="text-ink-2">{row.qty}</span>
               </li>
             ))}
           </ul>
@@ -153,12 +155,12 @@ export default function LiveOrderBook() {
 
       {/* Stats + benchmark */}
       <div className="grid grid-cols-3 border-t border-line">
-        <Stat label="orders" value={snap ? fmt(snap.ops) : "–"} />
-        <Stat label="trades" value={snap ? fmt(snap.trades) : "–"} />
-        <Stat label="resting" value={snap ? fmt(snap.resting) : "–"} />
+        <Stat label={t.orders} value={snap ? fmt(snap.ops, lang) : "–"} />
+        <Stat label={t.tradeCount} value={snap ? fmt(snap.trades, lang) : "–"} />
+        <Stat label={t.resting} value={snap ? fmt(snap.resting, lang) : "–"} />
       </div>
       <div className="border-t border-line bg-sunken px-4 py-3">
-        <p className="font-mono text-xs text-muted">seed {SEED}, replayable</p>
+        <p className="font-mono text-xs text-muted">{fill(t.seed, { seed: SEED })}</p>
       </div>
 
       <style>{`
@@ -170,6 +172,7 @@ export default function LiveOrderBook() {
 }
 
 interface LadderProps {
+  label: string;
   levels: { price: number; qty: number }[];
   side: "bid" | "ask";
   maxQty: number;
@@ -177,14 +180,14 @@ interface LadderProps {
   loading: boolean;
 }
 
-function Ladder({ levels, side, maxQty, pad, loading }: LadderProps) {
+function Ladder({ label, levels, side, maxQty, pad, loading }: LadderProps) {
   const rows: ({ price: number; qty: number } | null)[] = [...levels];
   while (rows.length < pad) {
     if (side === "ask") rows.unshift(null);
     else rows.push(null);
   }
   return (
-    <ul aria-label={side === "ask" ? "Asks" : "Bids"}>
+    <ul aria-label={label}>
       {rows.map((l, i) => (
         <li key={l ? l.price : `empty-${i}`} className="relative grid h-[22px] grid-cols-[1fr_1fr] items-center px-4 font-mono text-xs tabular">
           {l && (

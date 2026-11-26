@@ -97,6 +97,7 @@ export const fr: Dict = {
       typed: "Vos touches forment la charge utile. Changez un octet et le CRC change complètement.",
       idle: "Tapez ce que vous voulez pour écrire vous-même la charge utile.",
       illustrative: "Format de trame illustratif, pas le vrai protocole.",
+      source: { CC: "CC", ZC: "ZC", WRG: "WRG", you: "vous" },
       meaning: { CC: "rapport de position", ZC: "autorisation de mouvement", WRG: "état de la liaison", you: "saisi par vous" },
       fields: {
         srcPort: "port src",
@@ -159,6 +160,16 @@ export const fr: Dict = {
       demo: "Ici dans cet onglet, sans GPU : la même estimation, comparée au prix exact de Black-Scholes.",
       note: "Lire comment c'est vérifié",
       repo: "Notebook sur GitHub",
+    },
+    pricerChart: {
+      python: "Python pur",
+      pythonStack: "boucles",
+      numpy: "NumPy",
+      numpyStack: "CPU vectorisé",
+      cupy: "CuPy",
+      cupyStack: "GPU CUDA",
+      faster: "{n}× plus rapide que NumPy",
+      caption: "Même simulation, temps réel écoulé, échelle linéaire.",
     },
     orderBookUi: {
       live: "EN DIRECT",
@@ -283,7 +294,7 @@ export const fr: Dict = {
       notPublished: "non publié",
       perSecond: "{n} M op/s",
       range: "de {a} à {b}",
-      machine: "Reproduit sur {cpu}, {os}, {compiler}, gouverneur {governor}, sans épinglage de cœur, charge moyenne d'environ {load}. Le README n'enregistre pas le matériel de la mesure publiée.",
+      machine: "Reproduit sur {model} ({cpu}), {os}, {compiler}, gouverneur {governor}, sans épinglage de cœur, charge moyenne d'environ {load}. Le README n'enregistre pas le matériel de la mesure publiée.",
     },
     histogram: {
       aria: "Histogramme de la latence de 5 millions d'opérations en échelle logarithmique, avec la médiane, le P99 et le P99.9 repérés.",

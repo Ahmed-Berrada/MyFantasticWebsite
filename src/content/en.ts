@@ -99,6 +99,7 @@ export const en = {
       typed: "Your keys are the payload. Change one byte and the CRC changes completely.",
       idle: "Type anything to write the payload yourself.",
       illustrative: "Illustrative frame layout, not the real protocol.",
+      source: { CC: "CC", ZC: "ZC", WRG: "WRG", you: "you" },
       meaning: { CC: "position report", ZC: "movement authority", WRG: "link status", you: "typed by you" },
       fields: {
         srcPort: "src port",
@@ -161,6 +162,16 @@ export const en = {
       demo: "Running in this tab, not on a GPU: the same estimate, checked against the exact Black-Scholes price.",
       note: "Read how it is checked",
       repo: "Notebook on GitHub",
+    },
+    pricerChart: {
+      python: "Pure Python",
+      pythonStack: "loops",
+      numpy: "NumPy",
+      numpyStack: "vectorised CPU",
+      cupy: "CuPy",
+      cupyStack: "CUDA GPU",
+      faster: "{n}× faster than NumPy",
+      caption: "Same simulation, wall-clock time, linear scale.",
     },
     orderBookUi: {
       live: "LIVE",
@@ -285,7 +296,7 @@ export const en = {
       notPublished: "not published",
       perSecond: "{n} M ops/s",
       range: "range {a} to {b}",
-      machine: "Reproduced on {cpu}, {os}, {compiler}, governor {governor}, no core pinning, load average about {load}. The README does not record the hardware of the published run.",
+      machine: "Reproduced on {model} ({cpu}), {os}, {compiler}, governor {governor}, no core pinning, load average about {load}. The README does not record the hardware of the published run.",
     },
     histogram: {
       aria: "Histogram of the latency of 5 million operations on a logarithmic scale, with the median, P99 and P99.9 marked.",

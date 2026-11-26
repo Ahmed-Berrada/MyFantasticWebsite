@@ -82,8 +82,7 @@ export default function ProximityText({
 
   const restStyle = { fontVariationSettings: `"wght" ${rest.wght}, "wdth" ${rest.wdth}` };
   return (
-    <span ref={ref} className={className}>
-      <span className="sr-only">{text}</span>
+    <span ref={ref} className={className} role="img" aria-label={text}>
       <span aria-hidden>
         {text.split(" ").map((word, wi, words) => (
           <Fragment key={wi}>

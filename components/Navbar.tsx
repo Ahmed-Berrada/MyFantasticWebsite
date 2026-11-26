@@ -1,71 +1,89 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
-import { profile } from "@/src/content/profile";
-import type { CvFile } from "@/src/content/cv";
 import { useScrolledPast } from "@/src/lib/useInView";
+import { LINKS, localPath } from "@/src/lib/seo";
+import type { Dict } from "@/src/content";
+import type { Lang } from "@/src/content/types";
 
-const links = [
-  { label: "Siemens", href: "#siemens" },
-  { label: "Engines", href: "#work" },
-  { label: "Background", href: "#background" },
-  { label: "Contact", href: "#contact" },
-];
+interface Props {
+  t: Dict["nav"];
+  lang: Lang;
+  /** The same page in the other language. */
+  altPath: string;
+  /** The CV PDF in this page's language, if it is published. */
+  cvHref: string | null;
+}
 
-export default function Navbar({ cvs }: { cvs: CvFile[] }) {
-  const cv = cvs[0];
+export default function Navbar({ t, lang, altPath, cvHref }: Props) {
   const scrolled = useScrolledPast(12);
   const [open, setOpen] = useState(false);
+  const home = localPath(lang, "/");
+
+  const links = [
+    { label: t.siemens, href: `${home}#siemens` },
+    { label: t.work, href: `${home}#work` },
+    { label: t.writing, href: localPath(lang, "/writing") },
+    { label: t.background, href: `${home}#background` },
+    { label: t.contact, href: `${home}#contact` },
+  ];
 
   return (
     <nav
-      aria-label="Main"
+      aria-label={t.label}
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300 ${
         scrolled || open ? "border-b border-line bg-ground/90 backdrop-blur-sm" : "border-b border-transparent"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-        <a href="#top" className="font-display text-lg font-semibold tracking-tight">
-          {profile.name}
-        </a>
+        <Link href={home} className="font-display text-lg font-semibold tracking-tight">
+          Ahmed Berrada
+        </Link>
 
-        <div className="hidden items-center gap-7 md:flex">
+        <div className="hidden items-center gap-6 lg:flex">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="text-ink-2 transition-colors hover:text-ink">
+            <Link key={l.href} href={l.href} className="text-ink-2 transition-colors hover:text-ink">
               {l.label}
-            </a>
+            </Link>
           ))}
-          <a href={profile.links.github.href} target="_blank" rel="noreferrer" className="link">
-            GitHub
+          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link">
+            {t.github}
           </a>
-          {cv && (
-            <a href={cv.href} className="rounded-[3px] bg-ink px-3.5 py-1.5 text-ground transition-colors hover:bg-accent hover:text-ink">
-              CV
+          <a href={altPath} hrefLang={t.switchLang} lang={t.switchLang} title={t.switchLabel} className="rounded-[3px] border border-line-2 px-2 py-1 font-mono text-xs transition-colors hover:border-ink">
+            {t.switchShort}
+          </a>
+          {cvHref && (
+            <a href={cvHref} className="rounded-[3px] bg-ink px-3.5 py-1.5 text-ground transition-colors hover:bg-accent hover:text-ink active:translate-y-px">
+              {t.cv}
             </a>
           )}
         </div>
 
-        <button
-          className="-mr-2 px-2 py-2 md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((o) => !o)}
-        >
-          {open ? "Close" : "Menu"}
+        <button className="-mr-2 px-2 py-2 lg:hidden" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
+          {open ? t.close : t.menu}
         </button>
       </div>
 
       {open && (
-        <div id="mobile-menu" className="border-t border-line px-5 pb-4 md:hidden">
-          {[...links, { label: "GitHub", href: profile.links.github.href }, ...cvs.map((c) => ({ label: c.label, href: c.href }))].map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="block border-b border-line py-3.5 font-display text-2xl last:border-0"
-            >
+        <div id="mobile-menu" className="border-t border-line px-5 pb-4 lg:hidden">
+          {links.map((l) => (
+            <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="block border-b border-line py-3.5 font-display text-2xl">
               {l.label}
-            </a>
+            </Link>
           ))}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-4">
+            <a href={LINKS.github} target="_blank" rel="noreferrer" className="link">
+              {t.github}
+            </a>
+            {cvHref && (
+              <a href={cvHref} className="link">
+                {t.cv}
+              </a>
+            )}
+            <a href={altPath} hrefLang={t.switchLang} lang={t.switchLang} className="link">
+              {t.switchLabel}
+            </a>
+          </div>
         </div>
       )}
     </nav>
