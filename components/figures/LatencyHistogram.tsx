@@ -53,7 +53,7 @@ export default function LatencyHistogram({ t, lang }: { t: T; lang: Lang }) {
         {decades.map((v) => (
           <g key={v}>
             <line x1={x(v)} x2={x(v)} y1={M.t} y2={M.t + PH} stroke="var(--line)" strokeDasharray="2 4" />
-            <text x={x(v)} y={M.t + PH + 16} fontSize={10} textAnchor="middle" fill="var(--muted)" fontFamily="var(--font-martian)">
+            <text x={x(v)} y={M.t + PH + 16} fontSize={10} textAnchor={v === decades[decades.length - 1] ? "end" : "middle"} fill="var(--muted)" fontFamily="var(--font-martian)">
               {decadeLabel(v)}
             </text>
           </g>
@@ -65,7 +65,7 @@ export default function LatencyHistogram({ t, lang }: { t: T; lang: Lang }) {
           <g key={m.label}>
             <line x1={x(m.v)} x2={x(m.v)} y1={M.t + 6 + i * 16} y2={M.t + PH} stroke="var(--ink)" strokeWidth={1.4} />
             <rect x={x(m.v) - 2} y={M.t + 6 + i * 16 - 2} width={4} height={4} fill="var(--accent)" stroke="var(--ink)" strokeWidth={1} />
-            <text x={x(m.v) + 7} y={M.t + 10 + i * 16} fontSize={11} fill="var(--ink)" fontFamily="var(--font-martian)">
+            <text x={x(m.v) + 7} y={M.t + 10 + i * 16} fontSize={11} fill="var(--ink)" fontFamily="var(--font-martian)" stroke="var(--ground)" strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
               {m.label} {fmtNs(m.v, lang)}
             </text>
           </g>
