@@ -141,12 +141,12 @@ export const fr: Dict = {
     pipeline: {
       title: "Pipeline de données de marché",
       plain:
-        "Récupère à intervalles réguliers des prix d'actions et de cryptos, les valide et les stocke dans TimescaleDB, et les sert par une API et un tableau de bord en direct.",
+        "Récupère à intervalles réguliers des prix d'actions et de cryptos, les valide et les stocke dans TimescaleDB, et les sert par une API et un tableau de bord.",
       facts: [
         "Barres d'une minute pour sept actions et fonds, prix à cinq minutes pour quatre cryptos.",
         "Airflow en local, Cloud Run Jobs et Cloud Scheduler en production.",
       ],
-      live: "Tableau de bord en direct",
+      live: "Tableau de bord",
       repo: "Pipeline sur GitHub",
     },
     pricer: {

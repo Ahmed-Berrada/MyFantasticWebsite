@@ -323,12 +323,12 @@ export const casesFr: CaseStudy[] = [
   {
     slug: "market-data-pipeline",
     title: "Pipeline de données de marché",
-    plain: "Un pipeline qui récupère à intervalles réguliers des prix d'actions et de cryptos, les contrôle et les stocke, et les sert par une API et un tableau de bord en direct.",
+    plain: "Un pipeline qui récupère à intervalles réguliers des prix d'actions et de cryptos, les contrôle et les stocke, et les sert par une API et un tableau de bord.",
     stack: "Python, TimescaleDB, Airflow, Cloud Run, FastAPI, Next.js",
-    status: "En fonctionnement, avec un tableau de bord public. Le débit et la latence de l'API ne sont pas encore mesurés.",
+    status: "Déployé sur Cloud Run et Vercel, avec un tableau de bord public. Le débit et la latence de l'API ne sont pas encore mesurés.",
     repos: [
       { label: "Pipeline sur GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
-      { label: "Tableau de bord en direct", href: "https://marketdatapipeline.ahmedberrada.com/" },
+      { label: "Tableau de bord", href: "https://marketdatapipeline.ahmedberrada.com/" },
     ],
     updated: "2026-11-26",
     sections: [
@@ -377,7 +377,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Ce qui existe et peut être inspecté : le [tableau de bord en direct](https://marketdatapipeline.ahmedberrada.com/), la documentation de l'API sur `/docs` et le code. Ce qui n'existe pas encore : une mesure du débit d'ingestion ou de la latence de l'API. J'ajouterais les deux avant de citer le moindre chiffre.",
+            text: "Ce qui existe et peut être inspecté : le [tableau de bord](https://marketdatapipeline.ahmedberrada.com/) et le code. Ce qui n'existe pas encore : une mesure du débit d'ingestion ou de la latence de l'API. J'ajouterais les deux avant de citer le moindre chiffre.",
           },
         ],
       },

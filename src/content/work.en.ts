@@ -326,12 +326,12 @@ export const casesEn: CaseStudy[] = [
   {
     slug: "market-data-pipeline",
     title: "Market data pipeline",
-    plain: "A pipeline that fetches stock and crypto prices on a schedule, checks and stores them, and serves them through an API and a live dashboard.",
+    plain: "A pipeline that fetches stock and crypto prices on a schedule, checks and stores them, and serves them through an API and a dashboard.",
     stack: "Python, TimescaleDB, Airflow, Cloud Run, FastAPI, Next.js",
-    status: "Running, with a public dashboard. Throughput and API latency are not measured yet.",
+    status: "Deployed on Cloud Run and Vercel, with a public dashboard. Throughput and API latency are not measured yet.",
     repos: [
       { label: "Pipeline on GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
-      { label: "Live dashboard", href: "https://marketdatapipeline.ahmedberrada.com/" },
+      { label: "Dashboard", href: "https://marketdatapipeline.ahmedberrada.com/" },
     ],
     updated: "2026-11-26",
     sections: [
@@ -380,7 +380,7 @@ export const casesEn: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "What exists and can be inspected: the [live dashboard](https://marketdatapipeline.ahmedberrada.com/), the API documentation at `/docs` and the code. What does not exist yet: a measurement of ingestion throughput or API latency. I would add both before quoting any number.",
+            text: "What exists and can be inspected: the [dashboard](https://marketdatapipeline.ahmedberrada.com/) and the code. What does not exist yet: a measurement of ingestion throughput or API latency. I would add both before quoting any number.",
           },
         ],
       },
