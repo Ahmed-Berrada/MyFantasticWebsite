@@ -110,10 +110,16 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
           </p>
         </div>
         <button
-          onClick={() => setUserPaused(!paused)}
+          onClick={() => {
+            // With reduced motion nothing runs by itself; each press advances the flow by a batch and stops.
+            if (reduced) {
+              advance(OPS_PER_FRAME * 12);
+              publish();
+            } else setUserPaused(!paused);
+          }}
           className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px"
         >
-          {paused ? t.run : t.pause}
+          {paused || reduced ? t.run : t.pause}
         </button>
       </div>
 
