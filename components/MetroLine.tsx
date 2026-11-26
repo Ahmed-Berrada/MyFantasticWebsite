@@ -17,7 +17,6 @@ const stops: Stop[] = [
   { when: "Sep 2025", name: "Siemens Mobility", note: "Apprentice software engineer", kind: "interchange" },
   { when: "Sep 2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
   { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-  { when: "Oct 2026", name: "AWS", note: "Certified AI Practitioner" },
   { when: "Sep 2027", name: "Next stop", note: "A permanent role, Paris", kind: "terminus" },
 ];
 

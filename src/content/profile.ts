@@ -93,8 +93,6 @@ export const education = {
   coursework: "Mathematics (probability, statistics, optimisation), algorithms, software development, architecture.",
 };
 
-export const certification = "AWS Certified AI Practitioner, October 2026";
-
 export const stack: { group: string; items: string[] }[] = [
   { group: "Languages", items: ["C++", "Java", "Python", "SQL", "Bash"] },
   { group: "Critical systems", items: ["Simulation and stimulation tools", "pytest, Robot Framework", "Byte-level protocols (UDP, CRC)", "CENELEC EN 50128 context"] },

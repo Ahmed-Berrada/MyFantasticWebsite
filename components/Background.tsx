@@ -1,5 +1,5 @@
 import MetroLine from "./MetroLine";
-import { certification, education, stack } from "@/src/content/profile";
+import { education, stack } from "@/src/content/profile";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -39,7 +39,6 @@ export default function Background() {
               </div>
             ))}
           </dl>
-          <p className="mt-8 text-ink-2">{certification}.</p>
           <p className="mt-2 text-ink-2">French (C2), English (C1, my daily working language), Arabic (native).</p>
         </Row>
       </div>

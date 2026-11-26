@@ -1,5 +1,4 @@
 import ArchitectureDiagram from "./ArchitectureDiagram";
-import LatencyScale from "./LatencyScale";
 import LiveOrderBook from "./LiveOrderBook";
 import MonteCarloLab from "./MonteCarloLab";
 import SpeedupChart from "./SpeedupChart";
@@ -86,10 +85,6 @@ export default function Work() {
                 intrusive lists keep every order in memory allocated up front, so cancel is O(1) and the hot path never
                 allocates.
               </p>
-            </div>
-            <div>
-              <h4 className="mb-5 text-lg font-semibold">How long 163 ns is</h4>
-              <LatencyScale />
             </div>
           </div>
         </article>

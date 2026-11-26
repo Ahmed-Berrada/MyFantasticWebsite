@@ -1,37 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { TrainGraph, type Train } from "@/src/lib/traingraph";
 import { usePrefersReducedMotion } from "@/src/lib/useInView";
 
 const SIM_SPEED = 9; // simulated seconds per real second
-const LANE_H = 64; // keyboard lane height, px
 const ORIGIN_S = 6 * 3600 + 41 * 60; // the simulated clock starts at 06:41
-const MAX_PULSES = 48;
-const LANE_PX_PER_S = 60; // the key lane is zoomed in: 60 px per real second
-
-interface Pulse {
-  t: number; // sim time when the key was pressed
-  real: number; // performance.now() at the key press
-  label: string;
-  ms: number | null; // key press -> next frame
-  seq: number;
-}
-
-const KEY_LABELS: Record<string, string> = {
-  " ": "space",
-  Enter: "enter",
-  Backspace: "bksp",
-  Tab: "tab",
-  Escape: "esc",
-  ArrowLeft: "←",
-  ArrowRight: "→",
-  ArrowUp: "↑",
-  ArrowDown: "↓",
-  Shift: "shift",
-  Meta: "meta",
-  Alt: "alt",
-  Control: "ctrl",
-};
 
 function clock(simS: number): string {
   const s = ((ORIGIN_S + simS) % 86400 + 86400) % 86400;
@@ -41,55 +14,36 @@ function clock(simS: number): string {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${sec.toFixed(1).padStart(4, "0")}`;
 }
 
-interface Props {
-  /** Called with key-to-frame stats so the page can show them in text. */
-  onLatency?: (last: number, median: number, count: number) => void;
+/** Plain strings so a server page can pass them. Placeholders: {id} {dir} {station} {s}. */
+interface Labels {
+  train: string;
+  down: string;
+  up: string;
+  dwell: string;
+  run: string;
+  hint: string;
+  aria: string;
 }
 
-export default function TrainGraphCanvas({ onLatency }: Props) {
+const fill = (tpl: string, vars: Record<string, string | number>) =>
+  tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ""));
+
+interface Props {
+  labels: Labels;
+}
+
+export default function TrainGraphCanvas({ labels }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = usePrefersReducedMotion();
-  const [hint, setHint] = useState(true);
   const state = useRef({
     graph: new TrainGraph(41),
     now: 0,
     pointer: null as { x: number; y: number } | null,
-    pulses: [] as Pulse[],
-    seq: 0,
-    visible: true,
   });
-
-  // Keyboard and tap pulses: measure from the input event to the next frame.
+  const labelsRef = useRef(labels);
   useEffect(() => {
-    const s = state.current;
-    const record = (label: string, stamp: number) => {
-      const pulse: Pulse = { t: s.now, real: performance.now(), label, ms: null, seq: ++s.seq };
-      s.pulses.push(pulse);
-      if (s.pulses.length > MAX_PULSES) s.pulses.shift();
-      // rAF runs before the frame renders; a message posted from it lands just after,
-      // which approximates "the pulse is on screen".
-      requestAnimationFrame(() => {
-        const ch = new MessageChannel();
-        ch.port1.onmessage = () => {
-          pulse.ms = Math.max(0, performance.now() - stamp);
-          const done = s.pulses.filter((p) => p.ms !== null).map((p) => p.ms!).sort((a, b) => a - b);
-          onLatency?.(pulse.ms, done[Math.floor(done.length / 2)], done.length);
-          ch.port1.close();
-        };
-        ch.port2.postMessage(0);
-      });
-      setHint(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      const el = e.target as HTMLElement | null;
-      if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
-      if (e.repeat || !s.visible) return;
-      const label = KEY_LABELS[e.key] ?? (e.key.length === 1 ? e.key : e.key.slice(0, 5).toLowerCase());
-      record(label, e.timeStamp);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onLatency]);
+    labelsRef.current = labels;
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -99,7 +53,7 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
     let last = performance.now();
     let width = 0;
     let height = 0;
-    let colors = { ink: "#121417", ink2: "#3b4048", muted: "#5d636d", line: "#d3d7dd", accent: "#ffc400", sheet: "#f7f8f9", ground: "#eceef0" };
+    let colors = { ink: "#121417", ink2: "#3b4048", muted: "#5d636d", line: "#d3d7dd", accent: "#ffc400", ground: "#eceef0" };
     let monoFont = "monospace";
 
     const resize = () => {
@@ -111,7 +65,7 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const css = getComputedStyle(document.documentElement);
       const v = (n: string) => css.getPropertyValue(n).trim();
-      colors = { ink: v("--ink"), ink2: v("--ink-2"), muted: v("--muted"), line: v("--line"), accent: v("--accent"), sheet: v("--sheet"), ground: v("--ground") };
+      colors = { ink: v("--ink"), ink2: v("--ink-2"), muted: v("--muted"), line: v("--line"), accent: v("--accent"), ground: v("--ground") };
       monoFont = getComputedStyle(canvas).getPropertyValue("--font-martian").trim() || "monospace";
       draw();
     };
@@ -119,7 +73,7 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
     const pxPerS = () => Math.max(0.55, width / 1500);
     const xOf = (t: number) => width - (s.now - t) * pxPerS() - 24;
     const top = 28;
-    const plotH = () => height - LANE_H - top - 24;
+    const plotH = () => height - top - 34;
     const yOf = (y: number) => top + y * plotH();
 
     const drawTrain = (tr: Train, t0: number, t1: number) => {
@@ -139,6 +93,7 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
 
     function draw() {
       const g = s.graph;
+      const L = labelsRef.current;
       ctx.clearRect(0, 0, width, height);
       const tLeft = s.now - width / pxPerS();
       const tRight = s.now + 60;
@@ -170,8 +125,8 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
         if (isFive) ctx.fillText(clock(t).slice(0, 5), x + 4, top - 12);
       }
 
-      // Cursor time and the train nearest to the pointer
-      const p = s.pointer && s.pointer.y < height - LANE_H ? s.pointer : null;
+      // Pointer time and the train nearest to it
+      const p = s.pointer;
       const tc = p ? s.now - (width - 24 - p.x) / pxPerS() : null;
       let hit: { tr: Train; y: number } | null = null;
       if (tc !== null && p) {
@@ -210,7 +165,7 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
       const xNow = xOf(s.now);
       ctx.fillStyle = colors.ground;
       ctx.globalAlpha = 0.85;
-      ctx.fillRect(xNow + 1, 0, width - xNow, height - LANE_H);
+      ctx.fillRect(xNow + 1, 0, width - xNow, height);
       ctx.globalAlpha = 1;
       for (const tr of g.trains) {
         const y = g.positionAt(tr, s.now);
@@ -237,9 +192,9 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
         const lines = [clock(tc)];
         if (hit) {
           const st = g.stateAt(hit.tr, tc);
-          lines.push(`train ${hit.tr.id}, ${hit.tr.dir === 1 ? "down" : "up"}`);
-          if (st?.kind === "dwell") lines.push(`at station ${st.station}, leaves in ${Math.ceil(st.leavesIn)} s`);
-          if (st?.kind === "run") lines.push(`${Math.ceil(st.arrivesIn)} s to station ${st.nextStation}`);
+          lines.push(fill(L.train, { id: hit.tr.id, dir: hit.tr.dir === 1 ? L.down : L.up }));
+          if (st?.kind === "dwell") lines.push(fill(L.dwell, { station: st.station, s: Math.ceil(st.leavesIn) }));
+          if (st?.kind === "run") lines.push(fill(L.run, { s: Math.ceil(st.arrivesIn), station: st.nextStation }));
         }
         ctx.font = `11px ${monoFont}`;
         const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 16;
@@ -251,39 +206,6 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
         ctx.fillStyle = colors.ground;
         lines.forEach((l, i) => ctx.fillText(l, bx + 8, by + 19 + i * 16));
       }
-
-      // Keyboard lane
-      const laneTop = height - LANE_H;
-      const base = laneTop + LANE_H - 18;
-      ctx.strokeStyle = colors.ink2;
-      ctx.lineWidth = 1.25;
-      ctx.beginPath();
-      ctx.moveTo(0, base);
-      const pulses = [...s.pulses].sort((a, b) => a.real - b.real);
-      const realNow = performance.now();
-      const px = (pl: Pulse, k: number) =>
-        reduced ? width - 60 - (pulses.length - 1 - k) * 34 : width - 40 - ((realNow - pl.real) / 1000) * LANE_PX_PER_S;
-      pulses.forEach((pl, k) => {
-        const x = px(pl, k);
-        if (x < -20) return;
-        ctx.lineTo(x, base);
-        ctx.lineTo(x, base - 20);
-        ctx.lineTo(x + 8, base - 20);
-        ctx.lineTo(x + 8, base);
-      });
-      ctx.lineTo(width, base);
-      ctx.stroke();
-      ctx.font = `10px ${monoFont}`;
-      pulses.forEach((pl, k) => {
-        const x = px(pl, k);
-        if (x < -20) return;
-        const newest = pl.seq === s.seq;
-        const next = pulses[k + 1];
-        const room = newest || !next || px(next, k + 1) - x > 36;
-        ctx.fillStyle = newest ? colors.ink : colors.muted;
-        if (room || pl.label.length === 1) ctx.fillText(pl.label, x, base - 26);
-        if (pl.ms !== null && room) ctx.fillText(`${pl.ms.toFixed(1)} ms`, x, base + 13);
-      });
     }
 
     const loop = (nowReal: number) => {
@@ -299,7 +221,6 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
     const io = new IntersectionObserver(([e]) => {
-      s.visible = e.isIntersecting;
       cancelAnimationFrame(raf);
       if (e.isIntersecting) {
         last = performance.now();
@@ -334,17 +255,8 @@ export default function TrainGraphCanvas({ onLatency }: Props) {
 
   return (
     <div className="relative h-full w-full">
-      <canvas
-        ref={canvasRef}
-        className="block h-full w-full touch-pan-y"
-        role="img"
-        aria-label="A live train graph: each line is a train running between stations over time. Moving the pointer reads the timetable; pressing keys draws timed pulses on a signal lane."
-      />
-      {hint && (
-        <p className="pointer-events-none absolute right-10 bottom-[22px] text-right text-sm text-muted">
-          Type anything. Each key is timed from press to the next frame.
-        </p>
-      )}
+      <canvas ref={canvasRef} className="block h-full w-full touch-pan-y" role="img" aria-label={labels.aria} />
+      <p className="pointer-events-none absolute right-10 bottom-[10px] text-right text-sm text-muted">{labels.hint}</p>
     </div>
   );
 }

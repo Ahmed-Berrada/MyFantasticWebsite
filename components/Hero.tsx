@@ -1,25 +1,25 @@
 "use client";
-import { useCallback, useState } from "react";
 import ProximityText from "./ProximityText";
 import TrainGraphCanvas from "./TrainGraphCanvas";
 import { profile } from "@/src/content/profile";
 
-interface Latency {
-  last: number;
-  median: number;
-  count: number;
-}
+const graphLabels = {
+  train: "train {id}, {dir}",
+  down: "down",
+  up: "up",
+  dwell: "at station {station}, leaves in {s} s",
+  run: "{s} s to station {station}",
+  hint: "Move the pointer over the graph to read the timetable.",
+  aria: "A live train graph: each line is a train running between stations over time. Moving the pointer reads the timetable.",
+};
 
 export default function Hero() {
-  const [lat, setLat] = useState<Latency | null>(null);
-  const onLatency = useCallback((last: number, median: number, count: number) => setLat({ last, median, count }), []);
-
   return (
     <section id="top" className="relative flex flex-col overflow-hidden pt-20 lg:block lg:min-h-[100dvh]">
       {/* The instrument shares the page's centred column, fading out behind the text. */}
       <div className="relative order-2 mx-5 mb-16 h-[400px] lg:absolute lg:inset-x-0 lg:top-16 lg:mx-auto lg:mb-0 lg:h-[calc(100dvh-4rem)] lg:max-w-7xl lg:px-8">
         <div className="h-full w-full lg:[mask-image:linear-gradient(90deg,transparent_0%,transparent_26%,#000_50%)]">
-          <TrainGraphCanvas onLatency={onLatency} />
+          <TrainGraphCanvas labels={graphLabels} />
         </div>
       </div>
 
@@ -50,11 +50,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <p className="mt-10 max-w-[30rem] text-sm text-muted" aria-live="polite">
-            {lat
-              ? `Your last key reached the screen ${lat.last.toFixed(1)} ms after you pressed it. Median over ${lat.count} ${lat.count === 1 ? "key" : "keys"}: ${lat.median.toFixed(1)} ms.`
-              : profile.availability + "."}
-          </p>
+          <p className="mt-10 max-w-[30rem] text-sm text-muted">{profile.availability}.</p>
         </div>
       </div>
     </section>
