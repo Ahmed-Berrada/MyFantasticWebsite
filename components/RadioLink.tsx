@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { crc32mpeg2 } from "@/src/lib/crc";
-import { prng } from "@/src/lib/orderbook/flow";
+import { prng } from "@/src/lib/prng";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
 import { fill } from "@/src/lib/format";
 import type { Dict } from "@/src/content";

@@ -2,8 +2,6 @@ import { OrderBook, type Side, type Trade } from "./engine";
 
 import { prng } from "../prng";
 
-export { prng };
-
 export interface FlowStats {
   ops: number;
   trades: number;
