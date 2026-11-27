@@ -30,7 +30,7 @@ jobs:
 
   smoke:
     needs: check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # a release Playwright ships browser dependencies for
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
