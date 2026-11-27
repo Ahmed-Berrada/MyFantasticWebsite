@@ -61,7 +61,7 @@ function Box({ x, y, w, title, note }: { x: number; y: number; w: number; title:
   );
 }
 
-/** Static drawing of lob-engine's data structures. */
+/** Static drawing of the data structures of lob-engine, Order Book's C++ prototype. */
 export default function BookStructure({ t }: { t: T }) {
   return (
     <figure className="my-10">
