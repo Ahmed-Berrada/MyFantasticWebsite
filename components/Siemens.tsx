@@ -7,7 +7,7 @@ import type { Lang } from "@/src/content/types";
 
 export default function Siemens({ t, lang }: { t: Dict["siemens"]; lang: Lang }) {
   return (
-    <section id="siemens" className="border-t border-line-2 py-24 md:py-32">
+    <section id="siemens" className="border-t border-line-2 py-16 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-20">
           <div className="max-w-[46rem]">

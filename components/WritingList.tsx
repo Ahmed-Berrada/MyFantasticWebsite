@@ -14,7 +14,7 @@ export function NoteList({ notes, t, lang, heading = "h3" }: { notes: Note[]; t:
     <ul className="border-t border-line">
       {notes.map((n) => (
         <li key={n.slug} className="border-b border-line">
-          <Link href={localPath(lang, `/writing/${n.slug}`)} className="group grid gap-2 py-7 transition-colors duration-200 hover:bg-sunken md:grid-cols-[minmax(0,1fr)_12rem] md:gap-10 md:px-4">
+          <Link href={localPath(lang, `/writing/${n.slug}`)} className="group grid gap-2 py-7 transition-colors duration-200 hover:bg-sunken md:-mx-4 md:grid-cols-[minmax(0,1fr)_12rem] md:gap-10 md:px-4">
             <div>
               <H className="font-display text-2xl leading-tight font-medium tracking-tight group-hover:underline group-hover:decoration-line-2 group-hover:underline-offset-4 md:text-3xl">{n.title}</H>
               <p className="mt-2 max-w-[40rem] text-ink-2 text-pretty">{n.summary}</p>
@@ -33,7 +33,7 @@ export function NoteList({ notes, t, lang, heading = "h3" }: { notes: Note[]; t:
 
 export default function WritingList({ notes, t, lang }: { notes: Note[]; t: Dict["writing"]; lang: Lang }) {
   return (
-    <section id="writing" className="border-t border-line-2 py-24 md:py-32">
+    <section id="writing" className="border-t border-line-2 py-16 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div className="mb-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-24">
           <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.02em]">{t.title}</h2>
@@ -41,7 +41,7 @@ export default function WritingList({ notes, t, lang }: { notes: Note[]; t: Dict
         </div>
         <NoteList notes={notes} t={t} lang={lang} />
         <p className="mt-8">
-          <Link href={localPath(lang, "/writing")} className="link font-medium">
+          <Link href={localPath(lang, "/writing")} className="link link-tap font-medium">
             {t.all}
           </Link>
         </p>

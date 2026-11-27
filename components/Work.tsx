@@ -29,7 +29,7 @@ function Project({
   children?: React.ReactNode;
 }) {
   return (
-    <article className="mt-24 first:mt-20">
+    <article className="mt-16 first:mt-14 md:mt-24 md:first:mt-20">
       <header className="border-b border-line pb-6">
         <h3 className="font-display text-4xl leading-tight font-medium tracking-tight md:text-5xl">{title}</h3>
         <p className="mt-3 max-w-[44rem] text-lg leading-relaxed text-ink-2 text-pretty">{plain}</p>
@@ -46,7 +46,7 @@ function Project({
           <p className="mt-8 flex flex-wrap gap-x-7 gap-y-3">
             {links.map((l) =>
               l.internal ? (
-                <Link key={l.href} href={localPath(lang, l.href)} className="link font-medium">
+                <Link key={l.href} href={localPath(lang, l.href)} className="link link-tap font-medium">
                   {l.label}
                 </Link>
               ) : (
@@ -65,7 +65,7 @@ function Project({
 
 export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
   return (
-    <section id="work" className="border-t border-line-2 py-24 md:py-32">
+    <section id="work" className="border-t border-line-2 py-16 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-24">
           <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.02em]">{t.title}</h2>
