@@ -12,7 +12,7 @@ export default function Figure({ id, lang }: { id: FigureId; lang: Lang }) {
   const t = getDict(lang).figures;
   switch (id) {
     case "lob-structure":
-      return <BookStructure t={t.structure} />;
+      return <BookStructure t={t.structure} lang={lang} />;
     case "lob-results":
       return <LobResults t={t.results} lang={lang} />;
     case "lob-histogram":
