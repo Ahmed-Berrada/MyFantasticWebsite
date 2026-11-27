@@ -207,6 +207,7 @@ export const fr: Dict = {
     minutes: "min de lecture",
     published: "Publié le",
     back: "Tous les articles",
+    feed: "Flux RSS",
   },
   background: {
     title: "Parcours",

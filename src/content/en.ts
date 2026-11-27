@@ -209,6 +209,7 @@ export const en = {
     minutes: "min read",
     published: "Published",
     back: "All notes",
+    feed: "RSS feed",
   },
   background: {
     title: "Background",
