@@ -16,12 +16,12 @@ export const notesEn: Note[] = [
       { t: "h", text: "Step 1: make the measurement repeatable" },
       {
         t: "p",
-        text: "I wrote a small script that rebuilds the engine on a scratch copy, applies the method the README states (5 million operations, a 100,000 warm-up), runs it several times and records the machine, the compiler, the load and every run. On my laptop, eight runs gave a median of 149 ns, a P99 of 460 ns and a P99.9 of 909 ns. The median and the P99 moved by less than 3 % between runs, the P99.9 by about 8 %.",
+        text: "I wrote a small script that rebuilds the engine on a scratch copy, applies the method the README states (5 million operations, a 100,000 warm-up), runs it several times and records the machine, the compiler, the load and every run. On my laptop, eight runs gave a median of 149 ns, a P99 of 460 ns and a P99.9 of 909 ns. The median and the P99 moved by less than 3% between runs, the P99.9 by about 8%.",
       },
       { t: "h", text: "Step 2: know what the timer costs" },
       {
         t: "p",
-        text: "Each operation is wrapped in two clock reads. I measured an empty timed region: about 15 ns. That is 10 % of a 149 ns median, so it matters for the median and not at all for a millisecond outlier. I did not subtract it.",
+        text: "Each operation is wrapped in two clock reads. I measured an empty timed region: about 15 ns. That is 10% of a 149 ns median, so it matters for the median and not at all for a millisecond outlier. I did not subtract it.",
       },
       { t: "h", text: "Step 3: find the biggest outlier, and where it sits" },
       {
@@ -116,7 +116,7 @@ export const notesEn: Note[] = [
       { t: "h", text: "The check" },
       {
         t: "p",
-        text: "The estimator draws a standard normal with Box-Muller, builds the terminal price, discounts the payoff, and reports the mean with a 95 % confidence interval (1.96 times the standard error). With antithetic variates each draw Z is paired with −Z, and the pair counts as one sample.",
+        text: "The estimator draws a standard normal with Box-Muller, builds the terminal price, discounts the payoff, and reports the mean with a 95% confidence interval (1.96 times the standard error). With antithetic variates each draw Z is paired with −Z, and the pair counts as one sample.",
       },
       {
         t: "p",
@@ -132,15 +132,15 @@ export const notesEn: Note[] = [
           ["100,000", "10.4987 ± 0.0651", "0.0482", "10.4768 ± 0.0915"],
           ["1,000,000", "10.4701 ± 0.0204", "0.0195", "10.4625 ± 0.0289"],
         ],
-        note: "Exact price 10.4506 (S₀ 100, K 100, r 5 %, σ 20 %, 1 year). Seed 7, same random generator as the demo on this site.",
+        note: "Exact price 10.4506 (S₀ 100, K 100, r 5%, σ 20%, 1 year). Seed 7, same random generator as the demo on this site.",
       },
       {
         t: "p",
-        text: "Two things to look for. Each ten-fold increase in paths narrows the interval by about the square root of ten, which is how Monte Carlo converges. And at the same number of paths, antithetic variates give an interval about 30 % narrower than plain sampling.",
+        text: "Two things to look for. Each ten-fold increase in paths narrows the interval by about the square root of ten, which is how Monte Carlo converges. And at the same number of paths, antithetic variates give an interval about 30% narrower than plain sampling.",
       },
       {
         t: "p",
-        text: "The distance to the exact price at a million paths, 0.0195, is inside the interval of ±0.0204, as it should be about 95 % of the time. A result outside the interval, run after run, would mean a bug.",
+        text: "The distance to the exact price at a million paths, 0.0195, is inside the interval of ±0.0204, as it should be about 95% of the time. A result outside the interval, run after run, would mean a bug.",
       },
       { t: "h", text: "The GPU numbers" },
       {

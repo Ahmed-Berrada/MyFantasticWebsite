@@ -95,12 +95,12 @@ export const casesEn: CaseStudy[] = [
               ["A FIX member can log on, trade, cancel, query status and get every reject code, and resend works after a disconnect", "QuickFIX/J initiators over a socket"],
               ["A consumer that loses one UDP packet in five rebuilds every book by retransmission alone", "Real UDP and TCP sockets"],
               ["The matching core uses only the JDK", "ArchUnit"],
-              ["At least 90 % line and branch coverage", "JaCoCo, enforced by `./mvnw verify` in CI"],
+              ["At least 90% line and branch coverage", "JaCoCo, enforced by `./mvnw verify` in CI"],
             ],
           },
           {
             t: "p",
-            text: "CI is green on main (GitHub Actions runs `./mvnw verify`). The repository also defines a mutation-testing profile (PIT, with an 80 % threshold on every engine module). It is run on demand, not in CI, so I do not quote a score.",
+            text: "CI is green on main (GitHub Actions runs `./mvnw verify`). The repository also defines a mutation-testing profile (PIT, with an 80% threshold on every engine module). It is run on demand, not in CI, so I do not quote a score.",
           },
           {
             t: "p",
@@ -115,7 +115,7 @@ export const casesEn: CaseStudy[] = [
           { t: "h", text: "How to read these numbers" },
           {
             t: "p",
-            text: "The benchmark mixes 60 % adds, 25 % cancels and 15 % aggressive orders around a mid price, with seed 42. It times every operation with two reads of `std::chrono::high_resolution_clock`. On this laptop that pair costs about 15 ns, measured with an empty timed region, and it is not subtracted.",
+            text: "The benchmark mixes 60% adds, 25% cancels and 15% aggressive orders around a mid price, with seed 42. It times every operation with two reads of `std::chrono::high_resolution_clock`. On this laptop that pair costs about 15 ns, measured with an empty timed region, and it is not subtracted.",
           },
           {
             t: "p",
@@ -128,12 +128,12 @@ export const casesEn: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "The cancel list grows by about 0.35 ids per operation (60 % adds minus 25 % cancels), so late operations touch much more memory. I have not profiled the cache behaviour. That is my explanation, not a measurement.",
+            text: "The cancel list grows by about 0.35 ids per operation (60% adds minus 25% cancels), so late operations touch much more memory. I have not profiled the cache behaviour. That is my explanation, not a measurement.",
           },
           { t: "figure", id: "lob-histogram" },
           {
             t: "p",
-            text: "Half of the operations finish in under 150 ns and 99 % in under 460 ns. The slowest 0.1 % take 900 ns or more, up to a maximum of about 1.6 ms.",
+            text: "Half of the operations finish in under 150 ns and 99% in under 460 ns. The slowest 0.1% take 900 ns or more, up to a maximum of about 1.6 ms.",
           },
           { t: "h", text: "The 70 ms outlier is a hash map rehash" },
           {

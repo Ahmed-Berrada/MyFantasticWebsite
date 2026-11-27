@@ -62,7 +62,7 @@ export const en = {
         href: "/work/cbtc-validation",
       },
       {
-        value: "90 %",
+        value: "90%",
         label: "line and branch coverage required by CI",
         note: "Order Book, with property-based tests and a crash-recovery test.",
         href: "/work/order-book",
@@ -127,7 +127,7 @@ export const en = {
         "A matching engine, built twice. First in C++17, to learn how fast a book can match. Then in Java 21, as the core of a trading venue: orders over FIX or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
       facts: [
         "C++ prototype, first published: median 163 ns, P99 996 ns, 3.46 million operations a second. Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX conformance tests, with a 90 % coverage gate in CI.",
+        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX conformance tests, with a 90% coverage gate in CI.",
         "No numbers for the Java engine yet, on purpose: its benchmarking is phase 6, after correctness.",
       ],
       demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
