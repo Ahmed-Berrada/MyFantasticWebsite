@@ -42,7 +42,7 @@ export const casesFr: CaseStudy[] = [
       {
         id: "approach",
         blocks: [
-          { t: "h", text: "Le cœur de plateforme, en Java" },
+          { t: "h", text: "Le cœur de la plateforme, en Java" },
           { t: "figure", id: "order-path" },
           {
             t: "p",
@@ -59,7 +59,7 @@ export const casesFr: CaseStudy[] = [
           { t: "h", text: "Le prototype, en C++" },
           {
             t: "p",
-            text: "Demandes et offres sont deux arbres de prix `std::map`, donc le meilleur prix est à `begin()`. Chaque niveau de prix est une liste doublement chaînée intrusive d'ordres, dans l'ordre d'arrivée, et chaque ordre est pris dans un bloc de pool pré-alloué : ajouter ou retirer un ordre revient à quelques écritures de pointeurs. Une table de hachage de l'identifiant vers l'ordre donne une annulation en O(1).",
+            text: "Demandes et offres sont deux arbres de prix `std::map`, donc le meilleur prix est à `begin()`. Chaque niveau de prix est une liste doublement chaînée intrusive d'ordres, dans l'ordre d'arrivée, et chaque ordre est pris dans un bloc de pool préalloué : ajouter ou retirer un ordre revient à quelques écritures de pointeurs. Une table de hachage de l'identifiant vers l'ordre donne une annulation en O(1).",
           },
           { t: "figure", id: "lob-structure" },
           {
@@ -79,7 +79,7 @@ export const casesFr: CaseStudy[] = [
       {
         id: "result",
         blocks: [
-          { t: "h", text: "Correction : le moteur Java" },
+          { t: "h", text: "Justesse : le moteur Java" },
           { t: "p", text: "Ici, les preuves sont des tests et des seuils, pas de la vitesse." },
           {
             t: "table",
@@ -88,8 +88,8 @@ export const casesFr: CaseStudy[] = [
               ["Le carnet n'est jamais croisé, la quantité est conservée, identifiants et séquences sans trou, rejeu déterministe", "Tests de propriétés (jqwik)"],
               ["Des flux de commandes aléatoires donnent exactement les événements d'une implémentation de référence volontairement simple", "jqwik avec un oracle naïf"],
               ["Aucune commande acquittée n'est perdue après un crash, et l'état récupéré égale un rejeu complet", "Une seconde JVM tuée avec SIGKILL"],
-              ["Couper l'un ou l'autre journal à n'importe quel octet récupère exactement les commandes complètes", "jqwik sur le journal"],
-              ["Un membre FIX peut se connecter, négocier, annuler, interroger un statut et recevoir chaque code de rejet, et la reprise fonctionne après une déconnexion", "Initiateurs QuickFIX/J sur socket"],
+              ["Quel que soit l'octet où l'on tronque l'un ou l'autre journal, la reprise restitue exactement les commandes complètes", "jqwik sur le journal"],
+              ["Un membre FIX peut se connecter, passer des ordres, annuler, interroger un statut et recevoir chaque code de rejet, et la retransmission des messages (resend) fonctionne après une déconnexion", "Initiateurs QuickFIX/J sur socket"],
               ["Un consommateur qui perd un paquet UDP sur cinq reconstruit chaque carnet par la seule retransmission", "Vrais sockets UDP et TCP"],
               ["Le cœur d'appariement n'utilise que le JDK", "ArchUnit"],
               ["Au moins 90 % de couverture de lignes et de branches", "JaCoCo, imposé par `./mvnw verify` en CI"],
@@ -112,11 +112,11 @@ export const casesFr: CaseStudy[] = [
           { t: "h", text: "Comment lire ces chiffres" },
           {
             t: "p",
-            text: "Le benchmark mélange 60 % d'ajouts, 25 % d'annulations et 15 % d'ordres agressifs autour d'un prix médian, avec la graine 42. Il chronomètre chaque opération avec deux lectures de `std::chrono::high_resolution_clock`. Sur ce portable, cette paire coûte environ 15 ns, mesurés avec une zone chronométrée vide, et n'est pas soustraite.",
+            text: "Le benchmark mélange 60 % d'ajouts, 25 % d'annulations et 15 % d'ordres agressifs autour d'un prix milieu (mid), avec la graine 42. Il chronomètre chaque opération avec deux lectures de `std::chrono::high_resolution_clock`. Sur ce portable, cette paire coûte environ 15 ns, mesurés avec une zone chronométrée vide, et n'est pas soustraite.",
           },
           {
             t: "p",
-            text: "La zone chronométrée contient aussi les tirages aléatoires de prix et de quantité et la tenue de la liste des identifiants à annuler : chaque chiffre est donc une borne supérieure du temps propre au moteur. Le tirage qui choisit l'action est hors de la zone chronométrée mais dans l'horloge du débit, ce qui explique que le débit soit un peu inférieur à un sur la moyenne.",
+            text: "La zone chronométrée contient aussi les tirages aléatoires de prix et de quantité et la tenue de la liste des identifiants à annuler : chaque chiffre est donc une borne supérieure du temps propre au moteur. Le tirage qui choisit l'action est hors de la zone chronométrée mais dans l'horloge du débit, ce qui explique que le débit soit un peu inférieur à l'inverse de la latence moyenne.",
           },
           { t: "h", text: "Même code, réponses différentes" },
           {
@@ -139,13 +139,13 @@ export const casesFr: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Je l'ai testé sur une copie de travail. Construire la table avec 30 millions de buckets d'emblée ramène le maximum à 1,1 à 1,4 ms et fait passer le débit de 3,25 à 4,25 millions d'opérations par seconde. Le moteur n'est pas modifié. Le prix à payer est la mémoire : le tableau de buckets représente à lui seul environ 240 Mo.",
+            text: "Je l'ai testé sur une copie de travail. Construire la table avec 30 millions de buckets d'emblée ramène le maximum entre 1,1 et 1,4 ms et fait passer le débit de 3,25 à 4,25 millions d'opérations par seconde. Le moteur n'est pas modifié. Le prix à payer est la mémoire : le tableau de buckets représente à lui seul environ 240 Mo.",
           },
           { t: "figure", id: "id-map-probe" },
           { t: "h", text: "Ce que je ne peux pas dire" },
           {
             t: "p",
-            text: "Le README n'a pas noté quelle machine avait produit ses premiers chiffres : je ne peux donc pas savoir si l'écart entre son P99.9 de 5,5 µs et mes 0,9 µs vient du matériel, de la charge ou d'une autre version du code. Mes exécutions ont eu lieu sur un portable en gouverneur powersave, sans épinglage de cœur, avec une charge moyenne d'environ 1,2 due à des processus d'arrière-plan. Lancez le script sur votre machine : ces chiffres sont faits pour être vérifiés.",
+            text: "Le README n'a pas noté quelle machine avait produit ses premiers chiffres : je ne peux donc pas savoir si l'écart entre son P99.9 de 5,5 µs et mes 0,9 µs vient du matériel, de la charge ou d'une autre version du code. Mes exécutions ont eu lieu sur un portable avec le gouverneur powersave, sans épinglage de cœur, avec une charge moyenne d'environ 1,2 due à des processus d'arrière-plan. Lancez le script sur votre machine : ces chiffres sont faits pour être vérifiés.",
           },
         ],
       },
@@ -182,7 +182,7 @@ export const casesFr: CaseStudy[] = [
             items: [
               "Phase 4 : prévention de l'auto-appariement, enchères, phases de négociation et coupe-circuits.",
               "Phase 6 : micro-benchmarks JMH, chemin critique sans allocation et latence publiée pour le moteur Java, avec sa méthodologie, sur un cœur isolé, avec l'histogramme complet de chaque exécution.",
-              "Reprendre la leçon du prototype : dimensionner d'avance la table d'identifiants du moteur Java, et mesurer le coût en mémoire face au gain de latence.",
+              "Reprendre la leçon du prototype : prédimensionner la table d'identifiants du moteur Java, et mesurer le coût en mémoire face au gain de latence.",
             ],
           },
         ],
@@ -220,7 +220,7 @@ export const casesFr: CaseStudy[] = [
             items: [
               "Logiciel de sécurité, développé selon la norme CENELEC EN 50128.",
               "Scrum, en anglais, avec les équipes radio, logiciel embarqué et test en France et en Inde.",
-              "Les messages doivent être exacts à l'octet : trame UDP et somme de contrôle CRC-32/MPEG-2.",
+              "Les messages doivent être exacts à l'octet près : trame UDP et somme de contrôle CRC-32/MPEG-2.",
               "Des personnes qui ne programment pas doivent pouvoir écrire et exécuter des scénarios.",
             ],
           },
@@ -233,7 +233,7 @@ export const casesFr: CaseStudy[] = [
           {
             t: "list",
             items: [
-              "Le CRG Message Generator, en Python. Il simule les équipements de bord et de sol (CC, ZC, WRG) et génère des messages radio exacts à l'octet à partir d'une configuration YAML/XML. Une suite pytest vérifie sa conformité et produit des rapports JUnit-XML.",
+              "Le CRG Message Generator, en Python. Il simule les équipements de bord et de sol (CC, ZC, WRG) et génère des messages radio exacts à l'octet près à partir d'une configuration YAML/XML. Une suite pytest vérifie sa conformité et produit des rapports JUnit-XML.",
               "Une bibliothèque Robot Framework de mots-clés métier : un scénario se lit comme l'exigence qu'il vérifie.",
               "L'environnement d'exécution, construit avec l'équipe : GitLab CI/CD et runners, le CRG virtualisé avec QEMU/KVM dans des network namespaces Linux, et archivage automatique des rapports et des logs. Je suis responsable du banc de test.",
             ],
@@ -256,7 +256,7 @@ export const casesFr: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Je ne peux pas publier de vraies trames ni de code. La scène radio de la [page d'accueil](/) utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`.",
+            text: "Je ne peux pas publier de vraies trames ni de code. L'animation de la liaison radio de la [page d'accueil](/) utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`.",
           },
         ],
       },
@@ -320,7 +320,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Chaque pipeline suit les mêmes quatre tâches : extraire, transformer, charger, journaliser le succès. Après le chargement, il rafraîchit les agrégats continus de TimescaleDB. L'étape de transformation nettoie et valide les données, et calcule des moyennes mobiles simples sur 20 et 50 périodes ainsi que les rendements quotidiens.",
+            text: "Chaque pipeline suit les quatre mêmes tâches : extraire, transformer, charger, journaliser le succès. Après le chargement, il rafraîchit les agrégats continus de TimescaleDB. L'étape de transformation nettoie et valide les données, et calcule des moyennes mobiles simples sur 20 et 50 périodes ainsi que les rendements quotidiens.",
           },
           {
             t: "table",

@@ -4,7 +4,7 @@ import type { Note } from "./types";
 export const notesFr: Note[] = [
   {
     slug: "reading-a-latency-tail",
-    title: "Lire une queue de latence sans se tromper soi-même",
+    title: "Lire une queue de latence sans se raconter d'histoires",
     summary: "Un maximum de 68 ms dans le benchmark d'un moteur d'appariement s'est révélé être un unique rehash de table de hachage, à la même opération à chaque exécution.",
     date: "2026-11-26",
     minutes: 4,
@@ -30,7 +30,7 @@ export const notesFr: Note[] = [
       },
       {
         t: "p",
-        text: "À cette opération, la liste des identifiants à annuler contenait environ 9,4 millions d'entrées. La table identifiant vers ordre du moteur, un simple `std::unordered_map`, n'avait jamais reçu sa taille cible : elle grandit par rehash, et rehasher des millions d'entrées d'un seul coup prend des dizaines de millisecondes.",
+        text: "À cette opération, la liste des identifiants à annuler contenait environ 9,4 millions d'entrées. La table du moteur qui associe l'identifiant à ordre du moteur, un simple `std::unordered_map`, n'avait jamais reçu sa taille cible : elle grandit par rehash, et rehasher des millions d'entrées d'un seul coup prend des dizaines de millisecondes.",
       },
       { t: "h", text: "Étape 4 : changer une chose et mesurer de nouveau" },
       { t: "p", text: "Sur une copie de travail, j'ai construit la table avec 30 millions de buckets. Rien d'autre n'a changé." },
@@ -43,7 +43,7 @@ export const notesFr: Note[] = [
       {
         t: "list",
         items: [
-          "Un rapport de queue est une question. Demandez où sont les opérations les plus lentes avant de demander comment les accélérer.",
+          "Un rapport P99.9/médiane élevé est une question. Demandez où sont les opérations les plus lentes avant de demander comment les accélérer.",
           "Une graine fixe transforme un pic en preuve : un pic à la même opération à chaque exécution vient du programme, pas de la machine.",
           "Changer une seule chose, et garder l'avant et l'après.",
           "Dire sur quoi on a mesuré. Le README ne publiait pas le matériel, et son benchmark exécutait un autre nombre d'opérations que celui qu'il décrivait. Les deux sont corrigés : le README note la machine, et le code exécute la méthode que le README décrit.",
@@ -90,7 +90,7 @@ export const notesFr: Note[] = [
           "Tests de propriétés (jqwik) : le carnet n'est jamais croisé, la quantité est conservée, identifiants et séquences sans trou.",
           "Un modèle de référence : des flux de commandes aléatoires doivent donner exactement les événements d'une implémentation volontairement simple.",
           "Un test de crash : une seconde JVM est tuée avec SIGKILL, aucune commande acquittée ne doit être perdue, et l'état récupéré doit égaler un rejeu complet.",
-          "Couper l'un ou l'autre journal à n'importe quel octet doit récupérer exactement les commandes complètes.",
+          "Quel que soit l'octet où l'on tronque l'un ou l'autre journal, la reprise doit restituer exactement les commandes complètes.",
         ],
       },
       { t: "h", text: "Ce que ça coûte" },
@@ -104,19 +104,19 @@ export const notesFr: Note[] = [
 
   {
     slug: "monte-carlo-against-black-scholes",
-    title: "Vérifier un pricer Monte Carlo contre la formule fermée",
+    title: "Vérifier un pricer Monte Carlo avec la formule de Black-Scholes",
     summary: "Comment savoir qu'une simulation est juste : la comparer au prix exact et laisser l'intervalle de confiance trancher.",
     date: "2026-11-26",
     minutes: 4,
     blocks: [
       {
         t: "p",
-        text: "Un call européen sous mouvement brownien géométrique a un prix exact, Black-Scholes. C'est un bon test pour un pricer Monte Carlo : la simulation doit tomber dans son propre intervalle de confiance autour de la valeur exacte.",
+        text: "Un call européen dont le sous-jacent suit un mouvement brownien géométrique a un prix exact, Black-Scholes. C'est un bon test pour un pricer Monte Carlo : la simulation doit tomber dans son propre intervalle de confiance autour de la valeur exacte.",
       },
       { t: "h", text: "La vérification" },
       {
         t: "p",
-        text: "L'estimateur tire une loi normale standard avec Box-Muller, construit le prix final, actualise le paiement, et donne la moyenne avec un intervalle de confiance à 95 % (1,96 fois l'erreur standard). Avec les variables antithétiques, chaque tirage Z est associé à −Z, et la paire compte pour un échantillon.",
+        text: "L'estimateur tire une variable normale centrée réduite avec Box-Muller, construit le prix final, actualise le payoff, et donne la moyenne avec un intervalle de confiance à 95 % (1,96 fois l'erreur standard). Avec les variables antithétiques, chaque tirage Z est associé à −Z, et la paire compte pour un échantillon.",
       },
       {
         t: "p",
