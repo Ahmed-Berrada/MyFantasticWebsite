@@ -2,15 +2,16 @@
 import { useInView } from "@/src/lib/useInView";
 import { fill, fmtDec } from "@/src/lib/format";
 import type { Dict } from "@/src/content";
+import { pricerRun } from "@/src/content/bench/pricer";
 import type { Lang } from "@/src/content/types";
 
-/** The three timings of the same simulation, drawn to scale. They come from the author's runs of the notebook. */
+/** The three timings of the same simulation, drawn to scale. Source: `src/content/bench/pricer.ts`. */
 export default function SpeedupChart({ t, lang }: { t: Dict["work"]["pricerChart"]; lang: Lang }) {
   const [ref, seen] = useInView<HTMLDivElement>(0.4);
   const runs = [
-    { label: t.python, stack: t.pythonStack, seconds: 295 },
-    { label: t.numpy, stack: t.numpyStack, seconds: 7.4 },
-    { label: t.cupy, stack: t.cupyStack, seconds: 0.46, highlight: true },
+    { label: t.python, stack: t.pythonStack, seconds: pricerRun.seconds.python },
+    { label: t.numpy, stack: t.numpyStack, seconds: pricerRun.seconds.numpy },
+    { label: t.cupy, stack: t.cupyStack, seconds: pricerRun.seconds.cupy, highlight: true },
   ];
   const base = runs[0].seconds;
   const numpy = runs[1].seconds;
