@@ -52,9 +52,10 @@ export function renderOg(lang: Lang) {
         </svg>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 72, width: 720 }}>
           <div style={{ fontSize: 28, color: "#3b4048" }}>{t.who}</div>
-          <div style={{ display: "flex", flexDirection: "column", fontSize: lang === "fr" ? 112 : 128, fontWeight: 700, lineHeight: 0.9, color: "#121417", letterSpacing: -5 }}>
-            <span>{t.thesis[0]}</span>
-            <span>{t.thesis[1]}</span>
+          {/* Each line of the thesis stays on one line: the French one is longer, so it is set smaller. */}
+          <div style={{ display: "flex", flexDirection: "column", fontSize: lang === "fr" ? 84 : 128, fontWeight: 700, lineHeight: 0.95, color: "#121417", letterSpacing: lang === "fr" ? -3 : -5 }}>
+            <span style={{ whiteSpace: "nowrap" }}>{t.thesis[0]}</span>
+            <span style={{ whiteSpace: "nowrap" }}>{t.thesis[1]}</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 26, color: "#3b4048" }}>
             <div style={{ width: 18, height: 18, background: "#ffc400" }} />
