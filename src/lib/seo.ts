@@ -58,6 +58,11 @@ export function pageMetadata({ lang, path, title, description, type = "website",
   };
 }
 
+/** The author, as referenced from articles and case studies. */
+export function authorRef(lang: Lang) {
+  return { "@type": "Person", name: "Ahmed Berrada", url: SITE_URL + localPath(lang, "/"), sameAs: [LINKS.github, LINKS.linkedin] };
+}
+
 /** schema.org Person, so search engines can tie the name to the school, employer and profiles. */
 export function personJsonLd(lang: Lang) {
   return {

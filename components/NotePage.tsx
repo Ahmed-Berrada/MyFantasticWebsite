@@ -4,7 +4,7 @@ import JsonLd from "./JsonLd";
 import SiteShell from "./SiteShell";
 import { formatDate } from "./WritingList";
 import { getDict, getNote } from "@/src/content";
-import { LINKS, SITE_URL, localPath } from "@/src/lib/seo";
+import { SITE_URL, authorRef, localPath } from "@/src/lib/seo";
 import type { Lang } from "@/src/content/types";
 import { notFound } from "next/navigation";
 
@@ -24,7 +24,7 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
           datePublished: n.date,
           inLanguage: lang,
           mainEntityOfPage: SITE_URL + localPath(lang, path),
-          author: { "@type": "Person", name: "Ahmed Berrada", url: SITE_URL + localPath(lang, "/"), sameAs: [LINKS.github, LINKS.linkedin] },
+          author: authorRef(lang),
         }}
       />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
