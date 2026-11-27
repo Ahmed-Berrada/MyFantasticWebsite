@@ -155,7 +155,8 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
             {(snap?.tape ?? []).map((row) => (
               <li key={row.seq} className="tape-row grid grid-cols-[1fr_auto] rounded px-2 py-[3px] font-mono text-xs tabular">
                 <span className={row.aggressor === "buy" ? "text-bid" : "text-ask"}>
-                  {row.aggressor === "buy" ? "▲" : "▼"} {px(row.price, lang)}
+                  <span aria-hidden>{row.aggressor === "buy" ? "▲" : "▼"}</span>
+                  <span className="sr-only">{row.aggressor === "buy" ? t.buy : t.sell}</span> {px(row.price, lang)}
                 </span>
                 <span className="text-ink-2">{row.qty}</span>
               </li>

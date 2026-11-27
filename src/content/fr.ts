@@ -170,6 +170,8 @@ export const fr: Dict = {
       run: "lancer",
       pause: "pause",
       step: "pas à pas",
+      buy: "achat à",
+      sell: "vente à",
       price: "prix",
       size: "taille",
       trades: "transactions",

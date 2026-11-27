@@ -172,6 +172,8 @@ export const en = {
       run: "run",
       pause: "pause",
       step: "step",
+      buy: "buy at",
+      sell: "sell at",
       price: "price",
       size: "size",
       trades: "trades",
