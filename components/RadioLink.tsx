@@ -89,13 +89,14 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
   // Animation clock + automatic messages
   useEffect(() => {
-    if (!onScreen) return;
+    // With reduced motion nothing moves, so there is no clock to run: frames come only from the field.
+    if (!onScreen || reduced) return;
     let raf = 0;
     const t0 = performance.now() - now;
     const tick = (wall: number) => {
       const t = wall - t0;
       setNow(t);
-      if (!reduced && t >= nextMsg.current && wall - lastTyped.current > 4000) {
+      if (t >= nextMsg.current && wall - lastTyped.current > 4000) {
         nextMsg.current = t + MSG_EVERY_MS;
         const r = rand();
         const source: Source = r < 0.5 ? "CC" : r < 0.8 ? "ZC" : "WRG";
@@ -114,6 +115,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
         const len = 5 + Math.floor(rand() * 6);
         const payload = Array.from({ length: len }, () => Math.floor(rand() * 256));
         seqRef.current = (seqRef.current + 1) & 0xffff;
+        setHover(null);
         setFrame(buildFrame(p.source, seqRef.current, payload));
         setRevealed(0);
       }
@@ -132,28 +134,20 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
     return () => clearTimeout(id);
   }, [revealed, frame, reduced]);
 
-  // Typing writes the payload; the CRC follows every byte.
-  useEffect(() => {
-    if (!onScreen) return;
-    const onKey = (e: KeyboardEvent) => {
-      const el = e.target as HTMLElement | null;
-      if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))) return;
-      if (e.metaKey || e.ctrlKey || e.altKey) return;
-      let next: number[] | null = null;
-      if (e.key === "Backspace") next = (typed ?? []).slice(0, -1);
-      else if (e.key.length === 1 && e.key.charCodeAt(0) < 128) next = [...(typed ?? []), e.key.charCodeAt(0)].slice(-12);
-      if (!next) return;
-      lastTyped.current = performance.now();
-      pulse.current = null;
-      setPulse(null);
-      setTyped(next);
-      seqRef.current = (seqRef.current + 1) & 0xffff;
-      setFrame(buildFrame("you", seqRef.current, next));
-      setRevealed(Infinity);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onScreen, typed]);
+  /** The field writes the payload; the CRC follows every byte. ASCII only, at most 12 bytes. */
+  const onPayload = (value: string) => {
+    const next = Array.from(value, (c) => c.charCodeAt(0))
+      .filter((c) => c < 128)
+      .slice(0, 12);
+    lastTyped.current = performance.now();
+    pulse.current = null;
+    setPulse(null);
+    setHover(null);
+    setTyped(next);
+    seqRef.current = (seqRef.current + 1) & 0xffff;
+    setFrame(buildFrame("you", seqRef.current, next));
+    setRevealed(Infinity);
+  };
 
   const tx = reduced ? 300 : trainX(now);
   let dot: { x: number; y: number } | null = null;
@@ -263,7 +257,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
           ))}
         </div>
 
-        <p className="mt-3 min-h-5 font-mono text-[11px] text-ink-2" aria-live="polite">
+        <p className="mt-3 min-h-5 font-mono text-[11px] text-ink-2">
           {h !== null && hoverField
             ? fill(t.hover, {
                 i: h,
@@ -279,9 +273,29 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
                 state: verified ? t.verified : t.pending,
               })}
         </p>
+        <label className="mt-3 flex items-center gap-3 font-mono text-[12px] text-ink-2">
+          <span className="shrink-0">{t.inputLabel}</span>
+          <input
+            type="text"
+            inputMode="text"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck={false}
+            maxLength={12}
+            value={typed ? String.fromCharCode(...typed) : ""}
+            onChange={(e) => onPayload(e.target.value)}
+            placeholder={t.placeholder}
+            className="min-h-9 w-full max-w-[16rem] rounded-[3px] border border-line-2 bg-ground px-2 font-mono text-[13px] text-ink placeholder:text-muted focus:border-ink"
+          />
+        </label>
+        {/* Announce only frames the visitor wrote, not the automatic stream. */}
+        <p role="status" className="sr-only">
+          {frame.source === "you" ? fill(t.announce, { crc: `0x${hex(frame.crc, 8)}` }) : ""}
+        </p>
       </div>
-      <p className="border-t border-line bg-sunken px-4 py-2 text-xs text-muted">
-        {typed ? t.typed : t.idle} {t.illustrative}
+      <p className="border-t border-line bg-sunken px-4 py-2 text-[13px] text-muted">
+        {frame.source === "you" ? t.typed : t.idle} {t.illustrative}
       </p>
     </div>
   );
