@@ -39,7 +39,7 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
         </p>
         <p className="mt-6 max-w-[40rem] text-xl leading-relaxed text-pretty">{n.summary}</p>
         <div className="mt-6">
-          <Blocks blocks={n.blocks} lang={lang} />
+          <Blocks blocks={n.blocks} lang={lang} heading="h2" />
         </div>
       </article>
     </SiteShell>

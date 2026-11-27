@@ -8,14 +8,15 @@ export function formatDate(iso: string, lang: Lang): string {
 }
 
 /** A list of notes: title, one line, date and reading time. */
-export function NoteList({ notes, t, lang }: { notes: Note[]; t: Dict["writing"]; lang: Lang }) {
+export function NoteList({ notes, t, lang, heading = "h3" }: { notes: Note[]; t: Dict["writing"]; lang: Lang; heading?: "h2" | "h3" }) {
+  const H = heading;
   return (
     <ul className="border-t border-line">
       {notes.map((n) => (
         <li key={n.slug} className="border-b border-line">
           <Link href={localPath(lang, `/writing/${n.slug}`)} className="group grid gap-2 py-7 transition-colors duration-200 hover:bg-sunken md:grid-cols-[minmax(0,1fr)_12rem] md:gap-10 md:px-4">
             <div>
-              <h3 className="font-display text-2xl leading-tight font-medium tracking-tight group-hover:underline group-hover:decoration-line-2 group-hover:underline-offset-4 md:text-3xl">{n.title}</h3>
+              <H className="font-display text-2xl leading-tight font-medium tracking-tight group-hover:underline group-hover:decoration-line-2 group-hover:underline-offset-4 md:text-3xl">{n.title}</H>
               <p className="mt-2 max-w-[40rem] text-ink-2 text-pretty">{n.summary}</p>
             </div>
             <p className="text-sm text-muted md:text-right">
