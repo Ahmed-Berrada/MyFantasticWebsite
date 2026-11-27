@@ -115,28 +115,18 @@ export const fr: Dict = {
     title: "Projets",
     lede: "Des projets où les mêmes règles rencontrent la mesure. Chacun renvoie vers son code et vers une étude qui dit ce qui a été mesuré, et comment.",
     caseCta: "Lire l'étude",
-    lob: {
-      title: "lob-engine",
-      plain:
-        "Un moteur d'appariement en C++17. Il met en correspondance acheteurs et vendeurs par prix, puis par heure d'arrivée, et je mesure le temps que prend chaque ordre.",
-      facts: [
-        "Publié dans le README : médiane 163 ns, P99 996 ns, P99.9 5 517 ns, 3,46 millions d'opérations par seconde.",
-        "Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns, 5,3 millions d'opérations par seconde.",
-        "Le benchmark tel que committé, à 50 millions d'opérations, donne 229 ns et 3,2 millions par seconde. L'étude explique pourquoi.",
-      ],
-      demo: "Un portage TypeScript de la même structure, qui tourne dans cet onglet. Appuyez sur lancer.",
-      repo: "lob-engine sur GitHub",
-    },
     orderBook: {
       title: "Order Book",
       plain:
-        "Le cœur d'une plateforme de négociation en Java 21. Les ordres arrivent en FIX ou en REST, chacun est écrit dans un journal avant d'être apparié, et le carnet peut être reconstruit à l'identique après un crash.",
+        "Un moteur d'appariement construit deux fois. D'abord en C++17, pour savoir à quelle vitesse un carnet peut apparier. Puis en Java 21, comme cœur d'une plateforme de négociation : ordres en FIX ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
       facts: [
-        "Tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de conformité FIX.",
-        "Un seuil de 90 % de couverture de lignes et de branches est vérifié en CI.",
-        "Pas encore de chiffres de performance, volontairement : le benchmark est la phase 6, après la correction.",
+        "Prototype C++, première mesure publiée : médiane 163 ns, P99 996 ns, 3,46 millions d'opérations par seconde. Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns.",
+        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de conformité FIX, avec un seuil de 90 % de couverture en CI.",
+        "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, après la correction.",
       ],
+      demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
       repo: "Order_Book sur GitHub",
+      prototype: "Prototype C++ sur GitHub",
     },
     pipeline: {
       title: "Pipeline de données de marché",

@@ -117,28 +117,18 @@ export const en = {
     title: "Work",
     lede: "Projects where the same rules meet measurement. Each links to its code and to a case study that says what was measured, and how.",
     caseCta: "Read the case study",
-    lob: {
-      title: "lob-engine",
-      plain:
-        "A matching engine in C++17. It pairs buyers and sellers by price, then by arrival time, and I measure how long each order takes.",
-      facts: [
-        "Published in the README: median 163 ns, P99 996 ns, P99.9 5,517 ns, 3.46 million operations a second.",
-        "Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns, 5.3 million operations a second.",
-        "The benchmark as committed, at 50 million operations, gives 229 ns and 3.2 million a second. The case study explains why.",
-      ],
-      demo: "A TypeScript port of the same structure, running in this tab. Press run.",
-      repo: "lob-engine on GitHub",
-    },
     orderBook: {
       title: "Order Book",
       plain:
-        "The core of a trading venue in Java 21. Orders arrive over FIX or REST, each one is written to a journal before it is matched, and the book can be rebuilt exactly after a crash.",
+        "A matching engine, built twice. First in C++17, to learn how fast a book can match. Then in Java 21, as the core of a trading venue: orders over FIX or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
       facts: [
-        "Property-based tests, a reference-model check, a crash test with SIGKILL and FIX conformance tests.",
-        "A 90 % line and branch coverage gate runs in CI.",
-        "No performance numbers yet, on purpose: benchmarking is phase 6, after correctness.",
+        "C++ prototype, first published: median 163 ns, P99 996 ns, 3.46 million operations a second. Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns.",
+        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX conformance tests, with a 90 % coverage gate in CI.",
+        "No numbers for the Java engine yet, on purpose: its benchmarking is phase 6, after correctness.",
       ],
+      demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
       repo: "Order_Book on GitHub",
+      prototype: "C++ prototype on GitHub",
     },
     pipeline: {
       title: "Market data pipeline",

@@ -74,30 +74,20 @@ export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
 
         <Project
           lang={lang}
-          title={t.lob.title}
-          plain={t.lob.plain}
-          facts={t.lob.facts}
-          links={[
-            { label: t.caseCta, href: "/work/lob-engine", internal: true },
-            { label: t.lob.repo, href: "https://github.com/Ahmed-Berrada/lob-engine" },
-          ]}
-        >
-          <div>
-            <LiveOrderBook t={t.orderBookUi} lang={lang} />
-            <p className="mt-3 text-sm text-muted">{t.lob.demo}</p>
-          </div>
-        </Project>
-
-        <Project
-          lang={lang}
           title={t.orderBook.title}
           plain={t.orderBook.plain}
           facts={t.orderBook.facts}
           links={[
             { label: t.caseCta, href: "/work/order-book", internal: true },
             { label: t.orderBook.repo, href: "https://github.com/Ahmed-Berrada/Order_Book" },
+            { label: t.orderBook.prototype, href: "https://github.com/Ahmed-Berrada/lob-engine" },
           ]}
-        />
+        >
+          <div>
+            <LiveOrderBook t={t.orderBookUi} lang={lang} />
+            <p className="mt-3 text-sm text-muted">{t.orderBook.demo}</p>
+          </div>
+        </Project>
 
         <Project
           lang={lang}
