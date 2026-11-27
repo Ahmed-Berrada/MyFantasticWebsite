@@ -85,6 +85,17 @@ body::after {
   background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 0;
 }
 .link:hover { text-decoration-color: var(--ink); background-size: 100% 40%; }
+/* Horizontal scrollers: a soft shadow appears on the side that has more content, and disappears at the end
+   (Lea Verou's scrolling shadows; the covers scroll with the content, the shadows stay put). */
+.scroll-x {
+  --scroll-bg: var(--ground);
+  background:
+    linear-gradient(to right, var(--scroll-bg) 30%, transparent) left / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--scroll-bg) 30%, transparent) right / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, #12141729, transparent) left / 14px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, #12141729, transparent) right / 14px 100% no-repeat scroll;
+  background-color: var(--scroll-bg);
+}
 /* Standalone links: a 24px-high hit area without moving anything (WCAG 2.5.8). Links inside sentences stay inline. */
 .link-tap { display: inline-block; padding-block: 4px; margin-block: -4px; }
 
