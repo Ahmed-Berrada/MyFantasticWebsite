@@ -3,7 +3,9 @@ import Figure from "./figures/Figure";
 import type { Block, Lang } from "@/src/content/types";
 
 /** Renders article blocks. Prose stays in a reading column; tables, code and figures may use the full width. */
-export default function Blocks({ blocks, lang }: { blocks: Block[]; lang: Lang }) {
+/** `heading` is the level for "h" blocks: h3 under a case-study section, h2 directly under a note's title. */
+export default function Blocks({ blocks, lang, heading = "h3" }: { blocks: Block[]; lang: Lang; heading?: "h2" | "h3" }) {
+  const H = heading;
   return (
     <>
       {blocks.map((b, i) => {
@@ -16,9 +18,9 @@ export default function Blocks({ blocks, lang }: { blocks: Block[]; lang: Lang }
             );
           case "h":
             return (
-              <h3 key={i} className="mt-12 max-w-[44rem] font-display text-2xl leading-tight font-medium tracking-tight">
+              <H key={i} className="mt-12 max-w-[44rem] font-display text-2xl leading-tight font-medium tracking-tight">
                 {b.text}
-              </h3>
+              </H>
             );
           case "list":
             return (
@@ -32,14 +34,14 @@ export default function Blocks({ blocks, lang }: { blocks: Block[]; lang: Lang }
             );
           case "code":
             return (
-              <pre key={i} className="my-6 overflow-x-auto rounded-[6px] border border-line bg-sheet p-4 font-mono text-[12.5px] leading-relaxed text-ink">
+              <pre key={i} tabIndex={0} className="my-6 overflow-x-auto rounded-[6px] border border-line bg-sheet p-4 font-mono text-[12.5px] leading-relaxed text-ink">
                 <code>{b.text}</code>
               </pre>
             );
           case "table":
             return (
               <figure key={i} className="my-8">
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto" tabIndex={0} role="region" aria-label={b.note ?? b.head.join(", ")}>
                   <table className="w-full min-w-[520px] border-collapse text-left text-[15px]">
                     <thead>
                       <tr className="border-b border-line-2">

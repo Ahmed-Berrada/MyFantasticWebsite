@@ -40,6 +40,7 @@
 - `src/content/bench/*.json`: measured benchmark runs (source of the results table and histogram).
 - `components/figures/*`: figures referenced by id from case-study blocks (`Figure.tsx` maps ids).
 - Share images are generated per page (`opengraph-image.tsx` next to each route; `src/lib/og.tsx`).
+- `src/lib/feed.ts`: RSS feed of the notes, served at `/writing/feed.xml` in each language.
 
 ## SEO and hosting
 - Canonical host is `https://www.ahmedberrada.com`; the apex redirects to it (`next.config.ts`). Every page has a canonical
@@ -47,6 +48,13 @@
 - A not-found file sits inside each dynamic segment (`[...slug]`, `work/[slug]`, `writing/[slug]`) so 404s render in the
   language's layout.
 
+## Security and quality gates
+- `next.config.ts` sends a CSP and the usual security headers. Pages are static, so inline scripts stay allowed; anything
+  new from another origin (a font, a script, an API) must be added to the CSP or it will be blocked.
+- `content.test.ts` keeps titles (≤ 70, home ≤ 60) and descriptions (≤ 160) short enough for search results.
+- `scripts/smoke.mjs` (run in CI) fails on a non-200 page, not exactly one h1, overflow, console errors or any axe
+  violation. Standalone links use `link link-tap` for a 24px hit area; links inside sentences use `link` only.
+
 ## Workflows
-- `npm run dev`, `npm run lint`, `npm test`, `npm run build`. Do not read `node_modules`.
+- `npm run dev`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`. Do not read `node_modules`.
 - Commit and push every small change. Work on a branch, check the Vercel preview, then merge to `main`.

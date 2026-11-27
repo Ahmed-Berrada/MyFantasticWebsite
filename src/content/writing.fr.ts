@@ -55,7 +55,7 @@ export const notesFr: Note[] = [
 
   {
     slug: "one-writer-per-instrument",
-    title: "Un écrivain par instrument : comment un carnet d'ordres reste déterministe",
+    title: "Un seul écrivain par instrument : le déterminisme d'un carnet d'ordres",
     summary: "Pourquoi chaque instrument a un seul thread, un journal et un numéro de séquence, et ce que cela apporte.",
     date: "2026-11-26",
     minutes: 4,

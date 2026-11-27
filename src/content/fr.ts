@@ -5,9 +5,9 @@ export const fr: Dict = {
   htmlLang: "fr",
   siteName: "Ahmed Berrada",
   meta: {
-    homeTitle: "Ahmed Berrada, ingénieur logiciel, systèmes critiques et performance",
+    homeTitle: "Ahmed Berrada, ingénieur logiciel, systèmes critiques",
     homeDescription:
-      "Ingénieur logiciel : des systèmes qui doivent être justes et rapides. Logiciel ferroviaire critique chez Siemens Mobility, moteurs basse latence et calcul GPU. ESIEA 2027, Paris. Je cherche un CDI à partir de septembre 2027.",
+      "Du logiciel juste, puis rapide : ferroviaire critique chez Siemens Mobility, moteurs basse latence. Paris, je cherche un CDI à partir de septembre 2027.",
     writingTitle: "Articles, Ahmed Berrada",
     writingDescription: "Courtes notes techniques sur ce que j'ai mesuré ou construit : latence, déterminisme et vérification de code numérique.",
   },
@@ -207,6 +207,7 @@ export const fr: Dict = {
     minutes: "min de lecture",
     published: "Publié le",
     back: "Tous les articles",
+    feed: "Flux RSS",
   },
   background: {
     title: "Parcours",

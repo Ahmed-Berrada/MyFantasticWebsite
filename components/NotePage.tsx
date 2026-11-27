@@ -4,7 +4,7 @@ import JsonLd from "./JsonLd";
 import SiteShell from "./SiteShell";
 import { formatDate } from "./WritingList";
 import { getDict, getNote } from "@/src/content";
-import { LINKS, SITE_URL, localPath } from "@/src/lib/seo";
+import { SITE_URL, authorRef, breadcrumbJsonLd, localPath } from "@/src/lib/seo";
 import type { Lang } from "@/src/content/types";
 import { notFound } from "next/navigation";
 
@@ -24,12 +24,13 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
           datePublished: n.date,
           inLanguage: lang,
           mainEntityOfPage: SITE_URL + localPath(lang, path),
-          author: { "@type": "Person", name: "Ahmed Berrada", url: SITE_URL + localPath(lang, "/"), sameAs: [LINKS.github, LINKS.linkedin] },
+          author: authorRef(lang),
         }}
       />
+      <JsonLd data={breadcrumbJsonLd(lang, [[t.nav.writing, "/writing"], [n.title, path]])} />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
         <p>
-          <Link href={localPath(lang, "/writing")} className="link text-sm">
+          <Link href={localPath(lang, "/writing")} className="link link-tap text-sm">
             {t.writing.back}
           </Link>
         </p>
@@ -39,7 +40,7 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
         </p>
         <p className="mt-6 max-w-[40rem] text-xl leading-relaxed text-pretty">{n.summary}</p>
         <div className="mt-6">
-          <Blocks blocks={n.blocks} lang={lang} />
+          <Blocks blocks={n.blocks} lang={lang} heading="h2" />
         </div>
       </article>
     </SiteShell>

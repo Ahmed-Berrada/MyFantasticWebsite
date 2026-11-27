@@ -7,16 +7,15 @@ export const display = Bricolage_Grotesque({
   display: "swap",
 });
 
+// Body and mono use only the weight axis; the width axis is kept for the display face, which ProximityText animates.
 export const body = Instrument_Sans({
   subsets: ["latin"],
-  axes: ["wdth"],
   variable: "--font-instrument",
   display: "swap",
 });
 
 export const mono = Martian_Mono({
   subsets: ["latin"],
-  axes: ["wdth"],
   variable: "--font-martian",
   display: "swap",
 });

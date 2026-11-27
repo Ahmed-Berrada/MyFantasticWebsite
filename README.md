@@ -4,16 +4,20 @@ Source of my portfolio. **Right first. Then fast.** English at `/`, French at `/
 
 - **Home:** a live train graph (a Marey diagram you can read with the pointer), the Siemens Mobility work, projects with running demos (a matching engine in the browser, a Monte Carlo pricer in a Web Worker), notes, background and contact.
 - **Case studies** (`/work/…`): problem, constraints, approach, measured result, how to reproduce, what comes next. Each number traces to a README, CI or a measurement stored in `src/content/bench`.
-- **Notes** (`/writing/…`): short technical write-ups of things I measured.
+- **Notes** (`/writing/…`): short technical write-ups of things I measured, with an RSS feed per language (`/writing/feed.xml`, `/fr/writing/feed.xml`).
 
 ## Run
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm test         # engine, pricer, simulation, CRC and bilingual content tests
+npm test         # engine, pricer, simulation, CRC, feed and bilingual content tests
+npm run typecheck
 npm run build
+npm start & BASE=http://localhost:3000 npm run smoke   # every page, two widths, axe checks
 ```
+
+CI (`.github/workflows/ci.yml`) runs lint, typecheck, tests and build on every push, then the smoke test against the production build.
 
 ## Reproduce the lob-engine numbers
 

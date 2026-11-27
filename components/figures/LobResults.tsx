@@ -37,7 +37,7 @@ export default function LobResults({ t, lang }: { t: T; lang: Lang }) {
   const load = ((lobReadmeMethod.loadAverage1m.before + lobReadmeMethod.loadAverage1m.after) / 2).toFixed(1).replace(".", lang === "fr" ? "," : ".");
   return (
     <figure className="my-10">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-labelledby="lobresults-caption">
         <table className="w-full min-w-[640px] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-line-2 align-bottom">
@@ -66,7 +66,7 @@ export default function LobResults({ t, lang }: { t: T; lang: Lang }) {
           </tbody>
         </table>
       </div>
-      <figcaption className="mt-3 max-w-[46rem] text-sm text-muted">
+      <figcaption id="lobresults-caption" className="mt-3 max-w-[46rem] text-sm text-muted">
         {fill(t.machine, { model: m.model, cpu: m.cpu.replace(/\(R\)|\(TM\)/g, ""), os: m.os, compiler: m.compiler.replace(/\s*\(.*?\)/, ""), governor: m.governor, load })}
       </figcaption>
     </figure>

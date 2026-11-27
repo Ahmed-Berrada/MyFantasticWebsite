@@ -33,7 +33,7 @@ export default function IdMapProbe({ t, lang }: { t: T; lang: Lang }) {
   ];
   return (
     <figure className="my-10">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto" tabIndex={0} role="region" aria-labelledby="idmapprobe-caption">
         <table className="w-full min-w-[480px] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-line-2">
@@ -55,7 +55,7 @@ export default function IdMapProbe({ t, lang }: { t: T; lang: Lang }) {
           </tbody>
         </table>
       </div>
-      <figcaption className="mt-3 max-w-[46rem] text-sm text-muted">{t.note}</figcaption>
+      <figcaption id="idmapprobe-caption" className="mt-3 max-w-[46rem] text-sm text-muted">{t.note}</figcaption>
     </figure>
   );
 }

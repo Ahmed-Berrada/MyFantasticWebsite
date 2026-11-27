@@ -45,19 +45,19 @@ export default function Contact({ t, cvEn, cvFr }: Props) {
           </button>
         </div>
         <p className="mt-6 flex flex-wrap gap-x-7 gap-y-2">
-          <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="link">
+          <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="link link-tap">
             {t.linkedin}
           </a>
-          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link">
+          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link link-tap">
             {t.github}
           </a>
           {cvEn && (
-            <a href={cvEn} className="link">
+            <a href={cvEn} className="link link-tap">
               {t.cvEn}
             </a>
           )}
           {cvFr && (
-            <a href={cvFr} className="link">
+            <a href={cvFr} className="link link-tap">
               {t.cvFr}
             </a>
           )}

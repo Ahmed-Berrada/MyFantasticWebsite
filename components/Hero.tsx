@@ -40,7 +40,7 @@ export default function Hero({ t, cvHref, cvOtherHref }: Props) {
               </a>
             )}
             {cvOtherHref && (
-              <a href={cvOtherHref} className="link text-sm">
+              <a href={cvOtherHref} className="link link-tap text-sm">
                 {t.cvOther}
               </a>
             )}

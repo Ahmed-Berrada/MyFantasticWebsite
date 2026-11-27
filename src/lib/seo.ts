@@ -20,7 +20,8 @@ export function alternates(lang: Lang, path: string, available: Lang[] = ["en", 
   const languages: Record<string, string> = {};
   for (const l of available) languages[l] = localPath(l, path);
   languages["x-default"] = localPath("en", path);
-  return { canonical: localPath(lang, path), languages };
+  // Every page points feed readers at the notes in its own language.
+  return { canonical: localPath(lang, path), languages, types: { "application/rss+xml": localPath(lang, "/writing/feed.xml") } };
 }
 
 interface PageMeta {
@@ -31,6 +32,12 @@ interface PageMeta {
   type?: "website" | "article";
   published?: string;
   available?: Lang[];
+}
+
+/** Search results show about 60 characters: add the name only when the page title leaves room for it. */
+export function titleWithName(title: string): string {
+  const full = `${title}, Ahmed Berrada`;
+  return full.length <= 60 ? full : title;
 }
 
 export function pageMetadata({ lang, path, title, description, type = "website", published, available }: PageMeta): Metadata {
@@ -49,6 +56,21 @@ export function pageMetadata({ lang, path, title, description, type = "website",
       ...(published ? { publishedTime: published } : {}),
     },
     twitter: { card: "summary_large_image", title, description },
+  };
+}
+
+/** The author, as referenced from articles and case studies. */
+export function authorRef(lang: Lang) {
+  return { "@type": "Person", name: "Ahmed Berrada", url: SITE_URL + localPath(lang, "/"), sameAs: [LINKS.github, LINKS.linkedin] };
+}
+
+/** schema.org BreadcrumbList from the home page down to `trail`'s last item (name, path without the language prefix). */
+export function breadcrumbJsonLd(lang: Lang, trail: [name: string, path: string][]) {
+  const items: [string, string][] = [["Ahmed Berrada", "/"], ...trail];
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE_URL + localPath(lang, path) })),
   };
 }
 

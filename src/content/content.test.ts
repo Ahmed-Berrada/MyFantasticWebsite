@@ -82,3 +82,29 @@ describe("case studies and notes", () => {
     expect(code("fr")).toEqual(code("en"));
   });
 });
+
+describe("search snippets", () => {
+  // Google shows about 60 characters of a title and 155 to 160 of a description; longer ones are cut mid-sentence.
+  const DESC_MAX = 160;
+  const TITLE_MAX = 70;
+
+  it.each(["en", "fr"] as const)("fit in a search result (%s)", (lang) => {
+    const t = getDict(lang);
+    const snippets: [string, string, number][] = [
+      ["home title", t.meta.homeTitle, 60],
+      ["home description", t.meta.homeDescription, DESC_MAX],
+      ["writing title", t.meta.writingTitle, 60],
+      ["writing description", t.meta.writingDescription, DESC_MAX],
+      ...getCases(lang).flatMap((c): [string, string, number][] => [
+        [`${c.slug} title`, c.title, TITLE_MAX],
+        [`${c.slug} description`, c.plain, DESC_MAX],
+      ]),
+      ...getNotes(lang).flatMap((n): [string, string, number][] => [
+        [`${n.slug} title`, n.title, TITLE_MAX],
+        [`${n.slug} description`, n.summary, DESC_MAX],
+      ]),
+    ];
+    const tooLong = snippets.filter(([, s, max]) => s.length > max).map(([name, s, max]) => `${name}: ${s.length} > ${max}`);
+    expect(tooLong).toEqual([]);
+  });
+});

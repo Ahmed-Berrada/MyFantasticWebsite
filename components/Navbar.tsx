@@ -46,7 +46,7 @@ export default function Navbar({ t, lang, altPath, cvHref }: Props) {
               {l.label}
             </Link>
           ))}
-          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link">
+          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link link-tap">
             {t.github}
           </a>
           <a href={altPath} hrefLang={t.switchLang} lang={t.switchLang} title={t.switchLabel} className="rounded-[3px] border border-line-2 px-2 py-1 font-mono text-xs transition-colors hover:border-ink">
@@ -72,15 +72,15 @@ export default function Navbar({ t, lang, altPath, cvHref }: Props) {
             </Link>
           ))}
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-4">
-            <a href={LINKS.github} target="_blank" rel="noreferrer" className="link">
+            <a href={LINKS.github} target="_blank" rel="noreferrer" className="link link-tap">
               {t.github}
             </a>
             {cvHref && (
-              <a href={cvHref} className="link">
+              <a href={cvHref} className="link link-tap">
                 {t.cv}
               </a>
             )}
-            <a href={altPath} hrefLang={t.switchLang} lang={t.switchLang} className="link">
+            <a href={altPath} hrefLang={t.switchLang} lang={t.switchLang} className="link link-tap">
               {t.switchLabel}
             </a>
           </div>
