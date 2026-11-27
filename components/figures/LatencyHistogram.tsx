@@ -41,42 +41,45 @@ export default function LatencyHistogram({ t, lang }: { t: T; lang: Lang }) {
 
   return (
     <figure className="my-10">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label={t.aria}>
-        {counts.map((c) => (
-          <g key={c}>
-            <line x1={M.l} x2={W - M.r} y1={y(c)} y2={y(c)} stroke="var(--line)" />
-            <text x={M.l - 6} y={y(c) + 3.5} fontSize={10} textAnchor="end" fill="var(--muted)" fontFamily="var(--font-martian)">
-              {countLabel(c)}
-            </text>
-          </g>
-        ))}
-        {decades.map((v) => (
-          <g key={v}>
-            <line x1={x(v)} x2={x(v)} y1={M.t} y2={M.t + PH} stroke="var(--line)" strokeDasharray="2 4" />
-            <text x={x(v)} y={M.t + PH + 16} fontSize={10} textAnchor={v === decades[decades.length - 1] ? "end" : "middle"} fill="var(--muted)" fontFamily="var(--font-martian)">
-              {decadeLabel(v)}
-            </text>
-          </g>
-        ))}
-        {buckets.map(([b, c]) => (
-          <rect key={b} x={x(b)} y={y(c)} width={Math.max(1, x(b * step) - x(b) - 0.6)} height={M.t + PH - y(c)} fill="var(--ink-2)" opacity={0.78} />
-        ))}
-        {marks.map((m, i) => (
-          <g key={m.label}>
-            <line x1={x(m.v)} x2={x(m.v)} y1={M.t + 6 + i * 16} y2={M.t + PH} stroke="var(--ink)" strokeWidth={1.4} />
-            <rect x={x(m.v) - 2} y={M.t + 6 + i * 16 - 2} width={4} height={4} fill="var(--accent)" stroke="var(--ink)" strokeWidth={1} />
-            <text x={x(m.v) + 7} y={M.t + 10 + i * 16} fontSize={11} fill="var(--ink)" fontFamily="var(--font-martian)" stroke="var(--ground)" strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
-              {m.label} {fmtNs(m.v, lang)}
-            </text>
-          </g>
-        ))}
-        <text x={M.l + PW / 2} y={H - 8} fontSize={11} textAnchor="middle" fill="var(--ink-2)" fontFamily="var(--font-instrument)">
-          {t.x}
-        </text>
-        <text x={12} y={M.t + PH / 2} fontSize={11} textAnchor="middle" fill="var(--ink-2)" fontFamily="var(--font-instrument)" transform={`rotate(-90 12 ${M.t + PH / 2})`}>
-          {t.y}
-        </text>
-      </svg>
+      {/* Below 640 px the drawing would shrink its text to 4 or 5 px: keep it legible and let it scroll instead. */}
+      <div className="scroll-x overflow-x-auto" tabIndex={0} role="region" aria-label={t.aria}>
+        <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full min-w-[640px]" role="img" aria-label={t.aria}>
+          {counts.map((c) => (
+            <g key={c}>
+              <line x1={M.l} x2={W - M.r} y1={y(c)} y2={y(c)} stroke="var(--line)" />
+              <text x={M.l - 6} y={y(c) + 3.5} fontSize={10} textAnchor="end" fill="var(--muted)" fontFamily="var(--font-martian)">
+                {countLabel(c)}
+              </text>
+            </g>
+          ))}
+          {decades.map((v) => (
+            <g key={v}>
+              <line x1={x(v)} x2={x(v)} y1={M.t} y2={M.t + PH} stroke="var(--line)" strokeDasharray="2 4" />
+              <text x={x(v)} y={M.t + PH + 16} fontSize={10} textAnchor={v === decades[decades.length - 1] ? "end" : "middle"} fill="var(--muted)" fontFamily="var(--font-martian)">
+                {decadeLabel(v)}
+              </text>
+            </g>
+          ))}
+          {buckets.map(([b, c]) => (
+            <rect key={b} x={x(b)} y={y(c)} width={Math.max(1, x(b * step) - x(b) - 0.6)} height={M.t + PH - y(c)} fill="var(--ink-2)" opacity={0.78} />
+          ))}
+          {marks.map((m, i) => (
+            <g key={m.label}>
+              <line x1={x(m.v)} x2={x(m.v)} y1={M.t + 6 + i * 16} y2={M.t + PH} stroke="var(--ink)" strokeWidth={1.4} />
+              <rect x={x(m.v) - 2} y={M.t + 6 + i * 16 - 2} width={4} height={4} fill="var(--accent)" stroke="var(--ink)" strokeWidth={1} />
+              <text x={x(m.v) + 7} y={M.t + 10 + i * 16} fontSize={11} fill="var(--ink)" fontFamily="var(--font-martian)" stroke="var(--ground)" strokeWidth={4} strokeLinejoin="round" paintOrder="stroke">
+                {m.label} {fmtNs(m.v, lang)}
+              </text>
+            </g>
+          ))}
+          <text x={M.l + PW / 2} y={H - 8} fontSize={11} textAnchor="middle" fill="var(--ink-2)" fontFamily="var(--font-instrument)">
+            {t.x}
+          </text>
+          <text x={12} y={M.t + PH / 2} fontSize={11} textAnchor="middle" fill="var(--ink-2)" fontFamily="var(--font-instrument)" transform={`rotate(-90 12 ${M.t + PH / 2})`}>
+            {t.y}
+          </text>
+        </svg>
+      </div>
       <figcaption className="mt-3 text-sm text-muted">{fill(t.caption, { n: r.runs.length })}</figcaption>
     </figure>
   );

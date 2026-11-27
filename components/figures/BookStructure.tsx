@@ -65,18 +65,21 @@ function Box({ x, y, w, title, note }: { x: number; y: number; w: number; title:
 export default function BookStructure({ t }: { t: T }) {
   return (
     <figure className="my-10">
-      <svg viewBox="0 0 752 296" className="h-auto w-full" role="img" aria-label={t.aria}>
-        <Side x={4} title={t.bids} note={t.bidsNote} levels={bids} side="bid" />
-        <Side x={392} title={t.asks} note={t.asksNote} levels={asks} side="ask" />
-        <text x={4} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
-          {t.level}
-        </text>
-        <text x={90} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
-          {t.fifo}
-        </text>
-        <Box x={4} y={204} w={356} title={t.pool} note={t.poolNote} />
-        <Box x={392} y={204} w={356} title={t.ids} note={t.idsNote} />
-      </svg>
+      {/* Below 640 px the drawing would shrink its text to 4 or 5 px: keep it legible and let it scroll instead. */}
+      <div className="scroll-x overflow-x-auto" tabIndex={0} role="region" aria-label={t.aria}>
+        <svg viewBox="0 0 752 296" className="h-auto w-full min-w-[640px]" role="img" aria-label={t.aria}>
+          <Side x={4} title={t.bids} note={t.bidsNote} levels={bids} side="bid" />
+          <Side x={392} title={t.asks} note={t.asksNote} levels={asks} side="ask" />
+          <text x={4} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
+            {t.level}
+          </text>
+          <text x={90} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
+            {t.fifo}
+          </text>
+          <Box x={4} y={204} w={356} title={t.pool} note={t.poolNote} />
+          <Box x={392} y={204} w={356} title={t.ids} note={t.idsNote} />
+        </svg>
+      </div>
     </figure>
   );
 }
