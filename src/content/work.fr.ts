@@ -141,7 +141,7 @@ export const casesFr: CaseStudy[] = [
   {
     slug: "order-book",
     title: "Order Book, le cœur d'une plateforme de négociation en Java 21",
-    plain: "Le cœur d'une plateforme de négociation : il reçoit des ordres en FIX ou en REST, écrit chacun dans un journal avant de l'apparier, et peut reconstruire son état exact après un crash.",
+    plain: "Le cœur d'une plateforme de négociation : ordres reçus en FIX ou en REST, journalisés avant l'appariement, état exact reconstruit après un crash.",
     stack: "Java 21, Spring Boot, QuickFIX/J, FIX 4.4",
     status: "Phases 0 à 3 terminées (cœur, durabilité, connectivité). Phase 4, fonctions de plateforme, en cours. Pas encore de chiffres de performance : le benchmark JMH est la phase 6.",
     repos: [{ label: "Order_Book sur GitHub", href: "https://github.com/Ahmed-Berrada/Order_Book" }],
@@ -243,7 +243,7 @@ export const casesFr: CaseStudy[] = [
   {
     slug: "cbtc-validation",
     title: "Outillage de test d'un système de signalisation radio 5G",
-    plain: "Les outils avec lesquels est testé le logiciel radio de la signalisation de la ligne Crosstown du métro de New York : un simulateur des équipements du train et de la voie, une bibliothèque de scénarios et un banc de test.",
+    plain: "Les outils qui testent le logiciel radio de la signalisation du métro de New York (ligne Crosstown) : simulateur train et voie, scénarios et banc de test.",
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, network namespaces Linux",
     status: "Siemens Mobility, depuis septembre 2025. Livré pour la version 4.2 du CRG. Outillage interne : aucun code ni détail de protocole n'est publié ici.",
     repos: [],
