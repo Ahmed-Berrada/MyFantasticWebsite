@@ -20,7 +20,8 @@ export function alternates(lang: Lang, path: string, available: Lang[] = ["en", 
   const languages: Record<string, string> = {};
   for (const l of available) languages[l] = localPath(l, path);
   languages["x-default"] = localPath("en", path);
-  return { canonical: localPath(lang, path), languages };
+  // Every page points feed readers at the notes in its own language.
+  return { canonical: localPath(lang, path), languages, types: { "application/rss+xml": localPath(lang, "/writing/feed.xml") } };
 }
 
 interface PageMeta {
