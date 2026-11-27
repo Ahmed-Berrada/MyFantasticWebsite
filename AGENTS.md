@@ -15,13 +15,14 @@
 - French typography (no-break space before `? ! : ;`) is applied at load by `src/content/index.ts`. Write plain spaces.
 - Every number must trace to the CV (v3), a repository README or CI, or `src/content/bench` (measured with
   `scripts/bench-lob-engine.sh`). Do not round up, merge projects or quote a figure under a project it does not belong to:
-  the C++ latency figures belong to **lob-engine**, the Java correctness work to **Order Book** (no performance numbers
-  there until its phase 6).
-- Quote the published lob-engine figures next to the reproduced ones, and say which is which. The README does not record
-  its hardware; the reproductions are from an HP ProBook 450 G7 (i7-10510U, powersave governor, no pinning).
+  Order Book is one project built twice: **lob-engine** (C++17, archived) is its prototype and owns every latency
+  figure; the Java engine (Order_Book repo) owns the correctness work and has no performance numbers until its phase 6.
+  Always say which version a number belongs to. `/work/lob-engine` redirects to `/work/order-book`.
+- Quote the first published lob-engine figures next to the reproduced ones, and say which is which. The README did not
+  record the hardware of the first run; the reproductions are from an HP ProBook 450 G7 (i7-10510U, powersave governor, no pinning).
 - Siemens work is internal: only what the CV says. Illustrative frames are labelled as such. No real frames or code.
 - No invented testimonials, logos or client claims. The AWS certificate and the `/consulting` page are deliberately not on the site.
-- Projects shown: lob-engine, Order Book, market data pipeline, GPU option pricer (last, demoted).
+- Projects shown: Order Book (Java engine + C++ prototype), market data pipeline, GPU option pricer (last, demoted).
 
 ## Design direction (keep it)
 - Whiteprint greys + true ink + one safety yellow (`--accent`) as a fill only. `--bid` / `--ask` only inside market-data

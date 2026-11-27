@@ -55,8 +55,8 @@ export const fr: Dict = {
       {
         value: "163 ns",
         label: "médiane pour apparier un ordre, P99 996 ns",
-        note: "Mesure publiée. Je reproduis 149 ns de médiane et 460 ns de P99 sur un portable.",
-        href: "/work/lob-engine",
+        note: "Prototype C++ d'Order Book, première mesure publiée. Je reproduis 149 ns de médiane et 460 ns de P99 sur un portable.",
+        href: "/work/order-book",
       },
       {
         value: "300+",
@@ -115,28 +115,18 @@ export const fr: Dict = {
     title: "Projets",
     lede: "Des projets où les mêmes règles rencontrent la mesure. Chacun renvoie vers son code et vers une étude qui dit ce qui a été mesuré, et comment.",
     caseCta: "Lire l'étude",
-    lob: {
-      title: "lob-engine",
-      plain:
-        "Un moteur d'appariement en C++17. Il met en correspondance acheteurs et vendeurs par prix, puis par heure d'arrivée, et je mesure le temps que prend chaque ordre.",
-      facts: [
-        "Publié dans le README : médiane 163 ns, P99 996 ns, P99.9 5 517 ns, 3,46 millions d'opérations par seconde.",
-        "Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns, 5,3 millions d'opérations par seconde.",
-        "Le benchmark tel que committé, à 50 millions d'opérations, donne 229 ns et 3,2 millions par seconde. L'étude explique pourquoi.",
-      ],
-      demo: "Un portage TypeScript de la même structure, qui tourne dans cet onglet. Appuyez sur lancer.",
-      repo: "lob-engine sur GitHub",
-    },
     orderBook: {
       title: "Order Book",
       plain:
-        "Le cœur d'une plateforme de négociation en Java 21. Les ordres arrivent en FIX ou en REST, chacun est écrit dans un journal avant d'être apparié, et le carnet peut être reconstruit à l'identique après un crash.",
+        "Un moteur d'appariement construit deux fois. D'abord en C++17, pour savoir à quelle vitesse un carnet peut apparier. Puis en Java 21, comme cœur d'une plateforme de négociation : ordres en FIX ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
       facts: [
-        "Tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de conformité FIX.",
-        "Un seuil de 90 % de couverture de lignes et de branches est vérifié en CI.",
-        "Pas encore de chiffres de performance, volontairement : le benchmark est la phase 6, après la correction.",
+        "Prototype C++, première mesure publiée : médiane 163 ns, P99 996 ns, 3,46 millions d'opérations par seconde. Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns.",
+        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de conformité FIX, avec un seuil de 90 % de couverture en CI.",
+        "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, après la correction.",
       ],
+      demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
       repo: "Order_Book sur GitHub",
+      prototype: "Prototype C++ sur GitHub",
     },
     pipeline: {
       title: "Pipeline de données de marché",
@@ -284,8 +274,8 @@ export const fr: Dict = {
     results: {
       metric: "Mesure",
       published: "Publié dans le README",
-      readme: "Reproduit, méthode du README : 5 M d'opérations après 100 K d'échauffement. Médiane de {n} exécutions",
-      committed: "Reproduit, benchmark tel que committé : 50 M d'opérations, sans échauffement. Médiane de {n} exécutions",
+      readme: "Reproduit, benchmark tel que committé : 5 M d'opérations après 100 K d'échauffement. Médiane de {n} exécutions",
+      committed: "Reproduit, version antérieure du benchmark : 50 M d'opérations, sans échauffement. Médiane de {n} exécutions",
       throughput: "Débit",
       mean: "Moyenne",
       p50: "P50 (médiane)",
@@ -301,18 +291,18 @@ export const fr: Dict = {
       aria: "Histogramme de la latence de 5 millions d'opérations en échelle logarithmique, avec la médiane, le P99 et le P99.9 repérés.",
       x: "latence par opération, ns (échelle log)",
       y: "opérations (échelle log)",
-      caption: "Toutes les opérations d'une exécution (méthode du README), par tranches d'un huitième d'octave. Exécution retenue : la médiane des {n}.",
+      caption: "Toutes les opérations d'une exécution (5 M d'opérations après un échauffement), par tranches d'un huitième d'octave. Exécution retenue : la médiane des {n}.",
     },
     probe: {
       metric: "Mesure",
-      unmodified: "Tel que committé",
+      unmodified: "Sans modification",
       presized: "Table d'ids pré-dimensionnée",
       max: "Latence max",
       throughput: "Débit",
       p50: "P50",
       p999: "P99.9",
       range: "de {a} à {b}",
-      note: "Copie de travail, benchmark tel que committé (50 M d'opérations), deux exécutions chacune. Pré-dimensionner veut dire construire la table d'ids avec 30 millions de buckets. Le dépôt n'est pas modifié.",
+      note: "Copie de travail, 50 M d'opérations (version antérieure du benchmark), deux exécutions chacune. Pré-dimensionner veut dire construire la table d'ids avec 30 millions de buckets. Le moteur du dépôt n'est pas modifié.",
     },
     order: {
       aria: "Parcours d'un ordre : passerelles FIX et REST, un routeur, un journal write-ahead, un carnet à écrivain unique, puis rapports d'exécution et données de marché construits à partir des événements produits.",

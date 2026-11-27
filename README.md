@@ -19,14 +19,14 @@ npm start & BASE=http://localhost:3000 npm run smoke   # every page, two widths,
 
 CI (`.github/workflows/ci.yml`) runs lint, typecheck, tests and build on every push, then the smoke test against the production build.
 
-## Reproduce the lob-engine numbers
+## Reproduce the C++ prototype's numbers
 
 ```bash
-RUNS=5 scripts/bench-lob-engine.sh                      # README method: 5 M operations after a warm-up
-METHOD=committed RUNS=3 scripts/bench-lob-engine.sh     # the benchmark exactly as committed (50 M operations)
+RUNS=5 scripts/bench-lob-engine.sh                      # as committed: 5 M operations after a warm-up
+METHOD=50m RUNS=3 scripts/bench-lob-engine.sh           # the earlier version: 50 M operations, no warm-up
 ```
 
-The script works on a scratch copy of [lob-engine](https://github.com/Ahmed-Berrada/lob-engine), records the machine, compiler, load and every run, and writes one JSON file. To add a machine to the site, run it there and put the JSON in `src/content/bench`.
+The script works on a scratch copy of [lob-engine](https://github.com/Ahmed-Berrada/lob-engine), the archived C++ prototype of [Order_Book](https://github.com/Ahmed-Berrada/Order_Book). It records the machine, compiler, load and every run, and writes one JSON file. To add a machine to the site, run it there and put the JSON in `src/content/bench`.
 
 ## Stack
 

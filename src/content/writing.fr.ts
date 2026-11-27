@@ -11,7 +11,7 @@ export const notesFr: Note[] = [
     blocks: [
       {
         t: "p",
-        text: "Le README de lob-engine publie une médiane de 163 ns et un P99.9 de 5 517 ns, soit environ 34 fois la médiane. Un tel rapport est une question, pas une réponse. Voici comment j'ai cherché ce qu'il y avait derrière une queue de latence, et ce que j'ai trouvé.",
+        text: "lob-engine, le prototype C++ de mon carnet d'ordres, a d'abord publié une médiane de 163 ns et un P99.9 de 5 517 ns, soit environ 34 fois la médiane. Un tel rapport est une question, pas une réponse. Voici comment j'ai cherché ce qu'il y avait derrière une queue de latence, et ce que j'ai trouvé.",
       },
       { t: "h", text: "Étape 1 : rendre la mesure répétable" },
       {
@@ -26,7 +26,7 @@ export const notesFr: Note[] = [
       { t: "h", text: "Étape 3 : trouver le plus grand pic, et où il se situe" },
       {
         t: "p",
-        text: "Le benchmark tel que committé exécute 50 millions d'opérations. Sa latence maximale était d'environ 68 ms, et elle est survenue à l'opération 26 749 413 dans les deux exécutions que j'ai tracées. Une graine fixe veut dire que la même opération fait le même travail à chaque fois : un maximum qui tombe toujours sur la même opération n'est pas du bruit. C'est quelque chose que le programme fait.",
+        text: "La version antérieure du benchmark exécutait 50 millions d'opérations. Sa latence maximale était d'environ 68 ms, et elle est survenue à l'opération 26 749 413 dans les deux exécutions que j'ai tracées. Une graine fixe veut dire que la même opération fait le même travail à chaque fois : un maximum qui tombe toujours sur la même opération n'est pas du bruit. C'est quelque chose que le programme fait.",
       },
       {
         t: "p",
@@ -46,10 +46,10 @@ export const notesFr: Note[] = [
           "Un rapport de queue est une question. Demandez où sont les opérations les plus lentes avant de demander comment les accélérer.",
           "Une graine fixe transforme un pic en preuve : un pic à la même opération à chaque exécution vient du programme, pas de la machine.",
           "Changer une seule chose, et garder l'avant et l'après.",
-          "Le README ne publie pas le matériel, et le benchmark committé et le README ne sont pas d'accord sur le nombre d'opérations. Je donne les deux et je dis lequel est lequel.",
+          "Dire sur quoi on a mesuré. Le README ne publiait pas le matériel, et son benchmark exécutait un autre nombre d'opérations que celui qu'il décrivait. Les deux sont corrigés : le README note la machine, et le code exécute la méthode que le README décrit.",
         ],
       },
-      { t: "p", text: "L'étude de cas contient les tableaux complets, l'histogramme et les commandes : [lob-engine](/work/lob-engine)." },
+      { t: "p", text: "L'étude de cas contient les tableaux complets, l'histogramme et les commandes : [Order Book](/work/order-book)." },
     ],
   },
 

@@ -3,12 +3,12 @@
 #
 #   scripts/bench-lob-engine.sh                 # 5 runs, writes ./lob-bench-result.json
 #   RUNS=7 PIN_CPU=2 OUT=mac.json scripts/bench-lob-engine.sh
-#   METHOD=committed RUNS=3 scripts/bench-lob-engine.sh   # the benchmark exactly as committed (50 M ops, no warm-up)
+#   METHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # the benchmark's earlier version (50 M ops, no warm-up)
 #
 # Needs: git, cmake, a C++17 compiler, python3. Works on Linux and macOS.
-# The committed bench/benchmark.cpp runs 50 M operations with the warm-up commented out.
-# This script applies the README's stated method on a scratch copy (5 M operations after a
-# 100 K warm-up), adds max latency and a log-bucketed histogram, and leaves the repo untouched.
+# bench/benchmark.cpp runs the README's method: 5 M operations after a 100 K warm-up (until lob-engine
+# commit 228d76a it ran 50 M operations with the warm-up commented out; METHOD=50m restores that).
+# On a scratch copy, this script adds max latency and a log-bucketed histogram, and leaves the repo untouched.
 set -euo pipefail
 
 RUNS="${RUNS:-5}"
@@ -39,9 +39,11 @@ def swap(old, new):
     s = s.replace(old, new, 1)
 
 swap("#include <iomanip>", "#include <iomanip>\n#include <fstream>\n#include <cstdlib>\n#include <cmath>\n#include <map>")
-if method == "readme":
-    swap("size_t num_ops = 50000000;", "size_t num_ops = 5000000;")
-    swap("//run_benchmark(100000);", "run_benchmark(100000);")
+if method == "50m":
+    swap("size_t num_ops = 5000000;", "size_t num_ops = 50000000;")
+    swap("    run_benchmark(100000);", "    // run_benchmark(100000);")
+elif method != "readme":
+    sys.exit("METHOD must be readme or 50m")
 swap("    return result;\n}", r'''    if (const char* jp = std::getenv("LOB_JSON_OUT")) {
         if (num_ops >= 1000000) {
             std::map<int, size_t> counts;
