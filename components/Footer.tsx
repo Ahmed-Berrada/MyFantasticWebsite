@@ -12,16 +12,16 @@ export default function Footer({ t, lang, altPath }: { t: Dict; lang: Lang; altP
           {fill(t.footer.rights, { year: new Date().getFullYear() })}. {t.footer.status}
         </p>
         <p className="flex flex-wrap gap-x-6 gap-y-2">
-          <Link href={localPath(lang, "/writing")} className="link">
+          <Link href={localPath(lang, "/writing")} className="link link-tap">
             {t.nav.writing}
           </Link>
-          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link">
+          <a href={LINKS.github} target="_blank" rel="noreferrer" className="link link-tap">
             {t.nav.github}
           </a>
-          <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="link">
+          <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="link link-tap">
             {t.contact.linkedin}
           </a>
-          <a href={altPath} hrefLang={t.nav.switchLang} lang={t.nav.switchLang} className="link">
+          <a href={altPath} hrefLang={t.nav.switchLang} lang={t.nav.switchLang} className="link link-tap">
             {t.nav.switchLabel}
           </a>
         </p>

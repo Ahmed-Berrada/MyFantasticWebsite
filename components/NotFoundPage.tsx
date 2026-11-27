@@ -11,7 +11,7 @@ export default function NotFoundPage({ lang }: { lang: Lang }) {
       <h1 className="mt-3 font-display text-5xl leading-[0.95] font-semibold tracking-[-0.03em]">{t.title}</h1>
       <p className="mt-6 text-xl text-ink-2">{t.body}</p>
       <p className="mt-8">
-        <Link href={localPath(lang, "/")} className="link">
+        <Link href={localPath(lang, "/")} className="link link-tap">
           {t.back}
         </Link>
       </p>

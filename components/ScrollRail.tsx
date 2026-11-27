@@ -53,7 +53,7 @@ export default function ScrollRail({ sections, aria }: { sections: Section[]; ar
           <a
             key={s.id}
             href={`#${s.id}`}
-            className="group absolute left-1/2 -translate-x-1/2 -translate-y-1/2 p-1.5"
+            className="group absolute left-1/2 -translate-x-1/2 -translate-y-1/2 p-[7px]"
             style={{ top: `${at * 100}%` }}
             aria-label={s.label}
           >

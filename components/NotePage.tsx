@@ -30,7 +30,7 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
       <JsonLd data={breadcrumbJsonLd(lang, [[t.nav.writing, "/writing"], [n.title, path]])} />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
         <p>
-          <Link href={localPath(lang, "/writing")} className="link text-sm">
+          <Link href={localPath(lang, "/writing")} className="link link-tap text-sm">
             {t.writing.back}
           </Link>
         </p>

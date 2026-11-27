@@ -85,6 +85,8 @@ body::after {
   background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 0;
 }
 .link:hover { text-decoration-color: var(--ink); background-size: 100% 40%; }
+/* Standalone links: a 24px-high hit area without moving anything (WCAG 2.5.8). Links inside sentences stay inline. */
+.link-tap { display: inline-block; padding-block: 4px; margin-block: -4px; }
 
 :focus-visible {
   outline: 2px solid var(--ink);

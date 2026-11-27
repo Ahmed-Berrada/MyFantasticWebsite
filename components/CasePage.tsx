@@ -33,7 +33,7 @@ export default function CasePage({ lang, slug }: { lang: Lang; slug: string }) {
       <JsonLd data={breadcrumbJsonLd(lang, [[c.title, `/work/${c.slug}`]])} />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
         <p>
-          <Link href={`${localPath(lang, "/")}#work`} className="link text-sm">
+          <Link href={`${localPath(lang, "/")}#work`} className="link link-tap text-sm">
             {t.case.back}
           </Link>
         </p>
@@ -52,7 +52,7 @@ export default function CasePage({ lang, slug }: { lang: Lang; slug: string }) {
               <dt className="text-muted">{t.case.code}</dt>
               <dd className="flex flex-wrap gap-x-6 gap-y-2">
                 {c.repos.map((r) => (
-                  <a key={r.href} href={r.href} target="_blank" rel="noreferrer" className="link">
+                  <a key={r.href} href={r.href} target="_blank" rel="noreferrer" className="link link-tap">
                     {r.label}
                   </a>
                 ))}

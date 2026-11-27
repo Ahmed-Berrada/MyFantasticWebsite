@@ -50,7 +50,7 @@ function Project({
                   {l.label}
                 </Link>
               ) : (
-                <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="link">
+                <a key={l.href} href={l.href} target="_blank" rel="noreferrer" className="link link-tap">
                   {l.label}
                 </a>
               ),

@@ -16,7 +16,7 @@ export default function Siemens({ t, lang }: { t: Dict["siemens"]; lang: Lang })
             <p className="mt-3 text-lg text-ink-2">{t.subtitle}</p>
             <p className="mt-10 max-w-[38rem] text-xl leading-relaxed text-pretty">{t.lede}</p>
             <p className="mt-8">
-              <Link href={localPath(lang, "/work/cbtc-validation")} className="link">
+              <Link href={localPath(lang, "/work/cbtc-validation")} className="link link-tap">
                 {t.caseCta}
               </Link>
             </p>
