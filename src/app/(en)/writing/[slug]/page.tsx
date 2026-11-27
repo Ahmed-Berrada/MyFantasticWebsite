@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import NotePage from "@/components/NotePage";
 import { getNote, getNotes } from "@/src/content";
-import { pageMetadata } from "@/src/lib/seo";
+import { pageMetadata, titleWithName } from "@/src/lib/seo";
 
 type Params = { slug: string };
 
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const n = getNote("en", slug);
   if (!n) return {};
-  return pageMetadata({ lang: "en", path: `/writing/${slug}`, title: `${n.title}, Ahmed Berrada`, description: n.summary, type: "article", published: n.date });
+  return pageMetadata({ lang: "en", path: `/writing/${slug}`, title: titleWithName(n.title), description: n.summary, type: "article", published: n.date });
 }
 
 export default async function Page({ params }: { params: Promise<Params> }) {

@@ -33,6 +33,12 @@ interface PageMeta {
   available?: Lang[];
 }
 
+/** Search results show about 60 characters: add the name only when the page title leaves room for it. */
+export function titleWithName(title: string): string {
+  const full = `${title}, Ahmed Berrada`;
+  return full.length <= 60 ? full : title;
+}
+
 export function pageMetadata({ lang, path, title, description, type = "website", published, available }: PageMeta): Metadata {
   const url = localPath(lang, path);
   return {

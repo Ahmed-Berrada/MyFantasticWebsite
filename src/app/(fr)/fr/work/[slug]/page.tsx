@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CasePage from "@/components/CasePage";
 import { getCase, getCases } from "@/src/content";
-import { pageMetadata } from "@/src/lib/seo";
+import { pageMetadata, titleWithName } from "@/src/lib/seo";
 
 type Params = { slug: string };
 
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const c = getCase("fr", slug);
   if (!c) return {};
-  return pageMetadata({ lang: "fr", path: `/work/${slug}`, title: `${c.title}, Ahmed Berrada`, description: c.plain });
+  return pageMetadata({ lang: "fr", path: `/work/${slug}`, title: titleWithName(c.title), description: c.plain });
 }
 
 export default async function Page({ params }: { params: Promise<Params> }) {
