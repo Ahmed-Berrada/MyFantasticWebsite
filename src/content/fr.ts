@@ -270,7 +270,7 @@ export const fr: Dict = {
       fifo: "liste FIFO intrusive d'ordres",
       orders: "ordres",
       pool: "Allocateur par pool",
-      poolNote: "les ordres sont pris dans des blocs pré-alloués, aucun malloc par ordre",
+      poolNote: "les ordres sont pris dans des blocs préalloués, pas un malloc par ordre",
       ids: "Table d'identifiants",
       idsNote: "unordered_map de l'identifiant vers l'ordre : annulation en O(1)",
     },

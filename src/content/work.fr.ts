@@ -34,7 +34,7 @@ export const casesFr: CaseStudy[] = [
               "Des prix entiers, en ticks de 64 bits, dans les deux versions. Les flottants cassent l'égalité.",
               "Le cœur d'appariement Java est du Java pur, sans entrées-sorties. Spring en est banni par le build (maven-enforcer) et par des tests d'architecture (ArchUnit) : ni horloge, ni aléa, ni threads, ni E/S, ni flottants.",
               "Les identifiants d'ordre sont attribués par le moteur, par instrument. Chaque commande reçoit un numéro de séquence sans trou et un horodatage UTC à la microseconde, pris à l'entrée et journalisé. C'est ce qui rend le rejeu exact.",
-              "Le prototype C++ n'alloue rien par ordre sur le chemin critique, et son benchmark utilise une graine fixe, pour pouvoir refaire exactement une exécution.",
+              "Le prototype C++ prend chaque ordre dans un pool préalloué : un ordre ne coûte aucun malloc. Le chemin critique n'est pas pour autant sans allocation : la table d'identifiants et chaque nouveau niveau de prix allouent un nœud, et un appariement renvoie ses transactions dans un vecteur. Son benchmark utilise une graine fixe, pour pouvoir refaire exactement une exécution.",
             ],
           },
         ],

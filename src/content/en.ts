@@ -272,7 +272,7 @@ export const en = {
       fifo: "intrusive FIFO list of orders",
       orders: "orders",
       pool: "Pool allocator",
-      poolNote: "orders are carved from pre-allocated blocks, no malloc per order",
+      poolNote: "orders are carved from pre-allocated blocks, not malloc'd one by one",
       ids: "Id table",
       idsNote: "unordered_map from order id to order: O(1) cancel",
     },

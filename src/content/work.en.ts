@@ -37,7 +37,7 @@ export const casesEn: CaseStudy[] = [
               "Integer prices, as 64-bit ticks, in both versions. Floating point breaks equality.",
               "The Java matching core is plain Java with no I/O. Spring is banned from it by the build (maven-enforcer) and by architecture tests (ArchUnit): no clock, randomness, threads, I/O or floating point.",
               "Order ids are assigned by the engine, per instrument. Every command gets a gap-free sequence number and one microsecond UTC timestamp, taken at ingress and journaled. That is what makes replay exact.",
-              "The C++ prototype allocates nothing per order on the hot path, and its benchmark uses a fixed seed, so any run can be repeated exactly.",
+              "The C++ prototype takes every order from a pre-allocated pool, so an order costs no malloc. The hot path is not allocation-free: the id map and each new price level allocate a node, and a match returns its trades in a vector. Its benchmark uses a fixed seed, so any run can be repeated exactly.",
             ],
           },
         ],
