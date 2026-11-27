@@ -3,19 +3,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView, usePrefersReducedMotion } from "@/src/lib/useInView";
 
 const CHARSET = " 0123456789+.";
-const STEP_MS = 55;
-const STAGGER_MS = 90;
+const STEP_MS = 40;
+const STAGGER_MS = 60;
 
 interface Props {
   value: string;
-  /** Pad on the left so boards line up, like a station display. */
-  width?: number;
   label: string;
 }
 
-/** One departure-board row: each character flips through the charset until it lands. */
-export default function SplitFlap({ value, width = 4, label }: Props) {
-  const target = value.padStart(width, " ");
+/**
+ * One departure-board row: each character flips through the charset until it lands, once, when it scrolls into
+ * view. No replay on hover: a statistic must never be seen showing a wrong number.
+ */
+export default function SplitFlap({ value, label }: Props) {
+  const target = value;
   const [ref, seen] = useInView<HTMLDivElement>(0.15);
   const reduced = usePrefersReducedMotion();
   const [chars, setChars] = useState<string[]>(() => Array.from(target, () => " "));
@@ -47,12 +48,14 @@ export default function SplitFlap({ value, width = 4, label }: Props) {
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   return (
-    <div ref={ref} onMouseEnter={() => seen && run()} className="group">
+    <div ref={ref}>
       <div className="flex gap-[3px]" aria-hidden>
         {(reduced ? [...target] : chars).map((c, i) => (
           <span
             key={i}
-            className="relative grid h-[50px] w-[33px] place-items-center overflow-hidden rounded-[3px] bg-ink font-mono text-[25px] text-ground [perspective:200px] md:h-[68px] md:w-[46px] md:text-[34px]"
+            className={`relative grid h-[50px] place-items-center overflow-hidden rounded-[3px] bg-ink font-mono text-[25px] text-ground [perspective:200px] md:h-[68px] md:text-[34px] ${
+              target[i] === "." ? "w-[18px] md:w-[24px]" : "w-[33px] md:w-[46px]"
+            }`}
           >
             <span key={c} className="flap block">
               {c === " " ? " " : c}
