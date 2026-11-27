@@ -145,11 +145,11 @@ export const notesEn: Note[] = [
       { t: "h", text: "The GPU numbers" },
       {
         t: "p",
-        text: "The GPU pricer in the Monte-Carlo-Option-Pricing repository is a notebook. In my runs the same simulation took 295 s in pure Python, 7.4 s with vectorised NumPy and 0.46 s on a GPU with CuPy. That is 641 times faster than pure Python and 16 times faster than NumPy. The README's \"100 to 1,000 times\" is a general claim against single-threaded CPU code, not this notebook's measurement.",
+        text: "The GPU pricer in the Monte-Carlo-Option-Pricing repository started as a notebook. Its first run priced a call with 100 million paths: 295 s in pure Python, 7.4 s with vectorised NumPy and 0.46 s on a GPU with CuPy. That is 16 times faster than NumPy, which is the comparison that matters; the 647 times against a Python loop says more about the loop than about the GPU.",
       },
       {
         t: "p",
-        text: "The notebook does not record the GPU model or the number of paths, so treat the speedup as indicative until a benchmark script records them. The simulation in the demo on the home page uses the same estimator in TypeScript, and the test above is part of this site's test suite.",
+        text: "The notebook did not record the GPU model, so treat the speedup as indicative. The repository is now a tested package whose benchmark script records the CPU, the GPU and every timing, and whose test suite checks every backend against Black-Scholes the way this note describes. The demo on the home page uses the same estimator in TypeScript, and the test above is part of this site's test suite.",
       },
     ],
   },

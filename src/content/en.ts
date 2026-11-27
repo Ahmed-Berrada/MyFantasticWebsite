@@ -147,14 +147,14 @@ export const en = {
     pricer: {
       title: "GPU option pricer",
       plain:
-        "Prices a European option by Monte Carlo. The same simulation takes 295 s in pure Python, 7.4 s with NumPy and 0.46 s on a GPU with CuPy.",
+        "Prices a European call by Monte Carlo and checks it against the exact Black-Scholes price. On 100 million paths a GPU with CuPy takes 0.46 s, against 7.4 s for vectorised NumPy: 16 times faster.",
       facts: [
-        "That is 641 times faster than pure Python and 16 times faster than vectorised NumPy.",
-        "The timings come from my runs of the notebook. It does not record the GPU model or the number of paths.",
+        "Pure Python takes 295 s on the same paths, but a Python loop is a weak baseline: NumPy is the fair comparison.",
+        "Now a tested Python package: four backends, confidence intervals, antithetic variates, and a benchmark script that records the hardware. The GPU model of this first run was not recorded.",
       ],
       demo: "Running in this tab, not on a GPU: the same estimate, checked against the exact Black-Scholes price.",
       note: "Read how it is checked",
-      repo: "Notebook on GitHub",
+      repo: "Pricer on GitHub",
     },
     pricerChart: {
       python: "Pure Python",

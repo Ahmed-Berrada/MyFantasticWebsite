@@ -145,11 +145,11 @@ export const notesFr: Note[] = [
       { t: "h", text: "Les chiffres GPU" },
       {
         t: "p",
-        text: "Le pricer GPU du dépôt Monte-Carlo-Option-Pricing est un notebook. Dans mes exécutions, la même simulation a pris 295 s en Python pur, 7,4 s avec NumPy vectorisé et 0,46 s sur GPU avec CuPy. Soit 641 fois plus rapide que Python pur et 16 fois plus rapide que NumPy. Le « 100 à 1 000 fois » du README est une affirmation générale face à du code CPU mono-thread, pas une mesure de ce notebook.",
+        text: "Le pricer GPU du dépôt Monte-Carlo-Option-Pricing a commencé comme un notebook. Sa première exécution valorisait un call sur 100 millions de trajectoires : 295 s en Python pur, 7,4 s avec NumPy vectorisé et 0,46 s sur GPU avec CuPy. Soit 16 fois plus rapide que NumPy, la comparaison qui compte ; les 647 fois face à une boucle Python en disent plus sur la boucle que sur le GPU.",
       },
       {
         t: "p",
-        text: "Le notebook n'enregistre ni le modèle de GPU ni le nombre de trajectoires : considérez l'accélération comme indicative tant qu'un script de benchmark ne les enregistre pas. La simulation de la démo de la page d'accueil utilise le même estimateur en TypeScript, et le test ci-dessus fait partie de la suite de tests de ce site.",
+        text: "Le notebook n'a pas noté le modèle de GPU : considérez l'accélération comme indicative. Le dépôt est désormais un package testé, dont le script de benchmark note le CPU, le GPU et chaque temps, et dont la suite de tests compare chaque implémentation à Black-Scholes comme le décrit cette note. La démo de la page d'accueil utilise le même estimateur en TypeScript, et le test ci-dessus fait partie de la suite de tests de ce site.",
       },
     ],
   },

@@ -145,14 +145,14 @@ export const fr: Dict = {
     pricer: {
       title: "Pricer d'options sur GPU",
       plain:
-        "Évalue une option européenne par Monte Carlo. La même simulation prend 295 s en Python pur, 7,4 s avec NumPy et 0,46 s sur GPU avec CuPy.",
+        "Valorise un call européen par Monte Carlo et le compare au prix exact de Black-Scholes. Sur 100 millions de trajectoires, un GPU avec CuPy met 0,46 s, contre 7,4 s pour NumPy vectorisé : 16 fois plus rapide.",
       facts: [
-        "Soit 641 fois plus rapide que Python pur et 16 fois plus rapide que NumPy vectorisé.",
-        "Les temps viennent de mes exécutions du notebook. Il n'enregistre ni le modèle de GPU ni le nombre de trajectoires.",
+        "Python pur met 295 s sur les mêmes trajectoires, mais une boucle Python est une référence faible : NumPy est la comparaison honnête.",
+        "C'est désormais un package Python testé : quatre implémentations, intervalles de confiance, variables antithétiques, et un script de benchmark qui note le matériel. Le modèle de GPU de cette première exécution n'a pas été noté.",
       ],
       demo: "Ici dans cet onglet, sans GPU : la même estimation, comparée au prix exact de Black-Scholes.",
       note: "Lire comment c'est vérifié",
-      repo: "Notebook sur GitHub",
+      repo: "Pricer sur GitHub",
     },
     pricerChart: {
       python: "Python pur",
