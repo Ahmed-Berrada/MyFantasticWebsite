@@ -53,21 +53,21 @@ export const fr: Dict = {
     label: "Preuves",
     items: [
       {
-        value: "163 ns",
-        label: "médiane pour apparier un ordre, P99 996 ns",
-        note: "Prototype C++ d'Order Book, première mesure publiée. Je reproduis 149 ns de médiane et 460 ns de P99 sur un portable.",
-        href: "/work/order-book",
-      },
-      {
         value: "300+",
-        label: "scénarios de test, utilisés par 9 validateurs",
-        note: "Siemens Mobility, outillage de test du logiciel radio.",
+        label: "scénarios de test pour un logiciel radio CBTC critique",
+        note: "Siemens Mobility. Utilisés par 9 ingénieurs de test et validateurs.",
         href: "/work/cbtc-validation",
       },
       {
         value: "90 %",
         label: "de couverture de lignes et de branches exigée par la CI",
-        note: "Order Book : plus des tests de propriétés et un test de reprise après crash.",
+        note: "Order Book. S'y ajoutent des tests de propriétés et un test de reprise après crash.",
+        href: "/work/order-book",
+      },
+      {
+        value: "149 ns",
+        label: "médiane par opération sur le carnet, P99 460 ns",
+        note: "Prototype C++ d'Order Book, reproduit sur un portable. La première mesure publiée donnait 163 ns.",
         href: "/work/order-book",
       },
     ],

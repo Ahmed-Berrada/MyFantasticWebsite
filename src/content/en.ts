@@ -55,21 +55,21 @@ export const en = {
     label: "Evidence",
     items: [
       {
-        value: "163 ns",
-        label: "median to match an order, P99 996 ns",
-        note: "Order Book's C++ prototype, first published run. I reproduce a 149 ns median and 460 ns P99 on a laptop.",
-        href: "/work/order-book",
-      },
-      {
         value: "300+",
-        label: "test scenarios, used by 9 validators",
-        note: "Siemens Mobility, test tooling for the radio software.",
+        label: "test scenarios for safety-critical CBTC radio software",
+        note: "Siemens Mobility. Used by 9 test engineers and validators.",
         href: "/work/cbtc-validation",
       },
       {
         value: "90 %",
         label: "line and branch coverage required by CI",
-        note: "Order Book: plus property tests and a crash-recovery test.",
+        note: "Order Book, with property-based tests and a crash-recovery test.",
+        href: "/work/order-book",
+      },
+      {
+        value: "149 ns",
+        label: "median per order book operation, P99 460 ns",
+        note: "Order Book's C++ prototype, reproduced on a laptop. The first published run gave 163 ns.",
         href: "/work/order-book",
       },
     ],
