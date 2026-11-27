@@ -38,13 +38,26 @@ export default function MetroLine({ stops, label }: { stops: Stop[]; label: stri
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
     };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    // Listen to scrolling only while the line is near the screen: elsewhere on the page it costs nothing.
+    let listening = false;
+    const listen = (on: boolean) => {
+      if (on === listening) return;
+      listening = on;
+      if (on) {
+        update();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+      } else {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+      }
+    };
+    const io = new IntersectionObserver(([e]) => listen(e.isIntersecting), { rootMargin: "50% 0px" });
+    if (ref.current) io.observe(ref.current);
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      io.disconnect();
+      listen(false);
     };
   }, [reduced]);
 
