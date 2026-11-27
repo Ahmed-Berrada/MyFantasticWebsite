@@ -28,7 +28,7 @@ export default function Contact({ t, cvEn, cvFr }: Props) {
     <section id="contact" className="border-t border-line-2 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <h2 className="max-w-[56rem] font-display text-[clamp(40px,6vw,84px)] leading-[0.95] font-semibold tracking-[-0.03em] text-balance">
-          <ProximityText text={t.title} rest={{ wght: 560, wdth: 88 }} peak={{ wght: 800, wdth: 100 }} radius={160} />
+          <ProximityText text={t.title} rest={{ wght: 560, wdth: 88 }} peak={{ wght: 800, wdth: 94 }} radius={160} />
         </h2>
         <p className="mt-8 max-w-[38rem] text-xl leading-relaxed text-ink-2 text-pretty">{t.lede}</p>
 
