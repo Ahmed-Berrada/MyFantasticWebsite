@@ -12,7 +12,9 @@
 - All copy lives in `src/content`: `en.ts` is the source, `fr.ts` is typed against it (`Dict`), case studies in
   `work.en.ts` / `work.fr.ts`, notes in `writing.en.ts` / `writing.fr.ts`. `content.test.ts` checks that both languages
   have the same shape, placeholders, figures and valid internal links. Change both languages together.
-- French typography (no-break space before `? ! : ;`) is applied at load by `src/content/index.ts`. Write plain spaces.
+- Typography is applied at load by `src/content/index.ts`: a no-break space between a number and its unit in both
+  languages ("996 ns"), and in French also before `? ! : ;` and inside thousands ("26 749 413"). Write plain spaces.
+  English uses "90%", French "90 %".
 - Every number must trace to the CV (v3), a repository README or CI, or `src/content/bench` (measured with
   `scripts/bench-lob-engine.sh`). Do not round up, merge projects or quote a figure under a project it does not belong to:
   Order Book is one project built twice: **lob-engine** (C++17, archived) is its prototype and owns every latency
@@ -21,8 +23,13 @@
 - Quote the first published lob-engine figures next to the reproduced ones, and say which is which. The README did not
   record the hardware of the first run; the reproductions are from an HP ProBook 450 G7 (i7-10510U, powersave governor, no pinning).
 - Siemens work is internal: only what the CV says. Illustrative frames are labelled as such. No real frames or code.
+  Say plainly what was his (the simulator, the test bench) and what was the team's; he does not write the safety code.
+- The C++ prototype pools its orders but is not allocation-free (id map, new levels, trade vectors): never claim
+  "no allocation" for it. Name the benchmark's limits rather than hide them.
 - No invented testimonials, logos or client claims. The AWS certificate and the `/consulting` page are deliberately not on the site.
 - Projects shown: Order Book (Java engine + C++ prototype), market data pipeline, GPU option pricer (last, demoted).
+- Case studies and notes end with `PageEnd` (next page, email, CV). Errors render `ErrorPage` per language; the 404 sits
+  inside `SiteShell`.
 
 ## Design direction (keep it)
 - Whiteprint greys + true ink + one safety yellow (`--accent`) as a fill only. `--bid` / `--ask` only inside market-data
@@ -31,14 +38,19 @@
 - Avoid template tells: no uppercase eyebrows, no 01/02 numbering unless the content is a sequence, no `A · B · C`
   meta strings, no arrow glyphs on links, no icon set, no fade-up on every section. Links use `.link`.
 - Demos start only when asked (order book, Monte Carlo). The Monte Carlo simulation runs in a Web Worker
-  (`src/lib/montecarlo.worker.ts`); keep heavy work off the main thread. Everything animated pauses off-screen and
-  honours `prefers-reduced-motion`.
+  (`src/lib/montecarlo.worker.ts`) and is paced by time (about 3 s), not by CPU. Everything animated pauses off-screen
+  and, under `prefers-reduced-motion`, runs no animation loop at all. Demo buttons use `.demo-button`.
+- The radio demo takes input from its own field, never from a window-wide key listener. Hover state must survive a
+  frame getting shorter (guard indexes against the current frame).
+- Large statistics never animate through wrong values (the split-flaps play once and do not replay on hover).
 
 ## Code map
 - `src/lib/traingraph.ts`: Marey train graph model. `src/lib/orderbook/*`: price-time priority book and seeded flow.
 - `src/lib/montecarlo.ts` + `mcsim.ts` + `montecarlo.worker.ts`: estimator, demo simulation, worker.
-- `src/lib/crc.ts`: CRC-32/MPEG-2 (checked against `0x0376E6E7`). `src/lib/seo.ts`: canonical host, hreflang, JSON-LD.
-- `src/content/bench/*.json`: measured benchmark runs (source of the results table and histogram).
+- `src/lib/crc.ts`: CRC-32/MPEG-2 (checked against `0x0376E6E7`); `src/lib/radioframe.ts`: the illustrative frame.
+  `src/lib/seo.ts`: canonical host, hreflang, JSON-LD. `src/lib/format.ts`: cached number formatters, `fill`.
+- `src/content/bench/*.json`: measured benchmark runs (source of the results table and histogram), checked by
+  `bench.test.ts`; `src/content/bench/pricer.ts`: the GPU pricer's notebook timings.
 - `components/figures/*`: figures referenced by id from case-study blocks (`Figure.tsx` maps ids).
 - Share images are generated per page (`opengraph-image.tsx` next to each route; `src/lib/og.tsx`).
 - `src/lib/feed.ts`: RSS feed of the notes, served at `/writing/feed.xml` in each language.
@@ -53,8 +65,8 @@
 - `next.config.ts` sends a CSP and the usual security headers. Pages are static, so inline scripts stay allowed; anything
   new from another origin (a font, a script, an API) must be added to the CSP or it will be blocked.
 - `content.test.ts` keeps titles (≤ 70, home ≤ 60) and descriptions (≤ 160) short enough for search results.
-- `scripts/smoke.mjs` (run in CI) fails on a non-200 page, not exactly one h1, overflow, console errors or any axe
-  violation. Standalone links use `link link-tap` for a 24px hit area; links inside sentences use `link` only.
+- `scripts/smoke.mjs` (run in CI) fails on a non-200 page, not exactly one h1, overflow, console errors, a failed asset
+  or any axe violation, and checks the feeds, redirects, localised 404s, both demos and the mobile menu. Standalone links use `link link-tap` for a 24px hit area; links inside sentences use `link` only.
 
 ## Workflows
 - `npm run dev`, `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run smoke`. Do not read `node_modules`.
