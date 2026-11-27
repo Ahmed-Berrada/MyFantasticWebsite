@@ -35,7 +35,7 @@ export const fr: Dict = {
       "Élève-ingénieur en dernière année à l'ESIEA (diplôme en 2027) et alternant chez Siemens Mobility. Je cherche un CDI à Paris à partir de septembre 2027.",
     thesis: ["D'abord juste.", "Ensuite rapide."],
     intro:
-      "Chez Siemens Mobility, je construis les outils de test du logiciel radio de la ligne Crosstown du métro de New York. Sur mon temps libre, je construis des moteurs d'appariement et je les mesure. La même exigence dans les deux cas : déterministe, mesuré, testé jusqu'à ce que ce soit ennuyeux.",
+      "Chez Siemens Mobility, je développe les outils de test du logiciel radio de la ligne Crosstown du métro de New York. Sur mon temps libre, j'écris des moteurs d'appariement et je les mesure. La même exigence dans les deux cas : du code déterministe, mesuré et testé.",
     email: "M'écrire",
     cv: "Télécharger le CV",
     cvOther: "CV in English",
@@ -117,7 +117,7 @@ export const fr: Dict = {
   },
   work: {
     title: "Projets",
-    lede: "Des projets personnels où j'applique les mêmes règles, mesures à l'appui. Chacun renvoie vers son code et vers une étude qui dit ce qui a été mesuré, et comment.",
+    lede: "Des projets personnels. Chacun renvoie vers son code et vers une étude de cas qui dit ce qui a été mesuré, et comment.",
     caseCta: "Lire l'étude",
     orderBook: {
       title: "Order Book",
@@ -125,7 +125,7 @@ export const fr: Dict = {
         "Un moteur d'appariement construit deux fois. D'abord en C++17, pour savoir à quelle vitesse un carnet peut apparier. Puis en Java 21, comme cœur d'une plateforme de négociation : ordres en FIX ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
       facts: [
         "Prototype C++, première mesure publiée : médiane 163 ns, P99 996 ns, 3,46 millions d'opérations par seconde. Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de conformité FIX, avec un seuil de 90 % de couverture en CI.",
+        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de session FIX 4.4 sur un vrai socket, avec un seuil de 90 % de couverture en CI.",
         "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, une fois le comportement prouvé juste.",
       ],
       demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
@@ -229,8 +229,8 @@ export const fr: Dict = {
     ],
   },
   contact: {
-    title: "Vous construisez quelque chose qui ne doit pas tomber en panne, ou qui ne peut pas attendre ?",
-    lede: "Je cherche un CDI d'ingénieur logiciel à partir de septembre 2027, à Paris. Systèmes critiques, infrastructure, basse latence ou plateformes de trading.",
+    title: "Vous recrutez pour septembre 2027 ?",
+    lede: "Je cherche un CDI d'ingénieur logiciel à Paris à partir de septembre 2027 : logiciel critique ou embarqué, outillage de test et de validation, infrastructure backend, ou systèmes basse latence et de trading. Disponible dès maintenant pour des entretiens, en français ou en anglais.",
     copy: "Copier",
     copied: "Copié",
     linkedin: "LinkedIn",
@@ -256,7 +256,7 @@ export const fr: Dict = {
       problem: "Problème",
       constraints: "Contraintes",
       approach: "Approche",
-      result: "Résultat mesuré",
+      result: "Résultat",
       reproduce: "Reproduire",
       next: "Prochaines étapes",
     },

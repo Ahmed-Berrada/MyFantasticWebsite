@@ -83,7 +83,6 @@ export const casesEn: CaseStudy[] = [
         id: "result",
         blocks: [
           { t: "h", text: "Correctness: the Java engine" },
-          { t: "p", text: "The evidence here is tests and gates, not speed." },
           {
             t: "table",
             head: ["What is checked", "How"],
@@ -121,7 +120,7 @@ export const casesEn: CaseStudy[] = [
             t: "p",
             text: "The timed region also contains the random price and quantity draws and the bookkeeping of the list of ids to cancel, so every figure is an upper bound on the engine's own time. The draw that picks the action sits outside the timed region but inside the throughput clock, which is why throughput is a little below one over the mean.",
           },
-          { t: "h", text: "Same code, different answers" },
+          { t: "h", text: "Why 5 million and 50 million operations differ" },
           {
             t: "p",
             text: "The README described 5 million operations after a warm-up, but until November 2026 the committed benchmark ran 50 million operations with the warm-up call commented out. Same engine, different median: 149 ns at 5 million operations, 229 ns at 50 million. The benchmark now runs the method the README describes.",
@@ -145,7 +144,7 @@ export const casesEn: CaseStudy[] = [
             text: "I tested it on a scratch copy. Constructing the map with 30 million buckets up front drops the maximum to 1.1 to 1.4 ms and lifts throughput from 3.25 to 4.25 million operations a second. The engine is unchanged. The price is memory: the bucket array alone is about 240 MB.",
           },
           { t: "figure", id: "id-map-probe" },
-          { t: "h", text: "What I cannot tell you" },
+          { t: "h", text: "Open questions" },
           {
             t: "p",
             text: "The README did not record which machine produced its first figures, so I cannot tell whether the gap between its 5.5 µs P99.9 and my 0.9 µs is hardware, load or a different version of the code. My runs were on a laptop with the powersave governor, no core pinning and a load average around 1.2 from background processes. Run the script on your own machine: the numbers are meant to be checked.",

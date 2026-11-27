@@ -80,7 +80,6 @@ export const casesFr: CaseStudy[] = [
         id: "result",
         blocks: [
           { t: "h", text: "Justesse : le moteur Java" },
-          { t: "p", text: "Ici, les preuves sont des tests et des seuils, pas de la vitesse." },
           {
             t: "table",
             head: ["Ce qui est vérifié", "Comment"],
@@ -118,7 +117,7 @@ export const casesFr: CaseStudy[] = [
             t: "p",
             text: "La zone chronométrée contient aussi les tirages aléatoires de prix et de quantité et la tenue de la liste des identifiants à annuler : chaque chiffre est donc une borne supérieure du temps propre au moteur. Le tirage qui choisit l'action est hors de la zone chronométrée mais dans l'horloge du débit, ce qui explique que le débit soit un peu inférieur à l'inverse de la latence moyenne.",
           },
-          { t: "h", text: "Même code, réponses différentes" },
+          { t: "h", text: "Pourquoi 5 et 50 millions d'opérations diffèrent" },
           {
             t: "p",
             text: "Le README annonçait 5 millions d'opérations après un échauffement, mais jusqu'en novembre 2026 le benchmark committé exécutait 50 millions d'opérations, avec l'appel d'échauffement en commentaire. Même moteur, médiane différente : 149 ns à 5 millions d'opérations, 229 ns à 50 millions. Le benchmark exécute désormais la méthode que décrit le README.",
@@ -142,7 +141,7 @@ export const casesFr: CaseStudy[] = [
             text: "Je l'ai testé sur une copie de travail. Construire la table avec 30 millions de buckets d'emblée ramène le maximum entre 1,1 et 1,4 ms et fait passer le débit de 3,25 à 4,25 millions d'opérations par seconde. Le moteur n'est pas modifié. Le prix à payer est la mémoire : le tableau de buckets représente à lui seul environ 240 Mo.",
           },
           { t: "figure", id: "id-map-probe" },
-          { t: "h", text: "Ce que je ne peux pas dire" },
+          { t: "h", text: "Questions ouvertes" },
           {
             t: "p",
             text: "Le README n'a pas noté quelle machine avait produit ses premiers chiffres : je ne peux donc pas savoir si l'écart entre son P99.9 de 5,5 µs et mes 0,9 µs vient du matériel, de la charge ou d'une autre version du code. Mes exécutions ont eu lieu sur un portable avec le gouverneur powersave, sans épinglage de cœur, avec une charge moyenne d'environ 1,2 due à des processus d'arrière-plan. Lancez le script sur votre machine : ces chiffres sont faits pour être vérifiés.",

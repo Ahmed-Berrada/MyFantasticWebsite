@@ -11,7 +11,7 @@ export const notesEn: Note[] = [
     blocks: [
       {
         t: "p",
-        text: "lob-engine, the C++ prototype of my order book, first published a median of 163 ns and a P99.9 of 5,517 ns, about 34 times the median. A ratio like that is a question, not an answer. Here is how I went looking for what was behind a tail, and what I found.",
+        text: "lob-engine, the C++ prototype of my order book, first published a median of 163 ns and a P99.9 of 5,517 ns, about 34 times the median. A ratio like that needs explaining. Here is how I went looking for what was behind a tail, and what I found.",
       },
       { t: "h", text: "Step 1: make the measurement repeatable" },
       {
@@ -26,7 +26,7 @@ export const notesEn: Note[] = [
       { t: "h", text: "Step 3: find the biggest outlier, and where it sits" },
       {
         t: "p",
-        text: "The benchmark's earlier version ran 50 million operations. Its maximum latency was about 68 ms, and it happened at operation 26,749,413 in both runs I traced. A fixed seed means the same operation does the same work every time, so a maximum that always lands on the same operation is not noise. It is something the program does.",
+        text: "The benchmark's earlier version ran 50 million operations. Its maximum latency was about 68 ms, and it happened at operation 26,749,413 in both runs I traced. A fixed seed means the same operation does the same work every time, so a maximum that always lands on the same operation is not noise but the program.",
       },
       {
         t: "p",
@@ -43,7 +43,7 @@ export const notesEn: Note[] = [
       {
         t: "list",
         items: [
-          "A tail ratio is a question. Ask where the slowest operations are before asking how to speed them up.",
+          "Find where the slowest operations are before trying to speed them up.",
           "A fixed seed turns an outlier into evidence: an outlier at the same operation every run is the program, not the machine.",
           "Change one thing, and keep the before and the after.",
           "Say what you measured on. The README first published no hardware, and its benchmark ran a different operation count from the one it described. Both are fixed now: the README records the machine, and the code runs the method the README states.",
@@ -96,7 +96,7 @@ export const notesEn: Note[] = [
       { t: "h", text: "What it costs" },
       {
         t: "p",
-        text: "A full queue refuses the order at once (`OVERLOADED`) instead of growing without bound, so overload shows up as a visible refusal, not as latency nobody can explain. And the sync to disk per command is a deliberate trade: no acknowledged order is lost, at the price of throughput. I have not measured that price yet. JMH benchmarking is phase 6 of the project.",
+        text: "A full queue refuses the order at once (`OVERLOADED`) instead of growing without bound, so overload shows up as a visible refusal instead of unbounded queueing delay. And the sync to disk per command is a deliberate trade: no acknowledged order is lost, at the price of throughput. I have not measured that price yet. JMH benchmarking is phase 6 of the project.",
       },
       { t: "p", text: "Code and decisions: [Order Book](/work/order-book)." },
     ],
@@ -136,7 +136,7 @@ export const notesEn: Note[] = [
       },
       {
         t: "p",
-        text: "Two things to look for. Each ten-fold increase in paths narrows the interval by about the square root of ten, which is how Monte Carlo converges. And at the same number of paths, antithetic variates give an interval about 30% narrower than plain sampling.",
+        text: "Each ten-fold increase in paths narrows the interval by about the square root of ten, which is how Monte Carlo converges. And at the same number of paths, antithetic variates give an interval about 30% narrower than plain sampling.",
       },
       {
         t: "p",

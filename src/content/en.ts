@@ -37,7 +37,7 @@ export const en = {
       "Final-year engineering student at ESIEA (2027) and apprentice at Siemens Mobility. Looking for a permanent role (CDI) in Paris from September 2027.",
     thesis: ["Right first.", "Then fast."],
     intro:
-      "At Siemens Mobility I build the test tools for the radio software of New York's Crosstown subway line. On my own time I build matching engines and measure them. The discipline is the same: deterministic, measured, tested until it is boring.",
+      "At Siemens Mobility I build the test tools for the radio software of New York's Crosstown subway line. On my own time I build matching engines and measure them. The discipline is the same in both: deterministic, measured and tested.",
     email: "Email me",
     cv: "Download CV",
     cvOther: "CV en français",
@@ -119,7 +119,7 @@ export const en = {
   },
   work: {
     title: "Work",
-    lede: "Projects where the same rules meet measurement. Each links to its code and to a case study that says what was measured, and how.",
+    lede: "Personal projects. Each links to its code and to a case study that says what was measured, and how.",
     caseCta: "Read the case study",
     orderBook: {
       title: "Order Book",
@@ -127,7 +127,7 @@ export const en = {
         "A matching engine, built twice. First in C++17, to learn how fast a book can match. Then in Java 21, as the core of a trading venue: orders over FIX or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
       facts: [
         "C++ prototype, first published: median 163 ns, P99 996 ns, 3.46 million operations a second. Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX conformance tests, with a 90% coverage gate in CI.",
+        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX 4.4 session tests over a real socket, with a 90% coverage gate in CI.",
         "No numbers for the Java engine yet, on purpose: its benchmarking is phase 6, after correctness.",
       ],
       demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
@@ -231,8 +231,8 @@ export const en = {
     ],
   },
   contact: {
-    title: "Building something that cannot fail, or cannot wait?",
-    lede: "I am looking for a permanent software engineering role (CDI) from September 2027, in Paris. Critical systems, infrastructure, low-latency or trading platforms.",
+    title: "Hiring for September 2027?",
+    lede: "I am looking for a permanent software engineering role (CDI) in Paris from September 2027: critical or embedded software, test and validation tooling, backend infrastructure, or low-latency and trading systems. Available for interviews now, in French or English.",
     copy: "Copy",
     copied: "Copied",
     linkedin: "LinkedIn",
@@ -258,7 +258,7 @@ export const en = {
       problem: "Problem",
       constraints: "Constraints",
       approach: "Approach",
-      result: "Measured result",
+      result: "Result",
       reproduce: "How to reproduce",
       next: "What comes next",
     },

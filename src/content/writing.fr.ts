@@ -11,7 +11,7 @@ export const notesFr: Note[] = [
     blocks: [
       {
         t: "p",
-        text: "lob-engine, le prototype C++ de mon carnet d'ordres, a d'abord publié une médiane de 163 ns et un P99.9 de 5 517 ns, soit environ 34 fois la médiane. Un tel rapport est une question, pas une réponse. Voici comment j'ai cherché ce qu'il y avait derrière une queue de latence, et ce que j'ai trouvé.",
+        text: "lob-engine, le prototype C++ de mon carnet d'ordres, a d'abord publié une médiane de 163 ns et un P99.9 de 5 517 ns, soit environ 34 fois la médiane. Un tel rapport demande une explication. Voici comment j'ai cherché ce qu'il y avait derrière une queue de latence, et ce que j'ai trouvé.",
       },
       { t: "h", text: "Étape 1 : rendre la mesure répétable" },
       {
@@ -26,7 +26,7 @@ export const notesFr: Note[] = [
       { t: "h", text: "Étape 3 : trouver le plus grand pic, et où il se situe" },
       {
         t: "p",
-        text: "La version antérieure du benchmark exécutait 50 millions d'opérations. Sa latence maximale était d'environ 68 ms, et elle est survenue à l'opération 26 749 413 dans les deux exécutions que j'ai tracées. Une graine fixe veut dire que la même opération fait le même travail à chaque fois : un maximum qui tombe toujours sur la même opération n'est pas du bruit. C'est quelque chose que le programme fait.",
+        text: "La version antérieure du benchmark exécutait 50 millions d'opérations. Sa latence maximale était d'environ 68 ms, et elle est survenue à l'opération 26 749 413 dans les deux exécutions que j'ai tracées. Une graine fixe veut dire que la même opération fait le même travail à chaque fois : un maximum qui tombe toujours sur la même opération n'est pas du bruit, mais le programme.",
       },
       {
         t: "p",
@@ -43,7 +43,7 @@ export const notesFr: Note[] = [
       {
         t: "list",
         items: [
-          "Un rapport P99.9/médiane élevé est une question. Demandez où sont les opérations les plus lentes avant de demander comment les accélérer.",
+          "Chercher où sont les opérations les plus lentes avant de chercher à les accélérer.",
           "Une graine fixe transforme un pic en preuve : un pic à la même opération à chaque exécution vient du programme, pas de la machine.",
           "Changer une seule chose, et garder l'avant et l'après.",
           "Dire sur quoi on a mesuré. Le README ne publiait pas le matériel, et son benchmark exécutait un autre nombre d'opérations que celui qu'il décrivait. Les deux sont corrigés : le README note la machine, et le code exécute la méthode que le README décrit.",
@@ -96,7 +96,7 @@ export const notesFr: Note[] = [
       { t: "h", text: "Ce que ça coûte" },
       {
         t: "p",
-        text: "Une file pleine refuse l'ordre aussitôt (`OVERLOADED`) au lieu de grandir sans limite : la surcharge se voit comme un refus explicite, pas comme une latence que personne ne sait expliquer. Et la synchronisation sur disque à chaque commande est un compromis assumé : aucun ordre acquitté n'est perdu, au prix du débit. Je n'ai pas encore mesuré ce prix. Le benchmark JMH est la phase 6 du projet.",
+        text: "Une file pleine refuse l'ordre aussitôt (`OVERLOADED`) au lieu de grandir sans limite : la surcharge se voit comme un refus explicite plutôt que comme une attente sans limite dans la file. Et la synchronisation sur disque à chaque commande est un compromis assumé : aucun ordre acquitté n'est perdu, au prix du débit. Je n'ai pas encore mesuré ce prix. Le benchmark JMH est la phase 6 du projet.",
       },
       { t: "p", text: "Code et décisions : [Order Book](/work/order-book)." },
     ],
@@ -136,7 +136,7 @@ export const notesFr: Note[] = [
       },
       {
         t: "p",
-        text: "Deux choses à observer. Chaque multiplication par dix du nombre de trajectoires resserre l'intervalle d'environ la racine de dix : c'est ainsi que converge Monte Carlo. Et à nombre de trajectoires égal, les variables antithétiques donnent un intervalle environ 30 % plus étroit que l'échantillonnage simple.",
+        text: "Chaque multiplication par dix du nombre de trajectoires resserre l'intervalle d'environ la racine de dix : c'est ainsi que converge Monte Carlo. Et à nombre de trajectoires égal, les variables antithétiques donnent un intervalle environ 30 % plus étroit que l'échantillonnage simple.",
       },
       {
         t: "p",
