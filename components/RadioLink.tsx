@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { prng } from "@/src/lib/prng";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
 import { fill } from "@/src/lib/format";
@@ -186,33 +186,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
       {/* The frame, byte by byte */}
       <div className="border-t border-line px-4 pt-4 pb-3">
-        {/* Reserve three rows on phones: payloads vary in length, and the panel must not change height. */}
-        <div className="flex min-h-[150px] flex-wrap content-start gap-y-3 sm:min-h-0" onMouseLeave={() => setHover(null)}>
-          {frame.fields.map((f) => (
-            <div key={f.id} className="mr-2">
-              <div className="flex">
-                {frame.bytes.slice(f.from, f.to).map((b, j) => {
-                  const i = f.from + j;
-                  const on = i < shown;
-                  const isPayload = f.id === "payload";
-                  const isCrc = f.id === "crc";
-                  return (
-                    <span
-                      key={i}
-                      onMouseEnter={() => setHover(i)}
-                      className={`w-[22px] text-center font-mono text-[11px] leading-6 tabular transition-colors duration-150 ${
-                        h === i ? "bg-ink text-ground" : isCrc && verified ? "bg-accent text-ink" : isPayload ? "bg-sunken" : ""
-                      } ${on ? "opacity-100" : "opacity-0"}`}
-                    >
-                      {hex(b)}
-                    </span>
-                  );
-                })}
-              </div>
-              <p className={`mt-0.5 font-mono text-[10px] ${hoverField === f ? "text-ink" : "text-muted"}`}>{t.fields[f.id]}</p>
-            </div>
-          ))}
-        </div>
+        <ByteStrip frame={frame} hover={h} shown={shown} verified={verified} labels={t.fields} onHover={setHover} />
 
         <p className="mt-3 min-h-[52px] font-mono text-[11px] text-ink-2 sm:min-h-5">
           {h !== null && hoverField
@@ -257,3 +231,48 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
     </div>
   );
 }
+
+interface ByteStripProps {
+  frame: Frame;
+  hover: number | null;
+  shown: number;
+  verified: boolean;
+  labels: Dict["siemens"]["radio"]["fields"];
+  onHover: (i: number | null) => void;
+}
+
+/**
+ * The frame, byte by byte. Memoised: the scene above re-renders on every animation frame, this strip only when
+ * the frame, the reveal or the hovered byte changes.
+ */
+const ByteStrip = memo(function ByteStrip({ frame, hover, shown, verified, labels, onHover }: ByteStripProps) {
+  const hoverField = hover !== null ? frame.fields.find((f) => hover >= f.from && hover < f.to) : undefined;
+  return (
+    // Reserve three rows on phones: payloads vary in length, and the panel must not change height.
+    <div className="flex min-h-[150px] flex-wrap content-start gap-y-3 sm:min-h-0" onMouseLeave={() => onHover(null)}>
+      {frame.fields.map((f) => (
+        <div key={f.id} className="mr-2">
+          <div className="flex">
+            {frame.bytes.slice(f.from, f.to).map((b, j) => {
+              const i = f.from + j;
+              const isPayload = f.id === "payload";
+              const isCrc = f.id === "crc";
+              return (
+                <span
+                  key={i}
+                  onMouseEnter={() => onHover(i)}
+                  className={`w-[22px] text-center font-mono text-[11px] leading-6 tabular transition-colors duration-150 ${
+                    hover === i ? "bg-ink text-ground" : isCrc && verified ? "bg-accent text-ink" : isPayload ? "bg-sunken" : ""
+                  } ${i < shown ? "opacity-100" : "opacity-0"}`}
+                >
+                  {hex(b)}
+                </span>
+              );
+            })}
+          </div>
+          <p className={`mt-0.5 font-mono text-[10px] ${hoverField === f ? "text-ink" : "text-muted"}`}>{labels[f.id]}</p>
+        </div>
+      ))}
+    </div>
+  );
+});
