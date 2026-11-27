@@ -32,6 +32,7 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
   const workerRef = useRef<Worker | null>(null);
   const view = useRef<View>({ paths: [], hist: new Uint32Array(BINS) });
   const frame = useRef(0);
+  const palette = useRef<{ width: number; strong: string; grey: string; ink2: string; sheet: string; mono: string } | null>(null);
   const runs = useRef(0);
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [stats, setStats] = useState<Stats>({ paths: 0, price: 0, ci: Infinity });
@@ -50,11 +51,19 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, HEIGHT);
 
-    const css = getComputedStyle(document.documentElement);
-    const strong = css.getPropertyValue("--ink").trim();
-    const grey = css.getPropertyValue("--line-2").trim();
-    const ink2 = css.getPropertyValue("--ink-2").trim();
-    const mono = getComputedStyle(canvas).getPropertyValue("--font-martian").trim() || "monospace";
+    // Theme colours and font are read once per size change, not on every frame of a run.
+    if (!palette.current || canvas.width !== palette.current.width) {
+      const css = getComputedStyle(document.documentElement);
+      palette.current = {
+        width: canvas.width,
+        strong: css.getPropertyValue("--ink").trim(),
+        grey: css.getPropertyValue("--line-2").trim(),
+        ink2: css.getPropertyValue("--ink-2").trim(),
+        sheet: css.getPropertyValue("--sheet").trim(),
+        mono: getComputedStyle(canvas).getPropertyValue("--font-martian").trim() || "monospace",
+      };
+    }
+    const { strong, grey, ink2, sheet, mono } = palette.current;
 
     const histW = Math.min(90, w * 0.18);
     const plotW = w - histW - 8;
@@ -93,9 +102,14 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
     ctx.lineTo(w, y(P.k));
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = ink2;
+    // The strike label sits on a sheet-coloured backing so the paths do not run through it.
     ctx.font = `11px ${mono}`;
-    ctx.fillText("K = 100", 6, y(P.k) - 6);
+    const label = `K = ${P.k}`;
+    const lw = ctx.measureText(label).width;
+    ctx.fillStyle = sheet;
+    ctx.fillRect(2, y(P.k) - 19, lw + 8, 15);
+    ctx.fillStyle = ink2;
+    ctx.fillText(label, 6, y(P.k) - 7);
   }, []);
 
   /** Coalesce bursts of worker messages into one repaint per animation frame. */
