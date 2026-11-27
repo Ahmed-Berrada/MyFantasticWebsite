@@ -137,3 +137,11 @@ body::after {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* Radio scene labels: the 640-unit-wide scene is drawn at about half size on phones, so its text is scaled up
+   to stay near 10 px on screen. */
+@media (max-width: 639px) {
+  .radio-scene .rl-label { font-size: 18px; }
+  .radio-scene .rl-title { font-size: 20px; }
+  .radio-scene .rl-sub { font-size: 13px; }
+}

@@ -179,7 +179,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
         <span className="text-muted">{t.simulated}</span>
       </div>
 
-      <svg viewBox="0 0 640 200" className="block h-auto w-full" role="img" aria-label={t.aria}>
+      <svg viewBox="0 0 640 200" className="radio-scene block h-auto w-full" role="img" aria-label={t.aria}>
         {/* track */}
         <line x1="16" x2="624" y1={TRACK_Y} y2={TRACK_Y} stroke="var(--ink-2)" strokeWidth="1.5" />
         {Array.from({ length: 39 }, (_, i) => (
@@ -191,7 +191,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
           <g key={m}>
             <line x1={m} x2={m} y1={22} y2={TRACK_Y - 6} stroke="var(--ink-2)" strokeDasharray="3 3" />
             <path d={`M${m - 7},30 L${m},16 L${m + 7},30`} fill="none" stroke="var(--ink-2)" strokeDasharray="3 2" />
-            <text x={m + 10} y={22} fontSize="11" fontFamily="var(--font-martian)" fill="var(--muted)">WRG</text>
+            <text className="rl-label" x={m + 10} y={22} fontSize="11" fontFamily="var(--font-martian)" fill="var(--muted)">WRG</text>
           </g>
         ))}
 
@@ -201,7 +201,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
           <rect x="6" y="3" width="8" height="4" fill="var(--ink-2)" />
           <rect x="20" y="3" width="8" height="4" fill="var(--ink-2)" />
           <rect x="34" y="3" width="8" height="4" fill="var(--ink-2)" />
-          <text x="0" y="-5" fontSize="11" fontFamily="var(--font-martian)" fill="var(--muted)">CC</text>
+          <text className="rl-label" x="0" y="-5" fontSize="11" fontFamily="var(--font-martian)" fill="var(--muted)">CC</text>
         </g>
         {p?.source === "CC" && ripple < 1 && (
           <circle cx={p.from.x} cy={p.from.y} r={6 + ripple * 26} fill="none" stroke="var(--ink)" strokeOpacity={1 - ripple} />
@@ -209,7 +209,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
         {/* zone controller */}
         <rect x={ZC.x - 22} y={ZC.y - 14} width="56" height="28" rx="4" fill="var(--sheet)" stroke="var(--ink-2)" strokeDasharray="4 2" />
-        <text x={ZC.x - 10} y={ZC.y + 4} fontSize="12" fontFamily="var(--font-martian)" fill="var(--ink-2)">ZC</text>
+        <text className="rl-label" x={ZC.x - 10} y={ZC.y + 5} fontSize="12" fontFamily="var(--font-martian)" fill="var(--ink-2)">ZC</text>
 
         {/* links to the CRG */}
         <path d={`M${ZC.x - 22},${ZC.y} C${ZC.x - 120},${ZC.y} ${CRG_IN.x + 60},${CRG.y - 30} ${CRG_IN.x},${CRG.y}`} fill="none" stroke="var(--line-2)" />
@@ -219,8 +219,8 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
         {/* CRG: the real software under test */}
         <rect x={CRG.x} y={CRG.y} width={CRG.w} height={CRG.h} rx="5" fill="var(--ink)" />
-        <text x={CRG.x + 14} y={CRG.y + 18} fontSize="13" fontWeight="600" fontFamily="var(--font-instrument)" fill="var(--ground)">CRG</text>
-        <text x={CRG.x + 14} y={CRG.y + 32} fontSize="10" fontFamily="var(--font-martian)" fill="#b9bec8">{t.crgSub}</text>
+        <text className="rl-title" x={CRG.x + 12} y={CRG.y + 18} fontSize="13" fontWeight="600" fontFamily="var(--font-instrument)" fill="var(--ground)">CRG</text>
+        <text className="rl-sub" x={CRG.x + 12} y={CRG.y + 33} fontSize="10" fontFamily="var(--font-martian)" fill="#b9bec8">{t.crgSub}</text>
         {verified && (
           <circle cx={CRG.x + CRG.w - 14} cy={CRG.y + 14} r="4" fill="var(--accent)" />
         )}
@@ -230,7 +230,8 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
       {/* The frame, byte by byte */}
       <div className="border-t border-line px-4 pt-4 pb-3">
-        <div className="flex flex-wrap gap-y-3" onMouseLeave={() => setHover(null)}>
+        {/* Reserve three rows on phones: payloads vary in length, and the panel must not change height. */}
+        <div className="flex min-h-[150px] flex-wrap content-start gap-y-3 sm:min-h-0" onMouseLeave={() => setHover(null)}>
           {frame.fields.map((f) => (
             <div key={f.id} className="mr-2">
               <div className="flex">
@@ -257,7 +258,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
           ))}
         </div>
 
-        <p className="mt-3 min-h-5 font-mono text-[11px] text-ink-2">
+        <p className="mt-3 min-h-[52px] font-mono text-[11px] text-ink-2 sm:min-h-5">
           {h !== null && hoverField
             ? fill(t.hover, {
                 i: h,
