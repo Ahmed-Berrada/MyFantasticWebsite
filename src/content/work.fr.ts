@@ -67,9 +67,9 @@ export const casesFr: CaseStudy[] = [
             head: ["Opération", "Coût"],
             rows: [
               ["Ajout, sans appariement", "O(log n)"],
-              ["Ajout, appariement au meilleur niveau", "O(1)"],
+              ["Ajout, exécuté au meilleur niveau", "O(1)"],
               ["Ajout, balayage de K niveaux", "O(K + log n)"],
-              ["Annulation", "O(1)"],
+              ["Annulation", "O(1) en moyenne (table de hachage)"],
               ["Meilleure demande ou meilleure offre", "O(1)"],
             ],
             note: "n est le nombre de niveaux de prix actifs.",
@@ -116,6 +116,10 @@ export const casesFr: CaseStudy[] = [
           {
             t: "p",
             text: "La zone chronométrée contient aussi les tirages aléatoires de prix et de quantité et la tenue de la liste des identifiants à annuler : chaque chiffre est donc une borne supérieure du temps propre au moteur. Le tirage qui choisit l'action est hors de la zone chronométrée mais dans l'horloge du débit, ce qui explique que le débit soit un peu inférieur à l'inverse de la latence moyenne.",
+          },
+          {
+            t: "p",
+            text: "Les limites de ce benchmark. L'horloge est `high_resolution_clock`, qui sous libstdc++ est l'horloge système et n'est pas monotone : `steady_clock` serait le bon outil. Les prix sont tirés sur la même plage de 1 000 ticks des deux côtés, donc beaucoup d'ajouts croisent et s'exécutent aussitôt, et la liste des annulations garde les identifiants d'ordres déjà exécutés, donc certaines annulations sont des recherches qui échouent : la répartition 60/25/15 décrit le tirage, pas le travail effectué. Enfin, il mesure le temps de service d'une opération après l'autre, pas la latence sous un débit d'arrivée donné.",
           },
           { t: "h", text: "Pourquoi 5 et 50 millions d'opérations diffèrent" },
           {

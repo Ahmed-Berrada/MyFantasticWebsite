@@ -98,6 +98,10 @@ export const notesFr: Note[] = [
         t: "p",
         text: "Une file pleine refuse l'ordre aussitôt (`OVERLOADED`) au lieu de grandir sans limite : la surcharge se voit comme un refus explicite plutôt que comme une attente sans limite dans la file. Et la synchronisation sur disque à chaque commande est un compromis assumé : aucun ordre acquitté n'est perdu, au prix du débit. Je n'ai pas encore mesuré ce prix. Le benchmark JMH est la phase 6 du projet.",
       },
+      {
+        t: "p",
+        text: "Une limite du test de crash : tuer la JVM avec SIGKILL prouve l'ordre (journalisé avant d'être acquitté) et le rejeu, mais pas la synchronisation elle-même, car le système d'exploitation garde dans son cache de pages les écritures d'un processus tué. Les tests de coupure de courant, et le regroupement de plusieurs commandes par synchronisation, restent à faire.",
+      },
       { t: "p", text: "Code et décisions : [Order Book](/work/order-book)." },
     ],
   },

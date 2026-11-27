@@ -98,6 +98,10 @@ export const notesEn: Note[] = [
         t: "p",
         text: "A full queue refuses the order at once (`OVERLOADED`) instead of growing without bound, so overload shows up as a visible refusal instead of unbounded queueing delay. And the sync to disk per command is a deliberate trade: no acknowledged order is lost, at the price of throughput. I have not measured that price yet. JMH benchmarking is phase 6 of the project.",
       },
+      {
+        t: "p",
+        text: "One limit of the crash test: killing the JVM with SIGKILL proves the order (journaled before acknowledged) and the replay, but not the sync itself, because the operating system keeps a killed process's writes in its page cache. Power-loss testing, and grouping several commands per sync, are still open.",
+      },
       { t: "p", text: "Code and decisions: [Order Book](/work/order-book)." },
     ],
   },

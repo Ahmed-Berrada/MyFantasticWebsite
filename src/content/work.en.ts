@@ -70,9 +70,9 @@ export const casesEn: CaseStudy[] = [
             head: ["Operation", "Cost"],
             rows: [
               ["Add, no match", "O(log n)"],
-              ["Add, match at the best level", "O(1)"],
+              ["Add, filled at the best level", "O(1)"],
               ["Add, sweeping K levels", "O(K + log n)"],
-              ["Cancel", "O(1)"],
+              ["Cancel", "O(1) on average (hash lookup)"],
               ["Best bid or best ask", "O(1)"],
             ],
             note: "n is the number of active price levels.",
@@ -119,6 +119,10 @@ export const casesEn: CaseStudy[] = [
           {
             t: "p",
             text: "The timed region also contains the random price and quantity draws and the bookkeeping of the list of ids to cancel, so every figure is an upper bound on the engine's own time. The draw that picks the action sits outside the timed region but inside the throughput clock, which is why throughput is a little below one over the mean.",
+          },
+          {
+            t: "p",
+            text: "Limits of this benchmark. The clock is `high_resolution_clock`, which on libstdc++ is the system clock and is not monotonic; `steady_clock` would be the right tool. Prices are drawn over the same 1,000-tick range on both sides, so many adds cross and trade at once, and the cancel list keeps the ids of orders already filled, so some cancels are lookups that miss: the 60/25/15 split describes the dice, not the work done. And it measures service time one operation after another, not latency under a given arrival rate.",
           },
           { t: "h", text: "Why 5 million and 50 million operations differ" },
           {
