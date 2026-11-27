@@ -8,7 +8,9 @@ import type { CaseStudy, Lang, Note } from "./types";
 
 /** A no-break space between a number and its unit, so "996 ns" or "90 %" never splits across two lines. */
 export function unitTypo(s: string): string {
-  return s.replace(/(\d) (ns|µs|ms|s|%|M|Mo|MB|GB|millions?|ops\/s)(?=$|[\s.,;:!?)])/g, "$1\u00a0$2");
+  return s
+    .replace(/(\d) (ns|µs|ms|s|%|M|Mo|MB|GB|millions?|ops\/s)(?=$|[\s.,;:!?)])/g, "$1\u00a0$2")
+    .replace(/\b(P\d+(?:\.\d)?) (?=\d)/g, "$1\u00a0"); // "P99 460 ns" stays together
 }
 
 /**
