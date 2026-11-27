@@ -6,6 +6,9 @@ import { pageMetadata, titleWithName } from "@/src/lib/seo";
 
 type Params = { slug: string };
 
+// Every slug is known at build time: anything else is a 404 without a runtime render.
+export const dynamicParams = false;
+
 export function generateStaticParams(): Params[] {
   return getCases("fr").map((c) => ({ slug: c.slug }));
 }
