@@ -135,7 +135,7 @@ export const fr: Dict = {
     pipeline: {
       title: "Pipeline de données de marché",
       plain:
-        "Récupère à intervalles réguliers des prix d'actions et de cryptos, les valide et les stocke dans TimescaleDB, et les sert par une API et un tableau de bord.",
+        "Un petit service de données, de bout en bout : ingestion planifiée de prix d'actions et de cryptos, validation, base de séries temporelles, et une API et un tableau de bord déployés sur Google Cloud.",
       facts: [
         "Barres d'une minute pour sept actions et fonds, prix à cinq minutes pour quatre cryptos.",
         "Airflow en local, Cloud Run Jobs et Cloud Scheduler en production.",

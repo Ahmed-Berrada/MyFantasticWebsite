@@ -137,7 +137,7 @@ export const en = {
     pipeline: {
       title: "Market data pipeline",
       plain:
-        "Fetches stock and crypto prices on a schedule, validates and stores them in TimescaleDB, and serves them through an API and a dashboard.",
+        "A small data service, end to end: scheduled ingestion of stock and crypto prices, validation, a time-series database, and an API and dashboard deployed on Google Cloud.",
       facts: [
         "One-minute bars for seven stocks and funds, five-minute prices for four crypto assets.",
         "Airflow locally, Cloud Run Jobs and Cloud Scheduler in production.",
