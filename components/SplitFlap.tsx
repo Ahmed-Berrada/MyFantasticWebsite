@@ -24,10 +24,7 @@ export default function SplitFlap({ value, width = 4, label }: Props) {
   const run = useCallback(() => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
-    if (reduced) {
-      setChars([...target]);
-      return;
-    }
+    if (reduced) return; // the render shows the target directly
     [...target].forEach((goal, i) => {
       const steps = Math.max(0, CHARSET.indexOf(goal));
       for (let k = 0; k <= steps; k++) {
@@ -52,7 +49,7 @@ export default function SplitFlap({ value, width = 4, label }: Props) {
   return (
     <div ref={ref} onMouseEnter={() => seen && run()} className="group">
       <div className="flex gap-[3px]" aria-hidden>
-        {chars.map((c, i) => (
+        {(reduced ? [...target] : chars).map((c, i) => (
           <span
             key={i}
             className="relative grid h-[50px] w-[33px] place-items-center overflow-hidden rounded-[3px] bg-ink font-mono text-[25px] text-ground [perspective:200px] md:h-[68px] md:w-[46px] md:text-[34px]"

@@ -62,6 +62,13 @@ const LOOP_MS = 14000;
 const MSG_EVERY_MS = 1700;
 const TRAVEL_MS = 700;
 
+interface Pulse {
+  source: Source;
+  from: { x: number; y: number };
+  via?: { x: number; y: number };
+  start: number;
+}
+
 export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
   const reduced = usePrefersReducedMotion();
   const [ref, onScreen] = useOnScreen<HTMLDivElement>();
@@ -72,7 +79,9 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
   const [revealed, setRevealed] = useState(Infinity);
   const [hover, setHover] = useState<number | null>(null);
   const [typed, setTyped] = useState<number[] | null>(null);
-  const pulse = useRef<{ source: Source; from: { x: number; y: number }; via?: { x: number; y: number }; start: number } | null>(null);
+  const pulse = useRef<Pulse | null>(null);
+  /** What the render reads: a copy of `pulse`, updated with the clock. */
+  const [p, setPulse] = useState<Pulse | null>(null);
   const lastTyped = useRef(-Infinity);
   const nextMsg = useRef(0);
 
@@ -108,6 +117,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
         setFrame(buildFrame(p.source, seqRef.current, payload));
         setRevealed(0);
       }
+      setPulse(pulse.current);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -117,11 +127,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
   // Bytes appear left to right, like a frame on the wire.
   useEffect(() => {
-    if (revealed >= frame.bytes.length) return;
-    if (reduced) {
-      setRevealed(Infinity);
-      return;
-    }
+    if (reduced || revealed >= frame.bytes.length) return;
     const id = setTimeout(() => setRevealed((r) => r + 1), 18);
     return () => clearTimeout(id);
   }, [revealed, frame, reduced]);
@@ -139,6 +145,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
       if (!next) return;
       lastTyped.current = performance.now();
       pulse.current = null;
+      setPulse(null);
       setTyped(next);
       seqRef.current = (seqRef.current + 1) & 0xffff;
       setFrame(buildFrame("you", seqRef.current, next));
@@ -149,7 +156,6 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
   }, [onScreen, typed]);
 
   const tx = reduced ? 300 : trainX(now);
-  const p = pulse.current;
   let dot: { x: number; y: number } | null = null;
   let ripple = 0;
   if (p) {
@@ -165,7 +171,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
 
   const fieldOf = (i: number) => frame.fields.find((f) => i >= f.from && i < f.to)!;
   const hoverField = hover !== null ? fieldOf(hover) : null;
-  const shown = Math.min(revealed, frame.bytes.length);
+  const shown = reduced ? frame.bytes.length : Math.min(revealed, frame.bytes.length);
   const verified = shown >= frame.bytes.length;
 
   return (
