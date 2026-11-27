@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { en } from "./en";
 import { fr } from "./fr";
-import { getCases, getDict, getNotes } from "./index";
+import { frTypo, getCases, getDict, getNotes, unitTypo } from "./index";
 import type { Block, CaseStudy, Note } from "./types";
 
 type Json = unknown;
@@ -48,6 +48,15 @@ describe("dictionary", () => {
 
   it("puts a no-break space before French double punctuation", () => {
     for (const [path, s] of strings(getDict("fr"))) expect(s, path).not.toMatch(/ [?!:;]/);
+  });
+
+  it("keeps numbers with their units and groups French thousands", () => {
+    expect(unitTypo("P99 996 ns, 90% and 1.6 ms.")).toBe("P99 996\u00a0ns, 90% and 1.6\u00a0ms.");
+    expect(unitTypo("in 3 steps")).toBe("in 3 steps");
+    expect(frTypo("opération 26 749 413 : 5 M d'opérations, 25 %")).toBe("opération 26\u202f749\u202f413\u00a0: 5\u00a0M d'opérations, 25\u00a0%");
+    for (const lang of ["en", "fr"] as const) {
+      for (const [path, s] of strings(getDict(lang))) expect(s, `${lang}${path}`).not.toMatch(/\d (ns|µs|ms)\b/);
+    }
   });
 });
 
