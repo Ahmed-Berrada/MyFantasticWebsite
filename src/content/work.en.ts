@@ -135,10 +135,10 @@ export const casesEn: CaseStudy[] = [
             t: "p",
             text: "Half of the operations finish in under 150 ns and 99 % in under 460 ns. The slowest 0.1 % take 900 ns or more, up to a maximum of about 1.6 ms.",
           },
-          { t: "h", text: "The 68 ms outlier is a hash map rehash" },
+          { t: "h", text: "The 70 ms outlier is a hash map rehash" },
           {
             t: "p",
-            text: "In the 50 million run the maximum latency is about 68 ms, and it happens at the same operation, number 26,749,413, in both runs I traced. With a fixed seed that is a deterministic event. At that point the benchmark's list holds about 9.4 million ids, and the engine's id-to-order `std::unordered_map` is not pre-sized, so a rehash is the obvious suspect.",
+            text: "In the 50 million run the maximum latency is 68 to 73 ms: 68 ms in the two runs I traced for the experiment below, 72 to 73 ms in the three runs of the results table. In both traced runs it happens at the same operation, number 26,749,413. With a fixed seed that is a deterministic event. At that point the benchmark's list holds about 9.4 million ids, and the engine's id-to-order `std::unordered_map` is not pre-sized, so a rehash is the obvious suspect.",
           },
           {
             t: "p",
@@ -173,7 +173,7 @@ export const casesEn: CaseStudy[] = [
             t: "p",
             text: "To record the machine, the compiler and every run in a JSON file, use [scripts/bench-lob-engine.sh](https://github.com/Ahmed-Berrada/MyFantasticWebsite/blob/main/scripts/bench-lob-engine.sh) from this site's repository. It works on a scratch copy and leaves lob-engine untouched:",
           },
-          { t: "code", text: "RUNS=5 scripts/bench-lob-engine.sh              # as committed\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # the earlier 50 M version" },
+          { t: "code", text: "RUNS=8 scripts/bench-lob-engine.sh              # as committed\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # the earlier 50 M version" },
           { t: "p", text: "Release builds use `-O3 -march=native`, so results depend on the CPU." },
         ],
       },

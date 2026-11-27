@@ -132,10 +132,10 @@ export const casesFr: CaseStudy[] = [
             t: "p",
             text: "La moitié des opérations se terminent en moins de 150 ns et 99 % en moins de 460 ns. Les 0,1 % les plus lentes prennent 900 ns ou plus, jusqu'à un maximum d'environ 1,6 ms.",
           },
-          { t: "h", text: "Le pic de 68 ms est un rehash de table de hachage" },
+          { t: "h", text: "Le pic de 70 ms est un rehash de table de hachage" },
           {
             t: "p",
-            text: "Dans l'exécution à 50 millions, la latence maximale est d'environ 68 ms, et elle survient à la même opération, la numéro 26 749 413, dans les deux exécutions que j'ai tracées. Avec une graine fixe, c'est un événement déterministe. À ce moment, la liste du benchmark contient environ 9,4 millions d'identifiants, et le `std::unordered_map` du moteur (identifiant vers ordre) n'est pas pré-dimensionné : un rehash est le suspect évident.",
+            text: "Dans l'exécution à 50 millions, la latence maximale va de 68 à 73 ms : 68 ms dans les deux exécutions tracées pour l'expérience ci-dessous, 72 à 73 ms dans les trois exécutions du tableau de résultats. Dans les deux exécutions tracées, elle survient à la même opération, la numéro 26 749 413. Avec une graine fixe, c'est un événement déterministe. À ce moment, la liste du benchmark contient environ 9,4 millions d'identifiants, et le `std::unordered_map` du moteur (identifiant vers ordre) n'est pas pré-dimensionné : un rehash est le suspect évident.",
           },
           {
             t: "p",
@@ -170,7 +170,7 @@ export const casesFr: CaseStudy[] = [
             t: "p",
             text: "Pour noter la machine, le compilateur et chaque exécution dans un fichier JSON, utilisez [scripts/bench-lob-engine.sh](https://github.com/Ahmed-Berrada/MyFantasticWebsite/blob/main/scripts/bench-lob-engine.sh) du dépôt de ce site. Il travaille sur une copie et ne touche pas à lob-engine :",
           },
-          { t: "code", text: "RUNS=5 scripts/bench-lob-engine.sh              # tel que committé\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # l'ancienne version à 50 M" },
+          { t: "code", text: "RUNS=8 scripts/bench-lob-engine.sh              # tel qu'il est dans le dépôt\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # l'ancienne version à 50 M" },
           { t: "p", text: "Les builds Release utilisent `-O3 -march=native` : les résultats dépendent du processeur." },
         ],
       },
