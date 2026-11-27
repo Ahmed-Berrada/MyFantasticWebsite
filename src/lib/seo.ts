@@ -63,6 +63,16 @@ export function authorRef(lang: Lang) {
   return { "@type": "Person", name: "Ahmed Berrada", url: SITE_URL + localPath(lang, "/"), sameAs: [LINKS.github, LINKS.linkedin] };
 }
 
+/** schema.org BreadcrumbList from the home page down to `trail`'s last item (name, path without the language prefix). */
+export function breadcrumbJsonLd(lang: Lang, trail: [name: string, path: string][]) {
+  const items: [string, string][] = [["Ahmed Berrada", "/"], ...trail];
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE_URL + localPath(lang, path) })),
+  };
+}
+
 /** schema.org Person, so search engines can tie the name to the school, employer and profiles. */
 export function personJsonLd(lang: Lang) {
   return {

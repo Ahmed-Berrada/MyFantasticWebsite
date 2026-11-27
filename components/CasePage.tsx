@@ -4,7 +4,7 @@ import JsonLd from "./JsonLd";
 import SiteShell from "./SiteShell";
 import { formatDate } from "./WritingList";
 import { getCase, getDict } from "@/src/content";
-import { SITE_URL, authorRef, localPath } from "@/src/lib/seo";
+import { SITE_URL, authorRef, breadcrumbJsonLd, localPath } from "@/src/lib/seo";
 import type { Lang } from "@/src/content/types";
 import { notFound } from "next/navigation";
 
@@ -30,6 +30,7 @@ export default function CasePage({ lang, slug }: { lang: Lang; slug: string }) {
             : {}),
         }}
       />
+      <JsonLd data={breadcrumbJsonLd(lang, [[c.title, `/work/${c.slug}`]])} />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
         <p>
           <Link href={`${localPath(lang, "/")}#work`} className="link text-sm">

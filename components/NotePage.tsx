@@ -4,7 +4,7 @@ import JsonLd from "./JsonLd";
 import SiteShell from "./SiteShell";
 import { formatDate } from "./WritingList";
 import { getDict, getNote } from "@/src/content";
-import { SITE_URL, authorRef, localPath } from "@/src/lib/seo";
+import { SITE_URL, authorRef, breadcrumbJsonLd, localPath } from "@/src/lib/seo";
 import type { Lang } from "@/src/content/types";
 import { notFound } from "next/navigation";
 
@@ -27,6 +27,7 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
           author: authorRef(lang),
         }}
       />
+      <JsonLd data={breadcrumbJsonLd(lang, [[t.nav.writing, "/writing"], [n.title, path]])} />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
         <p>
           <Link href={localPath(lang, "/writing")} className="link text-sm">
