@@ -215,8 +215,13 @@ export const en = {
     education:
       "ESIEA, engineering degree (Master's level), computer science, artificial intelligence track, 2022 to 2027. Coursework: mathematics (probability, statistics, optimisation), algorithms, software development, architecture.",
     toolsTitle: "Tools",
-    tools:
-      "Languages: C++, Java, Python, SQL, Bash. Engineering: Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5. Computing: NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch. Domain, in personal projects: order books, matching, FIX, option pricing, Monte Carlo.",
+    tools: [
+      { label: "Programming", value: "C++, Java, Python, SQL, Bash" },
+      { label: "Engineering", value: "Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5" },
+      { label: "Computing", value: "NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch" },
+      { label: "Domain", value: "Order books, matching, FIX, option pricing, Monte Carlo (personal projects)" },
+    ],
+    languagesTitle: "Languages",
     languages: "French (C2), English (C1, my daily working language), Arabic (native).",
     metroLabel: "Path so far, as a metro line",
     stops: [
@@ -224,10 +229,10 @@ export const en = {
       { when: "2023", name: "Axeli", note: "Network intern" },
       { when: "2024", name: "Maroc Telecom", note: "Cloud and network intern" },
       { when: "2024", name: "ESIEA", note: "Student ambassador" },
-      { when: "Sep 2025", name: "Siemens Mobility", note: "Apprentice software engineer" },
-      { when: "Sep 2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
+      { when: "2025", name: "Siemens Mobility", note: "Apprentice software engineer" },
+      { when: "2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
       { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-      { when: "Sep 2027", name: "Next stop", note: "A permanent role, Paris" },
+      { when: "2027", name: "Next stop", note: "A permanent role, Paris" },
     ],
   },
   contact: {

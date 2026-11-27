@@ -213,8 +213,13 @@ export const fr: Dict = {
     education:
       "ESIEA, diplôme d'ingénieur (grade de master), informatique, spécialisation intelligence artificielle, 2022 à 2027. Cours : mathématiques (probabilités, statistiques, optimisation), algorithmique, développement logiciel, architecture.",
     toolsTitle: "Outils",
-    tools:
-      "Langages : C++, Java, Python, SQL, Bash. Ingénierie : Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5. Calcul : NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch. Domaine, en projets personnels : carnets d'ordres, appariement, FIX, valorisation d'options, Monte Carlo.",
+    tools: [
+      { label: "Programmation", value: "C++, Java, Python, SQL, Bash" },
+      { label: "Ingénierie", value: "Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5" },
+      { label: "Calcul", value: "NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch" },
+      { label: "Domaine", value: "Carnets d'ordres, appariement, FIX, valorisation d'options, Monte Carlo (projets personnels)" },
+    ],
+    languagesTitle: "Langues",
     languages: "Français (C2), anglais (C1, ma langue de travail au quotidien), arabe (natif).",
     metroLabel: "Parcours jusqu'ici, en ligne de métro",
     stops: [
@@ -222,10 +227,10 @@ export const fr: Dict = {
       { when: "2023", name: "Axeli", note: "Stagiaire réseau" },
       { when: "2024", name: "Maroc Telecom", note: "Stagiaire cloud et réseau" },
       { when: "2024", name: "ESIEA", note: "Ambassadeur étudiant" },
-      { when: "sept. 2025", name: "Siemens Mobility", note: "Alternant ingénieur logiciel" },
-      { when: "sept. 2026", name: "GDG on Campus ESIEA", note: "Cofondateur" },
+      { when: "2025", name: "Siemens Mobility", note: "Alternant ingénieur logiciel" },
+      { when: "2026", name: "GDG on Campus ESIEA", note: "Cofondateur" },
       { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-      { when: "sept. 2027", name: "Prochaine station", note: "Un CDI, Paris" },
+      { when: "2027", name: "Prochaine station", note: "Un CDI, Paris" },
     ],
   },
   contact: {

@@ -22,8 +22,17 @@ export default function Background({ t }: { t: Dict["background"] }) {
           <p>{t.education}</p>
         </Row>
         <Row title={t.toolsTitle}>
-          <p>{t.tools}</p>
-          <p className="mt-4">{t.languages}</p>
+          <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-[9rem_1fr]">
+            {t.tools.map((r) => (
+              <div key={r.label} className="contents">
+                <dt className="font-medium text-ink">{r.label}</dt>
+                <dd>{r.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Row>
+        <Row title={t.languagesTitle}>
+          <p>{t.languages}</p>
         </Row>
       </div>
     </section>
