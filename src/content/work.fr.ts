@@ -155,7 +155,7 @@ export const casesFr: CaseStudy[] = [
           { t: "p", text: "Le moteur Java :" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Order_Book && cd Order_Book\n./mvnw verify                          # build, tests et seuils de qualité\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify   # tests de mutation, lent\n./mvnw -pl api -am install -DskipTests && ./mvnw -pl api spring-boot:run   # REST sur :8080, FIX sur :9878",
+            text: "git clone https://github.com/Ahmed-Berrada/Order_Book\ncd Order_Book\n./mvnw verify                          # build, tests et seuils de qualité\n# tests de mutation, lent\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify\n# REST sur :8080, FIX sur :9878\n./mvnw -pl api -am install -DskipTests\n./mvnw -pl api spring-boot:run",
           },
           {
             t: "code",
@@ -164,7 +164,7 @@ export const casesFr: CaseStudy[] = [
           { t: "p", text: "Le prototype C++ :" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/lob-engine && cd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j\n./build/tests    # tests unitaires\n./build/bench    # 5 M d'opérations après 100 K d'échauffement",
+            text: "git clone https://github.com/Ahmed-Berrada/lob-engine\ncd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release\ncmake --build build -j\n./build/tests    # tests unitaires\n./build/bench    # 5 M d'opérations après 100 K d'échauffement",
           },
           {
             t: "p",
@@ -348,7 +348,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline && cd Market_data_pipeline\n# renseigner DATABASE_URL et X_CG_DEMO_API_KEY dans .env, comme le décrit le README\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow sur :8080, API sur :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
+            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline\ncd Market_data_pipeline\n# renseigner DATABASE_URL et X_CG_DEMO_API_KEY dans .env, comme le décrit le README\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow sur :8080, API sur :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
           },
         ],
       },

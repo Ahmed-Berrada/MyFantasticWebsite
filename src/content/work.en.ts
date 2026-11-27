@@ -57,7 +57,7 @@ export const casesEn: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Deliberately simple first: cancel is O(n) inside a price level and the book sides are `TreeMap`s. Both are to be measured with JMH before being optimised.",
+            text: "Deliberately simple first: cancel is O(n) inside a price level and the book sides are `TreeMap` instances. Both are to be measured with JMH before being optimised.",
           },
           { t: "h", text: "The prototype, in C++" },
           {
@@ -158,7 +158,7 @@ export const casesEn: CaseStudy[] = [
           { t: "p", text: "The Java engine:" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Order_Book && cd Order_Book\n./mvnw verify                          # build, tests and quality gates\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify   # mutation testing, slow\n./mvnw -pl api -am install -DskipTests && ./mvnw -pl api spring-boot:run   # REST on :8080, FIX on :9878",
+            text: "git clone https://github.com/Ahmed-Berrada/Order_Book\ncd Order_Book\n./mvnw verify                          # build, tests and quality gates\n# mutation testing, slow\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify\n# REST on :8080, FIX on :9878\n./mvnw -pl api -am install -DskipTests\n./mvnw -pl api spring-boot:run",
           },
           {
             t: "code",
@@ -167,7 +167,7 @@ export const casesEn: CaseStudy[] = [
           { t: "p", text: "The C++ prototype:" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/lob-engine && cd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j\n./build/tests    # unit tests\n./build/bench    # 5 M operations after a 100 K warm-up",
+            text: "git clone https://github.com/Ahmed-Berrada/lob-engine\ncd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release\ncmake --build build -j\n./build/tests    # unit tests\n./build/bench    # 5 M operations after a 100 K warm-up",
           },
           {
             t: "p",
@@ -351,7 +351,7 @@ export const casesEn: CaseStudy[] = [
         blocks: [
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline && cd Market_data_pipeline\n# set DATABASE_URL and X_CG_DEMO_API_KEY in .env, as the README describes\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow on :8080, API on :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
+            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline\ncd Market_data_pipeline\n# set DATABASE_URL and X_CG_DEMO_API_KEY in .env, as the README describes\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow on :8080, API on :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
           },
         ],
       },

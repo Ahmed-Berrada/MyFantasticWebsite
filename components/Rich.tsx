@@ -15,7 +15,7 @@ export default function Rich({ text, lang }: { text: string; lang: Lang }) {
         .map((part, i) => {
           if (part.startsWith("`") && part.endsWith("`")) {
             return (
-              <code key={i} className="rounded-[3px] bg-sunken px-1 py-px font-mono text-[0.88em] break-words text-ink">
+              <code key={i} className="rounded-[3px] bg-sunken px-[0.3em] py-[0.1em] font-mono text-[0.8em] break-words text-ink">
                 {part.slice(1, -1)}
               </code>
             );
