@@ -7,9 +7,9 @@ export const en = {
   htmlLang: "en",
   siteName: "Ahmed Berrada",
   meta: {
-    homeTitle: "Ahmed Berrada, software engineer, critical systems and performance",
+    homeTitle: "Ahmed Berrada, software engineer for critical systems",
     homeDescription:
-      "Software engineer building systems that have to be right and fast: safety-critical rail software at Siemens Mobility, plus low-latency engines and GPU compute. ESIEA 2027, Paris. Looking for a permanent role from September 2027.",
+      "Software that has to be right, then fast: safety-critical rail software at Siemens Mobility, low-latency engines. Paris, permanent role from Sept. 2027.",
     writingTitle: "Writing, Ahmed Berrada",
     writingDescription: "Short technical notes on things I measured or built: latency, determinism and checking numerical code.",
   },
