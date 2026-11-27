@@ -76,12 +76,12 @@ export const fr: Dict = {
     since: "Depuis septembre 2025, alternance jusqu'en août 2027",
     title: "Siemens Mobility",
     subtitle: "Ingénieur logiciel. Châtillon, France.",
-    lede: "New York City Transit fait passer sa ligne de métro Crosstown à une signalisation par radio sur 5G. Je construis ce avec quoi le logiciel radio est testé : un simulateur des équipements du train et de la voie, une bibliothèque de scénarios utilisable par des personnes qui ne programment pas, et le banc de test qui fait tourner le tout.",
+    lede: "New York City Transit (MTA) fait passer sa ligne de métro Crosstown à une signalisation CBTC sur radio 5G. Le logiciel radio au cœur du système, le CRG, est un logiciel critique de sécurité (CENELEC EN 50128). Je développe ce qui sert à le tester : un simulateur des équipements bord et sol, une bibliothèque de scénarios utilisable par des non-développeurs, et le banc de test qui fait tourner le tout.",
     flaps: [
       { value: "300+", label: "scénarios de test" },
       { value: "200+", label: "types de messages" },
-      { value: "9", label: "validateurs l'utilisent" },
-      { value: "4.2", label: "version CRG livrée" },
+      { value: "9", label: "ingénieurs de test et validateurs l'utilisent" },
+      { value: "4.2", label: "version du CRG pour laquelle il a été livré" },
     ],
     caseCta: "Comment fonctionne le banc de test",
     radio: {

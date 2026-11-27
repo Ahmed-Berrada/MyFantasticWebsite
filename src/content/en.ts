@@ -78,12 +78,12 @@ export const en = {
     since: "Since September 2025, apprenticeship until August 2027",
     title: "Siemens Mobility",
     subtitle: "Software engineer. Châtillon, France.",
-    lede: "New York City Transit is moving its Crosstown subway line to radio-based signalling over 5G. I build what the radio software is tested with: a simulator of the train and trackside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
+    lede: "New York City Transit (MTA) is moving its Crosstown subway line to CBTC, radio-based train control, over 5G. The radio software at its centre, the CRG, is safety-critical (CENELEC EN 50128). I build what it is tested with: a simulator of the onboard and wayside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
     flaps: [
       { value: "300+", label: "test scenarios" },
       { value: "200+", label: "message types" },
-      { value: "9", label: "validators use it" },
-      { value: "4.2", label: "CRG release delivered" },
+      { value: "9", label: "test engineers and validators use it" },
+      { value: "4.2", label: "CRG release it was delivered for" },
     ],
     caseCta: "How the test bench works",
     radio: {

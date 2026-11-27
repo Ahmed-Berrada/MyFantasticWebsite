@@ -192,8 +192,8 @@ export const casesFr: CaseStudy[] = [
 
   {
     slug: "cbtc-validation",
-    title: "Outillage de test d'un système de signalisation radio 5G",
-    plain: "Les outils qui testent le logiciel radio de la signalisation du métro de New York (ligne Crosstown) : simulateur train et voie, scénarios et banc de test.",
+    title: "Outillage de test d'un logiciel radio CBTC 5G chez Siemens Mobility",
+    plain: "Les outils qui testent le logiciel radio critique de la signalisation CBTC du métro de New York (ligne Crosstown) : simulateur, scénarios et banc de test.",
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, network namespaces Linux",
     status: "Siemens Mobility, depuis septembre 2025. Livré pour la version 4.2 du CRG. Outillage interne : aucun code ni détail de protocole n'est publié ici.",
     repos: [],
