@@ -204,7 +204,11 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Le logiciel radio, appelé CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, il n'y avait ni banc de test, ni outil, ni produit dont partir.",
+            text: "Le logiciel radio, appelé CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, rien n'existait : ni banc de test, ni outil, ni produit sur lequel s'appuyer.",
+          },
+          {
+            t: "p",
+            text: "Pour être précis sur ma part : je n'écris pas le logiciel critique. J'ai conçu et développé le simulateur, le CRG Message Generator, et je suis responsable du banc de test ; l'environnement d'exécution autour a été construit avec l'équipe.",
           },
         ],
       },
@@ -247,7 +251,7 @@ export const casesFr: CaseStudy[] = [
               ["Scénarios", "300+"],
               ["Utilisateurs", "9 validateurs : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
               ["Livré pour", "la version 4.2 du CRG"],
-              ["Sans cet outil", "le logiciel ne peut pas être testé"],
+              ["Pourquoi c'est indispensable", "le CRG ne fonctionne qu'avec les équipements bord et sol ; sur le banc, le simulateur tient ce rôle"],
             ],
           },
           {
@@ -262,11 +266,19 @@ export const casesFr: CaseStudy[] = [
           { t: "p", text: "L'outillage est interne : le projet lui-même ne peut pas être reproduit hors de Siemens. La somme de contrôle, si :" },
           {
             t: "code",
-            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF if crc & 0x80000000 else (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
+            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            if crc & 0x80000000:\n                crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF\n            else:\n                crc = (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
           },
         ],
       },
-      { id: "next", blocks: [{ t: "p", text: "L'alternance dure jusqu'en août 2027." }] },
+      {
+        id: "next",
+        blocks: [
+          {
+            t: "p",
+            text: "Je reste responsable du banc de test jusqu'à la fin de l'alternance, en août 2027. À partir de septembre 2027, je cherche un CDI : logiciel critique ou embarqué, outillage de test et de validation, ou systèmes où la performance compte.",
+          },
+        ],
+      },
     ],
   },
 

@@ -209,6 +209,10 @@ export const casesEn: CaseStudy[] = [
             t: "p",
             text: "The radio software, called the CRG, exchanges messages with equipment on the train and along the track. Without that equipment it cannot be tested. When I joined there was no test bench, no tool and no product to start from.",
           },
+          {
+            t: "p",
+            text: "To be precise about my part: I do not write the safety-critical software. I designed and developed the simulator, the CRG Message Generator, and I own the test bench; the execution environment around it was built with the team.",
+          },
         ],
       },
       {
@@ -250,7 +254,7 @@ export const casesEn: CaseStudy[] = [
               ["Scenarios", "300+"],
               ["Users", "9 validators: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
               ["Delivered for", "CRG release 4.2"],
-              ["Without this tool", "the software cannot be tested"],
+              ["Why it matters", "the CRG only runs against train and trackside equipment; on the bench, the simulator is that equipment"],
             ],
           },
           {
@@ -265,11 +269,19 @@ export const casesEn: CaseStudy[] = [
           { t: "p", text: "The tooling is internal, so the project itself cannot be reproduced outside Siemens. The checksum can:" },
           {
             t: "code",
-            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF if crc & 0x80000000 else (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
+            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            if crc & 0x80000000:\n                crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF\n            else:\n                crc = (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
           },
         ],
       },
-      { id: "next", blocks: [{ t: "p", text: "The apprenticeship runs until August 2027." }] },
+      {
+        id: "next",
+        blocks: [
+          {
+            t: "p",
+            text: "I remain test bench owner until the apprenticeship ends in August 2027. From September 2027 I am looking for a permanent role: critical or embedded software, test and validation tooling, or performance-sensitive systems.",
+          },
+        ],
+      },
     ],
   },
 
