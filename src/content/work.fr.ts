@@ -7,7 +7,7 @@ export const casesFr: CaseStudy[] = [
     title: "Order Book : un moteur d'appariement, du prototype C++ à la plateforme",
     plain: "Un moteur d'appariement construit deux fois : en C++ pour mesurer sa vitesse, puis en Java 21, qui journalise chaque ordre et survit à un crash.",
     stack: "Prototype C++17 ; Java 21, Spring Boot, QuickFIX/J, FIX 4.4",
-    status: "Prototype C++ : mesuré, puis archivé. Moteur Java : phases 0 à 3 terminées, phase 4 en cours, pas de chiffres de performance avant la phase 6.",
+    status: "Prototype C++ : mesuré, puis archivé. Moteur Java : phases 0 à 3 terminées, phase 4 bien avancée, premiers chiffres JMH et HdrHistogram publiés dans le dépôt.",
     repos: [
       { label: "Order_Book sur GitHub", href: "https://github.com/Ahmed-Berrada/Order_Book" },
       { label: "Prototype C++ (lob-engine, archivé)", href: "https://github.com/Ahmed-Berrada/lob-engine" },
@@ -54,7 +54,7 @@ export const casesFr: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Volontairement simple d'abord : l'annulation est en O(n) dans un niveau de prix et les côtés du carnet sont des `TreeMap`. Les deux seront mesurés avec JMH avant d'être optimisés.",
+            text: "Volontairement simple d'abord : l'annulation était en O(n) dans un niveau de prix, une file sur tableau. JMH a ensuite mesuré 2 015 ns par annulation à 10 000 ordres ; une file chaînée l'a ramenée à 150 ns. Les côtés du carnet sont toujours des `TreeMap`.",
           },
           { t: "h", text: "Le prototype, en C++" },
           {
@@ -96,11 +96,11 @@ export const casesFr: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "La CI est au vert sur main (GitHub Actions exécute `./mvnw verify`). Le dépôt définit aussi un profil de tests de mutation (PIT, avec un seuil de 80 % sur chaque module du moteur). Il est lancé à la demande, pas en CI : je ne cite donc aucun score.",
+            text: "La CI est au vert sur main (GitHub Actions exécute `./mvnw verify`). Un job de tests de mutation (PIT) tourne aussi en CI et échoue si un module du moteur passe sous 80 %.",
           },
           {
             t: "p",
-            text: "Le moteur Java n'a pas encore de chiffres de performance : les micro-benchmarks JMH et le chemin critique sans allocation sont la phase 6. Tous les chiffres ci-dessous sont ceux du prototype C++ et ne disent rien du code Java.",
+            text: "Les premiers chiffres du moteur Java (médiane 191 ns par commande, 2,2 millions de commandes par seconde, moteur seul, sur un conteneur cloud partagé de 4 vCPU) sont dans les notes de performance du dépôt, avec leurs limites. Tous les chiffres ci-dessous sont ceux du prototype C++ et ne disent rien du code Java.",
           },
           { t: "h", text: "Vitesse : le prototype C++" },
           {
@@ -183,8 +183,8 @@ export const casesFr: CaseStudy[] = [
           {
             t: "list",
             items: [
-              "Phase 4 : prévention de l'auto-appariement, enchères, phases de négociation et coupe-circuits.",
-              "Phase 6 : micro-benchmarks JMH, chemin critique sans allocation et latence publiée pour le moteur Java, avec sa méthodologie, sur un cœur isolé, avec l'histogramme complet de chaque exécution.",
+              "Phase 5 : limites de débit et coupe-circuit d'urgence.",
+              "Phase 6, suite : relancer les benchmarks Java sur un cœur isolé et une machine dédiée, et publier l'histogramme complet de chaque exécution.",
               "Reprendre la leçon du prototype : prédimensionner la table d'identifiants du moteur Java, et mesurer le coût en mémoire face au gain de latence.",
             ],
           },
@@ -194,8 +194,8 @@ export const casesFr: CaseStudy[] = [
   },
 
   {
-    slug: "cbtc-validation",
-    title: "Outillage de test d'un logiciel radio CBTC 5G chez Siemens Mobility",
+    slug: "siemens-cbtc",
+    title: "Simulateur et banc de test d'un logiciel radio CBTC 5G, Siemens",
     plain: "Les outils qui testent le logiciel radio critique de la signalisation CBTC du métro de New York (ligne Crosstown) : simulateur, scénarios et banc de test.",
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, network namespaces Linux",
     status: "Siemens Mobility, depuis septembre 2025. Livré pour la version 4.2 du CRG. Outillage interne : aucun code ni détail de protocole n'est publié ici.",
@@ -252,7 +252,7 @@ export const casesFr: CaseStudy[] = [
             rows: [
               ["Types de messages pris en charge", "200+"],
               ["Scénarios", "300+"],
-              ["Utilisateurs", "9 validateurs : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
+              ["Utilisateurs", "9 ingénieurs : 5 développeurs et 4 non-développeurs que j'ai formés, qui écrivent et exécutent leurs propres scénarios"],
               ["Livré pour", "la version 4.2 du CRG"],
               ["Pourquoi c'est indispensable", "le CRG ne fonctionne qu'avec les équipements bord et sol ; sur le banc, le simulateur tient ce rôle"],
             ],
@@ -278,7 +278,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Je reste responsable du banc de test jusqu'à la fin de l'alternance, en août 2027. À partir de septembre 2027, je cherche un CDI : logiciel critique ou embarqué, outillage de test et de validation, ou systèmes où la performance compte.",
+            text: "Je reste responsable du banc de test jusqu'à la fin de l'alternance, en août 2027. À partir de septembre 2027, je cherche un CDI : logiciel critique ou embarqué, simulation et outillage développeur, ou systèmes où la performance compte.",
           },
         ],
       },

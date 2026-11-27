@@ -47,6 +47,8 @@ const nextConfig: NextConfig = {
       // lob-engine was the C++ prototype of Order Book; both now share one case study.
       { source: "/work/lob-engine", destination: "/work/order-book", permanent: true },
       { source: "/fr/work/lob-engine", destination: "/fr/work/order-book", permanent: true },
+      { source: "/work/cbtc-validation", destination: "/work/siemens-cbtc", permanent: true },
+      { source: "/fr/work/cbtc-validation", destination: "/fr/work/siemens-cbtc", permanent: true },
     ];
   },
 };

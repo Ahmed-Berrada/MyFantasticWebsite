@@ -18,11 +18,11 @@
 - Every number must trace to the CV (v3), a repository README or CI, or `src/content/bench` (measured with
   `scripts/bench-lob-engine.sh`). Do not round up, merge projects or quote a figure under a project it does not belong to:
   Order Book is one project built twice: **lob-engine** (C++17, archived) is its prototype and owns every latency
-  figure; the Java engine (Order_Book repo) owns the correctness work and has no performance numbers until its phase 6.
+  figure; the Java engine (Order_Book repo) owns the correctness work and its own first JMH/HdrHistogram figures (`docs/performance.md`, shared cloud container); never mix the two.
   Always say which version a number belongs to. `/work/lob-engine` redirects to `/work/order-book`.
 - Quote the first published lob-engine figures next to the reproduced ones, and say which is which. The README did not
   record the hardware of the first run; the reproductions are from an HP ProBook 450 G7 (i7-10510U, powersave governor, no pinning).
-- Siemens work is internal: only what the CV says. Illustrative frames are labelled as such. No real frames or code.
+- Siemens work is internal: only what the CV says. Do not frame his role with the words "validation" or "validator" (QA connotation); the case study lives at `/work/siemens-cbtc`. Illustrative frames are labelled as such. No real frames or code.
   Say plainly what was his (the simulator, the test bench) and what was the team's; he does not write the safety code.
 - The C++ prototype pools its orders but is not allocation-free (id map, new levels, trade vectors): never claim
   "no allocation" for it. Name the benchmark's limits rather than hide them.

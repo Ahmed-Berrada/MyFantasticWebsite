@@ -10,7 +10,7 @@ export const casesEn: CaseStudy[] = [
     title: "Order Book: a matching engine, from C++ prototype to venue core",
     plain: "A matching engine built twice: in C++ to learn how fast a book can match, then in Java 21 as a venue core that journals every order and survives a crash.",
     stack: "C++17 prototype; Java 21, Spring Boot, QuickFIX/J, FIX 4.4",
-    status: "C++ prototype: measured, then archived. Java engine: phases 0 to 3 complete, phase 4 in progress, no performance numbers until phase 6.",
+    status: "C++ prototype: measured, then archived. Java engine: phases 0 to 3 complete, phase 4 well advanced, first JMH and HdrHistogram numbers published in the repository.",
     repos: [
       { label: "Order_Book on GitHub", href: "https://github.com/Ahmed-Berrada/Order_Book" },
       { label: "C++ prototype (lob-engine, archived)", href: "https://github.com/Ahmed-Berrada/lob-engine" },
@@ -57,7 +57,7 @@ export const casesEn: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Deliberately simple first: cancel is O(n) inside a price level and the book sides are `TreeMap` instances. Both are to be measured with JMH before being optimised.",
+            text: "Deliberately simple first: cancel started O(n) inside a price level, an array queue. JMH then showed 2,015 ns per cancel at 10,000 orders; a linked queue brought it to 150 ns. The book sides are still `TreeMap` instances.",
           },
           { t: "h", text: "The prototype, in C++" },
           {
@@ -99,11 +99,11 @@ export const casesEn: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "CI is green on main (GitHub Actions runs `./mvnw verify`). The repository also defines a mutation-testing profile (PIT, with an 80% threshold on every engine module). It is run on demand, not in CI, so I do not quote a score.",
+            text: "CI is green on main (GitHub Actions runs `./mvnw verify`). A mutation-testing job (PIT) also runs in CI and fails if any engine module scores under 80%.",
           },
           {
             t: "p",
-            text: "The Java engine has no performance numbers yet: JMH micro-benchmarks and the zero-allocation hot path are phase 6. Every figure below is the C++ prototype's and says nothing about the Java code.",
+            text: "The Java engine's first numbers (median 191 ns per command, 2.2 million commands a second, engine only, on a shared 4 vCPU cloud container) are in the repository's performance notes, with their limits. Every figure below is the C++ prototype's and says nothing about the Java code.",
           },
           { t: "h", text: "Speed: the C++ prototype" },
           {
@@ -186,8 +186,8 @@ export const casesEn: CaseStudy[] = [
           {
             t: "list",
             items: [
-              "Phase 4: self-trade prevention, auctions, trading phases and circuit breakers.",
-              "Phase 6: JMH micro-benchmarks, a zero-allocation hot path and published latency for the Java engine, with its methodology, pinned to an isolated core, with the full histogram of every run.",
+              "Phase 5: throttles and a kill switch.",
+              "Phase 6, continued: rerun the Java benchmarks pinned to an isolated core on dedicated hardware, and publish the full histogram of every run.",
               "Carry the prototype's lesson over: size the Java engine's id map up front, and measure the memory cost against the latency gain.",
             ],
           },
@@ -197,8 +197,8 @@ export const casesEn: CaseStudy[] = [
   },
 
   {
-    slug: "cbtc-validation",
-    title: "Test tooling for 5G CBTC radio software at Siemens Mobility",
+    slug: "siemens-cbtc",
+    title: "Simulator and test platform for 5G CBTC radio software, Siemens",
     plain: "The tools that test the safety-critical radio software of the CBTC signalling on New York's Crosstown line: a simulator, a scenario library and a test bench.",
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, Linux network namespaces",
     status: "Siemens Mobility, since September 2025. Delivered for CRG release 4.2. Internal tooling: no code or protocol details are published here.",
@@ -255,7 +255,7 @@ export const casesEn: CaseStudy[] = [
             rows: [
               ["Message types supported", "200+"],
               ["Scenarios", "300+"],
-              ["Users", "9 validators: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
+              ["Users", "9 engineers: 5 developers and 4 non-developers I trained, who write and run their own scenarios"],
               ["Delivered for", "CRG release 4.2"],
               ["Why it matters", "the CRG only runs against train and trackside equipment; on the bench, the simulator is that equipment"],
             ],
@@ -281,7 +281,7 @@ export const casesEn: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "I remain test bench owner until the apprenticeship ends in August 2027. From September 2027 I am looking for a permanent role: critical or embedded software, test and validation tooling, or performance-sensitive systems.",
+            text: "I remain test bench owner until the apprenticeship ends in August 2027. From September 2027 I am looking for a permanent role: critical or embedded software, simulation and developer tooling, or performance-sensitive systems.",
           },
         ],
       },
