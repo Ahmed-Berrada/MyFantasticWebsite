@@ -51,7 +51,7 @@ describe("dictionary", () => {
   });
 
   it("keeps numbers with their units and groups French thousands", () => {
-    expect(unitTypo("P99 996 ns, 90% and 1.6 ms.")).toBe("P99 996\u00a0ns, 90% and 1.6\u00a0ms.");
+    expect(unitTypo("median 996 ns, 90% and 1.6 ms.")).toBe("median 996\u00a0ns, 90% and 1.6\u00a0ms.");
     expect(unitTypo("in 3 steps")).toBe("in 3 steps");
     expect(unitTypo("P99 460 ns")).toBe("P99\u00a0460\u00a0ns");
     expect(frTypo("opération 26 749 413 : 5 M d'opérations, 25 %")).toBe("opération 26\u202f749\u202f413\u00a0: 5\u00a0M d'opérations, 25\u00a0%");
