@@ -179,7 +179,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
         <span className="text-muted">{t.simulated}</span>
       </div>
 
-      <svg viewBox="0 0 640 200" className="radio-scene block h-auto w-full" role="img" aria-label={t.aria}>
+      <svg viewBox="0 0 640 200" className="radio-scene block h-auto max-h-[260px] w-full" role="img" aria-label={t.aria}>
         {/* track */}
         <line x1="16" x2="624" y1={TRACK_Y} y2={TRACK_Y} stroke="var(--ink-2)" strokeWidth="1.5" />
         {Array.from({ length: 39 }, (_, i) => (

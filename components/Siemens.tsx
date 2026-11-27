@@ -21,13 +21,13 @@ export default function Siemens({ t, lang }: { t: Dict["siemens"]; lang: Lang })
               </Link>
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:gap-x-8">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:gap-x-8 lg:w-[27rem]">
             {t.flaps.map((f) => (
               <SplitFlap key={f.label} value={f.value} label={f.label} />
             ))}
           </div>
         </div>
-        <div className="mt-16 max-w-5xl">
+        <div className="mt-16">
           <RadioLink t={t.radio} />
         </div>
       </div>
