@@ -2,8 +2,6 @@ import type { Dict } from "./en";
 
 /** Version française. Même forme que en.ts (le type en est dérivé). Les espaces avant ? ! : ; sont rendues insécables au chargement. */
 export const fr: Dict = {
-  htmlLang: "fr",
-  siteName: "Ahmed Berrada",
   meta: {
     homeTitle: "Ahmed Berrada, ingénieur logiciel, systèmes critiques",
     homeDescription:

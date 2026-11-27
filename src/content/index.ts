@@ -21,7 +21,7 @@ export function frTypo(s: string): string {
     .replace(/(\d) (?=\d{3}(?!\d))/g, "$1\u202f");
 }
 
-const SKIP_KEYS = new Set(["href", "htmlLang", "switchLang", "slug", "id", "updated", "date"]);
+const SKIP_KEYS = new Set(["href", "switchLang", "slug", "id", "updated", "date"]);
 
 function mapStrings<T>(value: T, fn: (s: string) => string, key?: string): T {
   if (typeof value === "string") return (key && SKIP_KEYS.has(key) ? value : fn(value)) as T;

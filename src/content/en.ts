@@ -4,8 +4,6 @@
  * Placeholders in {braces} are filled by the components.
  */
 export const en = {
-  htmlLang: "en",
-  siteName: "Ahmed Berrada",
   meta: {
     homeTitle: "Ahmed Berrada, software engineer for critical systems",
     homeDescription:

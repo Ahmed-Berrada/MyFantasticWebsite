@@ -16,12 +16,10 @@
   --line: #d3d7dd;
   --line-2: #b9bfc8;
   --accent: #ffc400;
-  --accent-soft: #ffc40033;
   --bid: #17703f;
   --bid-soft: #17703f1f;
   --ask: #b33526;
   --ask-soft: #b335261a;
-  --running: #a86a00;
 }
 
 @theme inline {
@@ -34,12 +32,10 @@
   --color-line: var(--line);
   --color-line-2: var(--line-2);
   --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
   --color-bid: var(--bid);
   --color-bid-soft: var(--bid-soft);
   --color-ask: var(--ask);
   --color-ask-soft: var(--ask-soft);
-  --color-running: var(--running);
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-martian), ui-monospace, monospace;
