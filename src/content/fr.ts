@@ -55,8 +55,8 @@ export const fr: Dict = {
       {
         value: "163 ns",
         label: "médiane pour apparier un ordre, P99 996 ns",
-        note: "Mesure publiée. Je reproduis 149 ns de médiane et 460 ns de P99 sur un portable.",
-        href: "/work/lob-engine",
+        note: "Prototype C++ d'Order Book, première mesure publiée. Je reproduis 149 ns de médiane et 460 ns de P99 sur un portable.",
+        href: "/work/order-book",
       },
       {
         value: "300+",

@@ -57,8 +57,8 @@ export const en = {
       {
         value: "163 ns",
         label: "median to match an order, P99 996 ns",
-        note: "Published run. I reproduce a 149 ns median and 460 ns P99 on a laptop.",
-        href: "/work/lob-engine",
+        note: "Order Book's C++ prototype, first published run. I reproduce a 149 ns median and 460 ns P99 on a laptop.",
+        href: "/work/order-book",
       },
       {
         value: "300+",
