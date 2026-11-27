@@ -13,15 +13,16 @@ interface Props {
 /** Profile first: who, what, level and availability, with the two actions. The thesis comes directly under. */
 export default function Hero({ t, cvHref, cvOtherHref }: Props) {
   return (
-    <section id="top" className="relative flex flex-col overflow-hidden pt-20 lg:block lg:min-h-[100dvh]">
-      {/* The instrument shares the page's centred column and fades out behind the text. */}
-      <div className="relative order-2 mx-5 mb-16 h-[400px] lg:absolute lg:inset-x-0 lg:top-16 lg:mx-auto lg:mb-0 lg:h-[calc(100dvh-4rem)] lg:max-w-7xl lg:px-8">
-        <div className="h-full w-full lg:[mask-image:linear-gradient(90deg,transparent_0%,transparent_26%,#000_50%)]">
-          <TrainGraphCanvas labels={t.graph} />
+    <section id="top" className="relative flex flex-col overflow-hidden pt-20 xl:block xl:min-h-[100dvh]">
+      {/* From xl the instrument shares the page's centred column and fades out behind the text; below, it sits
+          under the text, because at 1024 px the text column covers half of the graph. */}
+      <div className="relative order-2 mx-5 mb-16 h-[320px] sm:h-[400px] xl:absolute xl:inset-x-0 xl:top-16 xl:mx-auto xl:mb-0 xl:h-[calc(100dvh-4rem)] xl:max-w-7xl xl:px-8">
+        <div className="h-full w-full xl:[mask-image:linear-gradient(90deg,transparent_0%,transparent_26%,#000_50%)]">
+          <TrainGraphCanvas labels={t.graph} covered={{ query: "(min-width: 1280px)", fraction: 0.45 }} />
         </div>
       </div>
 
-      <div className="pointer-events-none relative order-1 mx-auto w-full max-w-7xl px-5 pt-10 pb-12 md:px-8 lg:pt-[9vh] lg:pb-20">
+      <div className="pointer-events-none relative order-1 mx-auto w-full max-w-7xl px-5 pt-10 pb-12 md:px-8 xl:pt-[9vh] xl:pb-20">
         <div className="max-w-[34rem] [&_a]:pointer-events-auto">
           <h1 className="font-display text-[clamp(30px,3.2vw,42px)] leading-[1.05] font-semibold tracking-[-0.02em]">{t.name}</h1>
           <p className="mt-2 text-xl text-ink-2">{t.role}</p>

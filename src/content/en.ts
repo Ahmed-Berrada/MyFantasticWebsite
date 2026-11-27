@@ -48,6 +48,7 @@ export const en = {
       dwell: "at station {station}, leaves in {s} s",
       run: "{s} s to station {station}",
       hint: "Move the pointer over the graph to read the timetable.",
+      hintTouch: "Touch the graph to read the timetable.",
       aria: "A live train graph: each line is a train running between stations over time. Moving the pointer reads the timetable.",
     },
   },
