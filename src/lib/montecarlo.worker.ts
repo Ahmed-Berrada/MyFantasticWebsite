@@ -24,7 +24,11 @@ function post(s: Sim, from: number, reset: boolean, done: boolean): void {
   ctx.postMessage(out);
 }
 
-const yieldToQueue = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/** A run lasts about RUN_FRAMES x RUN_FRAME_MS: 45 frames of 60 ms, under three seconds. */
+const RUN_FRAMES = 45;
+const RUN_FRAME_MS = 60;
 
 ctx.onmessage = async (e) => {
   const m = e.data;
@@ -35,17 +39,24 @@ ctx.onmessage = async (e) => {
   }
   const s = newSim(m.seed);
   post(s, 0, true, false);
-  let sent = 0;
-  let last = performance.now();
-  while (s.est.paths < TARGET_PATHS) {
-    if (id !== current) return; // a newer request replaced this run
-    stepSim(s, PAIRS_PER_FRAME);
-    if (!m.instant && performance.now() - last >= 40) {
-      post(s, sent, false, false);
-      sent = s.paths.length;
-      last = performance.now();
-      await yieldToQueue();
-    }
+  if (m.instant) {
+    while (s.est.paths < TARGET_PATHS) stepSim(s, PAIRS_PER_FRAME);
+    post(s, 0, false, true);
+    return;
   }
-  post(s, sent, false, true);
+  // Paced by time, not by CPU: the run grows geometrically from about a thousand paths to a million over a few
+  // seconds, so the interval visibly narrows on any device. The work itself stays off the main thread.
+  let sent = 0;
+  for (let f = 1; f <= RUN_FRAMES; f++) {
+    const started = performance.now();
+    const goal = Math.min(TARGET_PATHS, Math.round(1000 * Math.pow(TARGET_PATHS / 1000, f / RUN_FRAMES)));
+    while (s.est.paths < goal) {
+      if (id !== current) return; // a newer request replaced this run
+      stepSim(s, Math.min(PAIRS_PER_FRAME, Math.ceil((goal - s.est.paths) / 2)));
+    }
+    const done = f === RUN_FRAMES;
+    post(s, sent, false, done);
+    sent = s.paths.length;
+    if (!done) await sleep(Math.max(0, RUN_FRAME_MS - (performance.now() - started)));
+  }
 };

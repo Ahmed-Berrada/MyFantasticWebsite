@@ -34,7 +34,7 @@ export const casesFr: CaseStudy[] = [
               "Des prix entiers, en ticks de 64 bits, dans les deux versions. Les flottants cassent l'égalité.",
               "Le cœur d'appariement Java est du Java pur, sans entrées-sorties. Spring en est banni par le build (maven-enforcer) et par des tests d'architecture (ArchUnit) : ni horloge, ni aléa, ni threads, ni E/S, ni flottants.",
               "Les identifiants d'ordre sont attribués par le moteur, par instrument. Chaque commande reçoit un numéro de séquence sans trou et un horodatage UTC à la microseconde, pris à l'entrée et journalisé. C'est ce qui rend le rejeu exact.",
-              "Le prototype C++ n'alloue rien par ordre sur le chemin critique, et son benchmark utilise une graine fixe, pour pouvoir refaire exactement une exécution.",
+              "Le prototype C++ prend chaque ordre dans un pool préalloué : un ordre ne coûte aucun malloc. Le chemin critique n'est pas pour autant sans allocation : la table d'identifiants et chaque nouveau niveau de prix allouent un nœud, et un appariement renvoie ses transactions dans un vecteur. Son benchmark utilise une graine fixe, pour pouvoir refaire exactement une exécution.",
             ],
           },
         ],
@@ -42,7 +42,7 @@ export const casesFr: CaseStudy[] = [
       {
         id: "approach",
         blocks: [
-          { t: "h", text: "Le cœur de plateforme, en Java" },
+          { t: "h", text: "Le cœur de la plateforme, en Java" },
           { t: "figure", id: "order-path" },
           {
             t: "p",
@@ -59,7 +59,7 @@ export const casesFr: CaseStudy[] = [
           { t: "h", text: "Le prototype, en C++" },
           {
             t: "p",
-            text: "Demandes et offres sont deux arbres de prix `std::map`, donc le meilleur prix est à `begin()`. Chaque niveau de prix est une liste doublement chaînée intrusive d'ordres, dans l'ordre d'arrivée, et chaque ordre est pris dans un bloc de pool pré-alloué : ajouter ou retirer un ordre revient à quelques écritures de pointeurs. Une table de hachage de l'identifiant vers l'ordre donne une annulation en O(1).",
+            text: "Demandes et offres sont deux arbres de prix `std::map`, donc le meilleur prix est à `begin()`. Chaque niveau de prix est une liste doublement chaînée intrusive d'ordres, dans l'ordre d'arrivée, et chaque ordre est pris dans un bloc de pool préalloué : ajouter ou retirer un ordre revient à quelques écritures de pointeurs. Une table de hachage de l'identifiant vers l'ordre donne une annulation en O(1).",
           },
           { t: "figure", id: "lob-structure" },
           {
@@ -67,9 +67,9 @@ export const casesFr: CaseStudy[] = [
             head: ["Opération", "Coût"],
             rows: [
               ["Ajout, sans appariement", "O(log n)"],
-              ["Ajout, appariement au meilleur niveau", "O(1)"],
+              ["Ajout, exécuté au meilleur niveau", "O(1)"],
               ["Ajout, balayage de K niveaux", "O(K + log n)"],
-              ["Annulation", "O(1)"],
+              ["Annulation", "O(1) en moyenne (table de hachage)"],
               ["Meilleure demande ou meilleure offre", "O(1)"],
             ],
             note: "n est le nombre de niveaux de prix actifs.",
@@ -79,8 +79,7 @@ export const casesFr: CaseStudy[] = [
       {
         id: "result",
         blocks: [
-          { t: "h", text: "Correction : le moteur Java" },
-          { t: "p", text: "Ici, les preuves sont des tests et des seuils, pas de la vitesse." },
+          { t: "h", text: "Justesse : le moteur Java" },
           {
             t: "table",
             head: ["Ce qui est vérifié", "Comment"],
@@ -88,8 +87,8 @@ export const casesFr: CaseStudy[] = [
               ["Le carnet n'est jamais croisé, la quantité est conservée, identifiants et séquences sans trou, rejeu déterministe", "Tests de propriétés (jqwik)"],
               ["Des flux de commandes aléatoires donnent exactement les événements d'une implémentation de référence volontairement simple", "jqwik avec un oracle naïf"],
               ["Aucune commande acquittée n'est perdue après un crash, et l'état récupéré égale un rejeu complet", "Une seconde JVM tuée avec SIGKILL"],
-              ["Couper l'un ou l'autre journal à n'importe quel octet récupère exactement les commandes complètes", "jqwik sur le journal"],
-              ["Un membre FIX peut se connecter, négocier, annuler, interroger un statut et recevoir chaque code de rejet, et la reprise fonctionne après une déconnexion", "Initiateurs QuickFIX/J sur socket"],
+              ["Quel que soit l'octet où l'on tronque l'un ou l'autre journal, la reprise restitue exactement les commandes complètes", "jqwik sur le journal"],
+              ["Un membre FIX peut se connecter, passer des ordres, annuler, interroger un statut et recevoir chaque code de rejet, et la retransmission des messages (resend) fonctionne après une déconnexion", "Initiateurs QuickFIX/J sur socket"],
               ["Un consommateur qui perd un paquet UDP sur cinq reconstruit chaque carnet par la seule retransmission", "Vrais sockets UDP et TCP"],
               ["Le cœur d'appariement n'utilise que le JDK", "ArchUnit"],
               ["Au moins 90 % de couverture de lignes et de branches", "JaCoCo, imposé par `./mvnw verify` en CI"],
@@ -112,13 +111,17 @@ export const casesFr: CaseStudy[] = [
           { t: "h", text: "Comment lire ces chiffres" },
           {
             t: "p",
-            text: "Le benchmark mélange 60 % d'ajouts, 25 % d'annulations et 15 % d'ordres agressifs autour d'un prix médian, avec la graine 42. Il chronomètre chaque opération avec deux lectures de `std::chrono::high_resolution_clock`. Sur ce portable, cette paire coûte environ 15 ns, mesurés avec une zone chronométrée vide, et n'est pas soustraite.",
+            text: "Le benchmark mélange 60 % d'ajouts, 25 % d'annulations et 15 % d'ordres agressifs autour d'un prix milieu (mid), avec la graine 42. Il chronomètre chaque opération avec deux lectures de `std::chrono::high_resolution_clock`. Sur ce portable, cette paire coûte environ 15 ns, mesurés avec une zone chronométrée vide, et n'est pas soustraite.",
           },
           {
             t: "p",
-            text: "La zone chronométrée contient aussi les tirages aléatoires de prix et de quantité et la tenue de la liste des identifiants à annuler : chaque chiffre est donc une borne supérieure du temps propre au moteur. Le tirage qui choisit l'action est hors de la zone chronométrée mais dans l'horloge du débit, ce qui explique que le débit soit un peu inférieur à un sur la moyenne.",
+            text: "La zone chronométrée contient aussi les tirages aléatoires de prix et de quantité et la tenue de la liste des identifiants à annuler : chaque chiffre est donc une borne supérieure du temps propre au moteur. Le tirage qui choisit l'action est hors de la zone chronométrée mais dans l'horloge du débit, ce qui explique que le débit soit un peu inférieur à l'inverse de la latence moyenne.",
           },
-          { t: "h", text: "Même code, réponses différentes" },
+          {
+            t: "p",
+            text: "Les limites de ce benchmark. L'horloge est `high_resolution_clock`, qui sous libstdc++ est l'horloge système et n'est pas monotone : `steady_clock` serait le bon outil. Les prix sont tirés sur la même plage de 1 000 ticks des deux côtés, donc beaucoup d'ajouts croisent et s'exécutent aussitôt, et la liste des annulations garde les identifiants d'ordres déjà exécutés, donc certaines annulations sont des recherches qui échouent : la répartition 60/25/15 décrit le tirage, pas le travail effectué. Enfin, il mesure le temps de service d'une opération après l'autre, pas la latence sous un débit d'arrivée donné.",
+          },
+          { t: "h", text: "Pourquoi 5 et 50 millions d'opérations diffèrent" },
           {
             t: "p",
             text: "Le README annonçait 5 millions d'opérations après un échauffement, mais jusqu'en novembre 2026 le benchmark committé exécutait 50 millions d'opérations, avec l'appel d'échauffement en commentaire. Même moteur, médiane différente : 149 ns à 5 millions d'opérations, 229 ns à 50 millions. Le benchmark exécute désormais la méthode que décrit le README.",
@@ -132,20 +135,20 @@ export const casesFr: CaseStudy[] = [
             t: "p",
             text: "La moitié des opérations se terminent en moins de 150 ns et 99 % en moins de 460 ns. Les 0,1 % les plus lentes prennent 900 ns ou plus, jusqu'à un maximum d'environ 1,6 ms.",
           },
-          { t: "h", text: "Le pic de 68 ms est un rehash de table de hachage" },
+          { t: "h", text: "Le pic de 70 ms est un rehash de table de hachage" },
           {
             t: "p",
-            text: "Dans l'exécution à 50 millions, la latence maximale est d'environ 68 ms, et elle survient à la même opération, la numéro 26 749 413, dans les deux exécutions que j'ai tracées. Avec une graine fixe, c'est un événement déterministe. À ce moment, la liste du benchmark contient environ 9,4 millions d'identifiants, et le `std::unordered_map` du moteur (identifiant vers ordre) n'est pas pré-dimensionné : un rehash est le suspect évident.",
+            text: "Dans l'exécution à 50 millions, la latence maximale va de 68 à 73 ms : 68 ms dans les deux exécutions tracées pour l'expérience ci-dessous, 72 à 73 ms dans les trois exécutions du tableau de résultats. Dans les deux exécutions tracées, elle survient à la même opération, la numéro 26 749 413. Avec une graine fixe, c'est un événement déterministe. À ce moment, la liste du benchmark contient environ 9,4 millions d'identifiants, et le `std::unordered_map` du moteur (identifiant vers ordre) n'est pas pré-dimensionné : un rehash est le suspect évident.",
           },
           {
             t: "p",
-            text: "Je l'ai testé sur une copie de travail. Construire la table avec 30 millions de buckets d'emblée ramène le maximum à 1,1 à 1,4 ms et fait passer le débit de 3,25 à 4,25 millions d'opérations par seconde. Le moteur n'est pas modifié. Le prix à payer est la mémoire : le tableau de buckets représente à lui seul environ 240 Mo.",
+            text: "Je l'ai testé sur une copie de travail. Construire la table avec 30 millions de buckets d'emblée ramène le maximum entre 1,1 et 1,4 ms et fait passer le débit de 3,25 à 4,25 millions d'opérations par seconde. Le moteur n'est pas modifié. Le prix à payer est la mémoire : le tableau de buckets représente à lui seul environ 240 Mo.",
           },
           { t: "figure", id: "id-map-probe" },
-          { t: "h", text: "Ce que je ne peux pas dire" },
+          { t: "h", text: "Questions ouvertes" },
           {
             t: "p",
-            text: "Le README n'a pas noté quelle machine avait produit ses premiers chiffres : je ne peux donc pas savoir si l'écart entre son P99.9 de 5,5 µs et mes 0,9 µs vient du matériel, de la charge ou d'une autre version du code. Mes exécutions ont eu lieu sur un portable en gouverneur powersave, sans épinglage de cœur, avec une charge moyenne d'environ 1,2 due à des processus d'arrière-plan. Lancez le script sur votre machine : ces chiffres sont faits pour être vérifiés.",
+            text: "Le README n'a pas noté quelle machine avait produit ses premiers chiffres : je ne peux donc pas savoir si l'écart entre son P99.9 de 5,5 µs et mes 0,9 µs vient du matériel, de la charge ou d'une autre version du code. Mes exécutions ont eu lieu sur un portable avec le gouverneur powersave, sans épinglage de cœur, avec une charge moyenne d'environ 1,2 due à des processus d'arrière-plan. Lancez le script sur votre machine : ces chiffres sont faits pour être vérifiés.",
           },
         ],
       },
@@ -155,7 +158,7 @@ export const casesFr: CaseStudy[] = [
           { t: "p", text: "Le moteur Java :" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Order_Book && cd Order_Book\n./mvnw verify                          # build, tests et seuils de qualité\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify   # tests de mutation, lent\n./mvnw -pl api -am install -DskipTests && ./mvnw -pl api spring-boot:run   # REST sur :8080, FIX sur :9878",
+            text: "git clone https://github.com/Ahmed-Berrada/Order_Book\ncd Order_Book\n./mvnw verify                          # build, tests et seuils de qualité\n# tests de mutation, lent\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify\n# REST sur :8080, FIX sur :9878\n./mvnw -pl api -am install -DskipTests\n./mvnw -pl api spring-boot:run",
           },
           {
             t: "code",
@@ -164,13 +167,13 @@ export const casesFr: CaseStudy[] = [
           { t: "p", text: "Le prototype C++ :" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/lob-engine && cd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j\n./build/tests    # tests unitaires\n./build/bench    # 5 M d'opérations après 100 K d'échauffement",
+            text: "git clone https://github.com/Ahmed-Berrada/lob-engine\ncd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release\ncmake --build build -j\n./build/tests    # tests unitaires\n./build/bench    # 5 M d'opérations après 100 K d'échauffement",
           },
           {
             t: "p",
             text: "Pour noter la machine, le compilateur et chaque exécution dans un fichier JSON, utilisez [scripts/bench-lob-engine.sh](https://github.com/Ahmed-Berrada/MyFantasticWebsite/blob/main/scripts/bench-lob-engine.sh) du dépôt de ce site. Il travaille sur une copie et ne touche pas à lob-engine :",
           },
-          { t: "code", text: "RUNS=5 scripts/bench-lob-engine.sh              # tel que committé\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # l'ancienne version à 50 M" },
+          { t: "code", text: "RUNS=8 scripts/bench-lob-engine.sh              # tel qu'il est dans le dépôt\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # l'ancienne version à 50 M" },
           { t: "p", text: "Les builds Release utilisent `-O3 -march=native` : les résultats dépendent du processeur." },
         ],
       },
@@ -182,7 +185,7 @@ export const casesFr: CaseStudy[] = [
             items: [
               "Phase 4 : prévention de l'auto-appariement, enchères, phases de négociation et coupe-circuits.",
               "Phase 6 : micro-benchmarks JMH, chemin critique sans allocation et latence publiée pour le moteur Java, avec sa méthodologie, sur un cœur isolé, avec l'histogramme complet de chaque exécution.",
-              "Reprendre la leçon du prototype : dimensionner d'avance la table d'identifiants du moteur Java, et mesurer le coût en mémoire face au gain de latence.",
+              "Reprendre la leçon du prototype : prédimensionner la table d'identifiants du moteur Java, et mesurer le coût en mémoire face au gain de latence.",
             ],
           },
         ],
@@ -192,19 +195,23 @@ export const casesFr: CaseStudy[] = [
 
   {
     slug: "cbtc-validation",
-    title: "Outillage de test d'un système de signalisation radio 5G",
-    plain: "Les outils qui testent le logiciel radio de la signalisation du métro de New York (ligne Crosstown) : simulateur train et voie, scénarios et banc de test.",
+    title: "Outillage de test d'un logiciel radio CBTC 5G chez Siemens Mobility",
+    plain: "Les outils qui testent le logiciel radio critique de la signalisation CBTC du métro de New York (ligne Crosstown) : simulateur, scénarios et banc de test.",
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, network namespaces Linux",
     status: "Siemens Mobility, depuis septembre 2025. Livré pour la version 4.2 du CRG. Outillage interne : aucun code ni détail de protocole n'est publié ici.",
     repos: [],
-    updated: "2026-11-26",
+    updated: "2026-11-27",
     sections: [
       {
         id: "problem",
         blocks: [
           {
             t: "p",
-            text: "Le logiciel radio, appelé CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, il n'y avait ni banc de test, ni outil, ni produit dont partir.",
+            text: "Le logiciel radio, appelé CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, rien n'existait : ni banc de test, ni outil, ni produit sur lequel s'appuyer.",
+          },
+          {
+            t: "p",
+            text: "Pour être précis sur ma part : je n'écris pas le logiciel critique. J'ai conçu et développé le simulateur, le CRG Message Generator, et je suis responsable du banc de test ; l'environnement d'exécution autour a été construit avec l'équipe.",
           },
         ],
       },
@@ -216,7 +223,7 @@ export const casesFr: CaseStudy[] = [
             items: [
               "Logiciel de sécurité, développé selon la norme CENELEC EN 50128.",
               "Scrum, en anglais, avec les équipes radio, logiciel embarqué et test en France et en Inde.",
-              "Les messages doivent être exacts à l'octet : trame UDP et somme de contrôle CRC-32/MPEG-2.",
+              "Les messages doivent être exacts à l'octet près : trame UDP et somme de contrôle CRC-32/MPEG-2.",
               "Des personnes qui ne programment pas doivent pouvoir écrire et exécuter des scénarios.",
             ],
           },
@@ -229,7 +236,7 @@ export const casesFr: CaseStudy[] = [
           {
             t: "list",
             items: [
-              "Le CRG Message Generator, en Python. Il simule les équipements de bord et de sol (CC, ZC, WRG) et génère des messages radio exacts à l'octet à partir d'une configuration YAML/XML. Une suite pytest vérifie sa conformité et produit des rapports JUnit-XML.",
+              "Le CRG Message Generator, en Python. Il simule les équipements de bord et de sol (CC, ZC, WRG) et génère des messages radio exacts à l'octet près à partir d'une configuration YAML/XML. Une suite pytest vérifie sa conformité et produit des rapports JUnit-XML.",
               "Une bibliothèque Robot Framework de mots-clés métier : un scénario se lit comme l'exigence qu'il vérifie.",
               "L'environnement d'exécution, construit avec l'équipe : GitLab CI/CD et runners, le CRG virtualisé avec QEMU/KVM dans des network namespaces Linux, et archivage automatique des rapports et des logs. Je suis responsable du banc de test.",
             ],
@@ -247,12 +254,12 @@ export const casesFr: CaseStudy[] = [
               ["Scénarios", "300+"],
               ["Utilisateurs", "9 validateurs : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
               ["Livré pour", "la version 4.2 du CRG"],
-              ["Sans cet outil", "le logiciel ne peut pas être testé"],
+              ["Pourquoi c'est indispensable", "le CRG ne fonctionne qu'avec les équipements bord et sol ; sur le banc, le simulateur tient ce rôle"],
             ],
           },
           {
             t: "p",
-            text: "Je ne peux pas publier de vraies trames ni de code. La scène radio de la [page d'accueil](/) utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`.",
+            text: "Je ne peux pas publier de vraies trames ni de code. L'animation de la liaison radio de la [page d'accueil](/) utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`.",
           },
         ],
       },
@@ -262,11 +269,19 @@ export const casesFr: CaseStudy[] = [
           { t: "p", text: "L'outillage est interne : le projet lui-même ne peut pas être reproduit hors de Siemens. La somme de contrôle, si :" },
           {
             t: "code",
-            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF if crc & 0x80000000 else (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
+            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            if crc & 0x80000000:\n                crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF\n            else:\n                crc = (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
           },
         ],
       },
-      { id: "next", blocks: [{ t: "p", text: "L'alternance dure jusqu'en août 2027." }] },
+      {
+        id: "next",
+        blocks: [
+          {
+            t: "p",
+            text: "Je reste responsable du banc de test jusqu'à la fin de l'alternance, en août 2027. À partir de septembre 2027, je cherche un CDI : logiciel critique ou embarqué, outillage de test et de validation, ou systèmes où la performance compte.",
+          },
+        ],
+      },
     ],
   },
 
@@ -280,7 +295,7 @@ export const casesFr: CaseStudy[] = [
       { label: "Pipeline sur GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
       { label: "Tableau de bord", href: "https://marketdatapipeline.ahmedberrada.com/" },
     ],
-    updated: "2026-11-26",
+    updated: "2026-11-27",
     sections: [
       {
         id: "problem",
@@ -308,7 +323,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Chaque pipeline suit les mêmes quatre tâches : extraire, transformer, charger, journaliser le succès. Après le chargement, il rafraîchit les agrégats continus de TimescaleDB. L'étape de transformation nettoie et valide les données, et calcule des moyennes mobiles simples sur 20 et 50 périodes ainsi que les rendements quotidiens.",
+            text: "Chaque pipeline suit les quatre mêmes tâches : extraire, transformer, charger, journaliser le succès. Après le chargement, il rafraîchit les agrégats continus de TimescaleDB. L'étape de transformation nettoie et valide les données, et calcule des moyennes mobiles simples sur 20 et 50 périodes ainsi que les rendements quotidiens.",
           },
           {
             t: "table",
@@ -336,7 +351,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline && cd Market_data_pipeline\n# renseigner DATABASE_URL et X_CG_DEMO_API_KEY dans .env, comme le décrit le README\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow sur :8080, API sur :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
+            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline\ncd Market_data_pipeline\n# renseigner DATABASE_URL et X_CG_DEMO_API_KEY dans .env, comme le décrit le README\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow sur :8080, API sur :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
           },
         ],
       },

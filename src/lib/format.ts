@@ -2,12 +2,24 @@ import type { Lang } from "@/src/content/types";
 
 const locale = (lang: Lang) => (lang === "fr" ? "fr-FR" : "en-US");
 
+/** Number formatters are costly to build and the demos format many numbers per frame: build each one once. */
+const formatters = new Map<string, Intl.NumberFormat>();
+function formatter(lang: Lang, min: number, max: number): Intl.NumberFormat {
+  const key = `${lang}:${min}:${max}`;
+  let f = formatters.get(key);
+  if (!f) {
+    f = new Intl.NumberFormat(locale(lang), { minimumFractionDigits: min, maximumFractionDigits: max });
+    formatters.set(key, f);
+  }
+  return f;
+}
+
 export function fmtInt(n: number, lang: Lang): string {
-  return new Intl.NumberFormat(locale(lang), { maximumFractionDigits: 0 }).format(Math.round(n));
+  return formatter(lang, 0, 0).format(Math.round(n));
 }
 
 export function fmtDec(n: number, lang: Lang, digits: number): string {
-  return new Intl.NumberFormat(locale(lang), { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(n);
+  return formatter(lang, digits, digits).format(n);
 }
 
 /** Nanoseconds, switching to ms from one million (the maxima span ns to ms). */

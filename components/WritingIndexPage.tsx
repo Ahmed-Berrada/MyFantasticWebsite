@@ -29,7 +29,7 @@ export default function WritingIndexPage({ lang }: { lang: Lang }) {
         }}
       />
       <section className="mx-auto max-w-7xl px-5 pt-32 pb-24 md:px-8">
-        <h1 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em]">{t.writing.title}</h1>
+        <h1 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.02em]">{t.writing.title}</h1>
         <p className="mt-6 max-w-[36rem] text-xl leading-relaxed text-pretty text-ink-2">{t.writing.lede}</p>
         <p className="mt-3 mb-12 text-sm">
           <a href={feedPath(lang)} className="link link-tap" type="application/rss+xml">

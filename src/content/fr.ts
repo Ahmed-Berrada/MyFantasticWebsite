@@ -2,8 +2,6 @@ import type { Dict } from "./en";
 
 /** Version française. Même forme que en.ts (le type en est dérivé). Les espaces avant ? ! : ; sont rendues insécables au chargement. */
 export const fr: Dict = {
-  htmlLang: "fr",
-  siteName: "Ahmed Berrada",
   meta: {
     homeTitle: "Ahmed Berrada, ingénieur logiciel, systèmes critiques",
     homeDescription:
@@ -12,7 +10,7 @@ export const fr: Dict = {
     writingDescription: "Courtes notes techniques sur ce que j'ai mesuré ou construit : latence, déterminisme et vérification de code numérique.",
   },
   nav: {
-    label: "Principale",
+    label: "Navigation principale",
     siemens: "Siemens",
     work: "Projets",
     writing: "Articles",
@@ -32,10 +30,10 @@ export const fr: Dict = {
     name: "Ahmed Berrada",
     role: "Ingénieur logiciel, systèmes critiques et performance",
     status:
-      "Élève-ingénieur en dernière année à l'ESIEA (2027) et alternant chez Siemens Mobility. Je cherche un CDI à Paris à partir de septembre 2027.",
+      "Élève-ingénieur en dernière année à l'ESIEA (diplôme en 2027) et alternant chez Siemens Mobility. Je cherche un CDI à Paris à partir de septembre 2027.",
     thesis: ["D'abord juste.", "Ensuite rapide."],
     intro:
-      "Chez Siemens Mobility, je construis les outils de test du logiciel radio de la ligne Crosstown du métro de New York. Sur mon temps libre, je construis des moteurs d'appariement et je les mesure. La même exigence dans les deux cas : déterministe, mesuré, testé jusqu'à ce que ce soit ennuyeux.",
+      "Chez Siemens Mobility, je développe les outils de test du logiciel radio de la ligne Crosstown du métro de New York. Sur mon temps libre, j'écris des moteurs d'appariement et je les mesure. La même exigence dans les deux cas : du code déterministe, mesuré et testé.",
     email: "M'écrire",
     cv: "Télécharger le CV",
     cvOther: "CV in English",
@@ -45,29 +43,30 @@ export const fr: Dict = {
       up: "retour",
       dwell: "en gare {station}, part dans {s} s",
       run: "{s} s avant la gare {station}",
-      hint: "Survolez le graphe pour lire l'horaire.",
-      aria: "Un graphe de circulation en direct : chaque ligne est un train qui roule entre des gares au fil du temps. Le survol du graphe donne l'horaire.",
+      hint: "Survolez le graphique pour lire l'horaire.",
+      hintTouch: "Touchez le graphique pour lire l'horaire.",
+      aria: "Un graphique de circulation en direct : chaque ligne est un train qui roule entre des gares au fil du temps. Le survol du graphique donne l'horaire.",
     },
   },
   proof: {
     label: "Preuves",
     items: [
       {
-        value: "163 ns",
-        label: "médiane pour apparier un ordre, P99 996 ns",
-        note: "Prototype C++ d'Order Book, première mesure publiée. Je reproduis 149 ns de médiane et 460 ns de P99 sur un portable.",
-        href: "/work/order-book",
-      },
-      {
         value: "300+",
-        label: "scénarios de test, utilisés par 9 validateurs",
-        note: "Siemens Mobility, outillage de test du logiciel radio.",
+        label: "scénarios de test pour un logiciel radio CBTC critique",
+        note: "Siemens Mobility. Utilisés par 9 ingénieurs de test et validateurs.",
         href: "/work/cbtc-validation",
       },
       {
         value: "90 %",
         label: "de couverture de lignes et de branches exigée par la CI",
-        note: "Order Book : plus des tests de propriétés et un test de reprise après crash.",
+        note: "Order Book. S'y ajoutent des tests de propriétés et un test de reprise après crash.",
+        href: "/work/order-book",
+      },
+      {
+        value: "149 ns",
+        label: "médiane par opération sur le carnet, P99 460 ns",
+        note: "Prototype C++ d'Order Book, reproduit sur un portable. La première mesure publiée donnait 163 ns.",
         href: "/work/order-book",
       },
     ],
@@ -76,12 +75,12 @@ export const fr: Dict = {
     since: "Depuis septembre 2025, alternance jusqu'en août 2027",
     title: "Siemens Mobility",
     subtitle: "Ingénieur logiciel. Châtillon, France.",
-    lede: "New York City Transit fait passer sa ligne de métro Crosstown à une signalisation par radio sur 5G. Je construis ce avec quoi le logiciel radio est testé : un simulateur des équipements du train et de la voie, une bibliothèque de scénarios utilisable par des personnes qui ne programment pas, et le banc de test qui fait tourner le tout.",
+    lede: "New York City Transit (MTA) fait passer sa ligne de métro Crosstown à une signalisation CBTC sur radio 5G. Le logiciel radio au cœur du système, le CRG, est un logiciel critique de sécurité (CENELEC EN 50128). Je développe ce qui sert à le tester : un simulateur des équipements bord et sol, une bibliothèque de scénarios utilisable par des non-développeurs, et le banc de test qui fait tourner le tout.",
     flaps: [
       { value: "300+", label: "scénarios de test" },
       { value: "200+", label: "types de messages" },
-      { value: "9", label: "validateurs l'utilisent" },
-      { value: "4.2", label: "version CRG livrée" },
+      { value: "9", label: "ingénieurs de test et validateurs l'utilisent" },
+      { value: "4.2", label: "version du CRG pour laquelle il a été livré" },
     ],
     caseCta: "Comment fonctionne le banc de test",
     radio: {
@@ -94,8 +93,11 @@ export const fr: Dict = {
       verified: "vérifié",
       pending: "…",
       hover: "octet {i}, {field} : {hex}",
-      typed: "Vos touches forment la charge utile. Changez un octet et le CRC change complètement.",
-      idle: "Tapez ce que vous voulez pour écrire vous-même la charge utile.",
+      typed: "Votre texte devient la charge utile. Changez un octet et le CRC change complètement.",
+      idle: "Écrivez votre propre charge utile dans le champ ci-dessus.",
+      inputLabel: "votre charge utile",
+      placeholder: "tapez ici",
+      announce: "Trame avec votre charge utile, CRC {crc}",
       illustrative: "Format de trame illustratif, pas le vrai protocole.",
       source: { CC: "CC", ZC: "ZC", WRG: "WRG", you: "vous" },
       meaning: { CC: "rapport de position", ZC: "autorisation de mouvement", WRG: "état de la liaison", you: "saisi par vous" },
@@ -113,7 +115,7 @@ export const fr: Dict = {
   },
   work: {
     title: "Projets",
-    lede: "Des projets où les mêmes règles rencontrent la mesure. Chacun renvoie vers son code et vers une étude qui dit ce qui a été mesuré, et comment.",
+    lede: "Des projets personnels. Chacun renvoie vers son code et vers une étude de cas qui dit ce qui a été mesuré, et comment.",
     caseCta: "Lire l'étude",
     orderBook: {
       title: "Order Book",
@@ -121,8 +123,8 @@ export const fr: Dict = {
         "Un moteur d'appariement construit deux fois. D'abord en C++17, pour savoir à quelle vitesse un carnet peut apparier. Puis en Java 21, comme cœur d'une plateforme de négociation : ordres en FIX ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
       facts: [
         "Prototype C++, première mesure publiée : médiane 163 ns, P99 996 ns, 3,46 millions d'opérations par seconde. Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de conformité FIX, avec un seuil de 90 % de couverture en CI.",
-        "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, après la correction.",
+        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de session FIX 4.4 sur un vrai socket, avec un seuil de 90 % de couverture en CI.",
+        "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, une fois le comportement prouvé juste.",
       ],
       demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
       repo: "Order_Book sur GitHub",
@@ -131,7 +133,7 @@ export const fr: Dict = {
     pipeline: {
       title: "Pipeline de données de marché",
       plain:
-        "Récupère à intervalles réguliers des prix d'actions et de cryptos, les valide et les stocke dans TimescaleDB, et les sert par une API et un tableau de bord.",
+        "Un petit service de données, de bout en bout : ingestion planifiée de prix d'actions et de cryptos, validation, base de séries temporelles, et une API et un tableau de bord déployés sur Google Cloud.",
       facts: [
         "Barres d'une minute pour sept actions et fonds, prix à cinq minutes pour quatre cryptos.",
         "Airflow en local, Cloud Run Jobs et Cloud Scheduler en production.",
@@ -142,14 +144,14 @@ export const fr: Dict = {
     pricer: {
       title: "Pricer d'options sur GPU",
       plain:
-        "Évalue une option européenne par Monte Carlo. La même simulation prend 295 s en Python pur, 7,4 s avec NumPy et 0,46 s sur GPU avec CuPy.",
+        "Valorise un call européen par Monte Carlo et le compare au prix exact de Black-Scholes. Sur 100 millions de trajectoires, un GPU avec CuPy met 0,46 s, contre 7,4 s pour NumPy vectorisé : 16 fois plus rapide.",
       facts: [
-        "Soit 641 fois plus rapide que Python pur et 16 fois plus rapide que NumPy vectorisé.",
-        "Les temps viennent de mes exécutions du notebook. Il n'enregistre ni le modèle de GPU ni le nombre de trajectoires.",
+        "Python pur met 295 s sur les mêmes trajectoires, mais une boucle Python est une référence faible : NumPy est la comparaison honnête.",
+        "C'est désormais un package Python testé : quatre implémentations, intervalles de confiance, variables antithétiques, et un script de benchmark qui note le matériel. Le modèle de GPU de cette première exécution n'a pas été noté.",
       ],
       demo: "Ici dans cet onglet, sans GPU : la même estimation, comparée au prix exact de Black-Scholes.",
       note: "Lire comment c'est vérifié",
-      repo: "Notebook sur GitHub",
+      repo: "Pricer sur GitHub",
     },
     pricerChart: {
       python: "Python pur",
@@ -159,7 +161,7 @@ export const fr: Dict = {
       cupy: "CuPy",
       cupyStack: "GPU CUDA",
       faster: "{n}× plus rapide que NumPy",
-      caption: "Même simulation, temps réel écoulé, échelle linéaire.",
+      caption: "Même simulation, temps écoulé à l'horloge, échelle linéaire.",
     },
     orderBookUi: {
       live: "EN DIRECT",
@@ -167,6 +169,9 @@ export const fr: Dict = {
       sub: "moteur d'appariement, dans cet onglet",
       run: "lancer",
       pause: "pause",
+      step: "pas à pas",
+      buy: "achat à",
+      sell: "vente à",
       price: "prix",
       size: "taille",
       trades: "transactions",
@@ -183,6 +188,9 @@ export const fr: Dict = {
     mcUi: {
       header: "call européen, S₀ 100, K 100, σ 20 %, r 5 %, 1 an",
       run: "lancer",
+      running: "en cours…",
+      runAgain: "relancer",
+      done: "Estimation Monte Carlo {price} ± {ci} après {paths} trajectoires. Prix de Black-Scholes {bs}.",
       paths: "trajectoires",
       monteCarlo: "monte carlo",
       blackScholes: "black-scholes",
@@ -203,10 +211,15 @@ export const fr: Dict = {
     title: "Parcours",
     educationTitle: "Formation",
     education:
-      "ESIEA, diplôme d'ingénieur (niveau master), informatique, spécialisation intelligence artificielle, 2022 à 2027. Cours : mathématiques (probabilités, statistiques, optimisation), algorithmique, développement logiciel, architecture.",
+      "ESIEA, diplôme d'ingénieur (grade de master), informatique, spécialisation intelligence artificielle, 2022 à 2027. Cours : mathématiques (probabilités, statistiques, optimisation), algorithmique, développement logiciel, architecture.",
     toolsTitle: "Outils",
-    tools:
-      "Langages : C++, Java, Python, SQL, Bash. Ingénierie : Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5. Calcul : NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch. Domaine, en projets personnels : carnets d'ordres, appariement, FIX, valorisation d'options, Monte Carlo.",
+    tools: [
+      { label: "Programmation", value: "C++, Java, Python, SQL, Bash" },
+      { label: "Ingénierie", value: "Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5" },
+      { label: "Calcul", value: "NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch" },
+      { label: "Domaine", value: "Carnets d'ordres, appariement, FIX, valorisation d'options, Monte Carlo (projets personnels)" },
+    ],
+    languagesTitle: "Langues",
     languages: "Français (C2), anglais (C1, ma langue de travail au quotidien), arabe (natif).",
     metroLabel: "Parcours jusqu'ici, en ligne de métro",
     stops: [
@@ -214,15 +227,15 @@ export const fr: Dict = {
       { when: "2023", name: "Axeli", note: "Stagiaire réseau" },
       { when: "2024", name: "Maroc Telecom", note: "Stagiaire cloud et réseau" },
       { when: "2024", name: "ESIEA", note: "Ambassadeur étudiant" },
-      { when: "sept. 2025", name: "Siemens Mobility", note: "Alternant ingénieur logiciel" },
-      { when: "sept. 2026", name: "GDG on Campus ESIEA", note: "Cofondateur" },
+      { when: "2025", name: "Siemens Mobility", note: "Alternant ingénieur logiciel" },
+      { when: "2026", name: "GDG on Campus ESIEA", note: "Cofondateur" },
       { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-      { when: "sept. 2027", name: "Prochain arrêt", note: "Un CDI, Paris" },
+      { when: "2027", name: "Prochaine station", note: "Un CDI, Paris" },
     ],
   },
   contact: {
-    title: "Vous construisez quelque chose qui ne doit pas tomber en panne, ou qui ne peut pas attendre ?",
-    lede: "Je cherche un CDI d'ingénieur logiciel à partir de septembre 2027, à Paris. Systèmes critiques, infrastructure, basse latence ou plateformes de trading.",
+    title: "Vous recrutez pour septembre 2027 ?",
+    lede: "Je cherche un CDI d'ingénieur logiciel à Paris à partir de septembre 2027 : logiciel critique ou embarqué, outillage de test et de validation, infrastructure backend, ou systèmes basse latence et de trading. Disponible dès maintenant pour des entretiens, en français ou en anglais.",
     copy: "Copier",
     copied: "Copié",
     linkedin: "LinkedIn",
@@ -233,9 +246,10 @@ export const fr: Dict = {
   footer: {
     rights: "© {year} Ahmed Berrada",
     status: "Disponible pour un CDI à Paris à partir de septembre 2027.",
-    live: "Le graphe des trains, la liaison radio, le carnet d'ordres et le pricer de ce site tournent en direct dans votre navigateur.",
+    live: "Le graphique de circulation, la liaison radio, le carnet d'ordres et le pricer de ce site tournent en direct dans votre navigateur.",
   },
   notFound: {
+    metaTitle: "Page introuvable, Ahmed Berrada",
     code: "Erreur 404",
     title: "Cette page n'existe pas.",
     body: "Le lien est peut-être ancien, ou mal saisi.",
@@ -247,14 +261,22 @@ export const fr: Dict = {
       problem: "Problème",
       constraints: "Contraintes",
       approach: "Approche",
-      result: "Résultat mesuré",
+      result: "Résultat",
       reproduce: "Reproduire",
-      next: "Suite",
+      next: "Prochaines étapes",
     },
     code: "Code",
     status: "État",
+    stack: "Technologies",
     updated: "Dernière mise à jour",
     back: "Tous les projets",
+  },
+  pageEnd: {
+    next: "Suivant",
+    allNotes: "Tous les articles",
+    hiring: "Vous recrutez pour septembre 2027 ?",
+    email: "M'écrire",
+    cv: "Télécharger mon CV",
   },
   figures: {
     structure: {
@@ -267,14 +289,14 @@ export const fr: Dict = {
       fifo: "liste FIFO intrusive d'ordres",
       orders: "ordres",
       pool: "Allocateur par pool",
-      poolNote: "les ordres sont pris dans des blocs pré-alloués, aucun malloc par ordre",
+      poolNote: "les ordres sont pris dans des blocs préalloués, pas un malloc par ordre",
       ids: "Table d'identifiants",
       idsNote: "unordered_map de l'identifiant vers l'ordre : annulation en O(1)",
     },
     results: {
       metric: "Mesure",
       published: "Publié dans le README",
-      readme: "Reproduit, benchmark tel que committé : 5 M d'opérations après 100 K d'échauffement. Médiane de {n} exécutions",
+      readme: "Reproduit, benchmark tel qu'il est dans le dépôt : 5 millions d'opérations après 100 000 d'échauffement. Médiane de {n} exécutions",
       committed: "Reproduit, version antérieure du benchmark : 50 M d'opérations, sans échauffement. Médiane de {n} exécutions",
       throughput: "Débit",
       mean: "Moyenne",
@@ -296,13 +318,13 @@ export const fr: Dict = {
     probe: {
       metric: "Mesure",
       unmodified: "Sans modification",
-      presized: "Table d'ids pré-dimensionnée",
+      presized: "Table d'identifiants prédimensionnée",
       max: "Latence max",
       throughput: "Débit",
       p50: "P50",
       p999: "P99.9",
       range: "de {a} à {b}",
-      note: "Copie de travail, 50 M d'opérations (version antérieure du benchmark), deux exécutions chacune. Pré-dimensionner veut dire construire la table d'ids avec 30 millions de buckets. Le moteur du dépôt n'est pas modifié.",
+      note: "Copie de travail, 50 M d'opérations (version antérieure du benchmark), deux exécutions chacune. Prédimensionner veut dire construire la table d'identifiants avec 30 millions de buckets. Le moteur du dépôt n'est pas modifié.",
     },
     order: {
       aria: "Parcours d'un ordre : passerelles FIX et REST, un routeur, un journal write-ahead, un carnet à écrivain unique, puis rapports d'exécution et données de marché construits à partir des événements produits.",
@@ -319,7 +341,7 @@ export const fr: Dict = {
       replay: "le rejeu reconstruit le carnet",
     },
     bench: {
-      aria: "Banc de test simplifié : des scénarios écrits en mots-clés pilotent le générateur de messages, qui envoie des messages radio exacts à l'octet au logiciel sous test, exécuté dans une machine virtuelle ; les résultats sont archivés par la chaîne CI.",
+      aria: "Banc de test simplifié : des scénarios écrits en mots-clés pilotent le générateur de messages, qui envoie des messages radio exacts à l'octet près au logiciel sous test, exécuté dans une machine virtuelle ; les résultats sont archivés par la chaîne CI.",
       scenarios: "Scénarios",
       scenariosNote: "mots-clés Robot Framework, YAML/XML",
       generator: "Générateur de messages",
@@ -328,7 +350,7 @@ export const fr: Dict = {
       sutNote: "virtualisé, QEMU/KVM + network namespaces",
       ci: "GitLab CI/CD",
       ciNote: "runners, rapports et logs archivés",
-      messages: "messages exacts à l'octet",
+      messages: "messages exacts à l'octet près",
       results: "résultats",
       simplified: "Simplifié. Aucun code ni détail de protocole Siemens n'est montré.",
     },

@@ -1,20 +1,22 @@
 import { monoWidth, wrap } from "@/src/lib/svgText";
 import type { Dict } from "@/src/content";
+import type { Lang } from "@/src/content/types";
+import { fmtDec } from "@/src/lib/format";
 
 type T = Dict["figures"]["structure"];
 
 const bids = [
-  { price: "100.08", n: 4 },
-  { price: "100.07", n: 2 },
-  { price: "100.06", n: 1 },
+  { price: 100.08, n: 4 },
+  { price: 100.07, n: 2 },
+  { price: 100.06, n: 1 },
 ];
 const asks = [
-  { price: "100.09", n: 2 },
-  { price: "100.10", n: 4 },
-  { price: "100.12", n: 1 },
+  { price: 100.09, n: 2 },
+  { price: 100.1, n: 4 },
+  { price: 100.12, n: 1 },
 ];
 
-function Side({ x, title, note, levels, side }: { x: number; title: string; note: string; levels: typeof bids; side: "bid" | "ask" }) {
+function Side({ x, title, note, levels, side, lang }: { x: number; title: string; note: string; levels: typeof bids; side: "bid" | "ask"; lang: Lang }) {
   const fill = side === "bid" ? "var(--bid-soft)" : "var(--ask-soft)";
   const stroke = side === "bid" ? "var(--bid)" : "var(--ask)";
   return (
@@ -31,7 +33,7 @@ function Side({ x, title, note, levels, side }: { x: number; title: string; note
           <g key={l.price}>
             <rect x={x} y={y} width={72} height={28} rx={4} fill="var(--sheet)" stroke="var(--line-2)" />
             <text x={x + 10} y={y + 18} fontSize={12} fill={stroke} fontFamily="var(--font-martian)">
-              {l.price}
+              {fmtDec(l.price, lang, 2)}
             </text>
             <line x1={x + 72} x2={x + 86 + l.n * 32} y1={y + 14} y2={y + 14} stroke="var(--line-2)" />
             {Array.from({ length: l.n }, (_, k) => (
@@ -62,21 +64,26 @@ function Box({ x, y, w, title, note }: { x: number; y: number; w: number; title:
 }
 
 /** Static drawing of the data structures of lob-engine, Order Book's C++ prototype. */
-export default function BookStructure({ t }: { t: T }) {
+export default function BookStructure({ t, lang }: { t: T; lang: Lang }) {
+  // The order-list label starts after the level label, however long its translation.
+  const fifoX = Math.max(90, 4 + t.level.length * monoWidth(10.5) + 12);
   return (
     <figure className="my-10">
-      <svg viewBox="0 0 752 296" className="h-auto w-full" role="img" aria-label={t.aria}>
-        <Side x={4} title={t.bids} note={t.bidsNote} levels={bids} side="bid" />
-        <Side x={392} title={t.asks} note={t.asksNote} levels={asks} side="ask" />
-        <text x={4} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
-          {t.level}
-        </text>
-        <text x={90} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
-          {t.fifo}
-        </text>
-        <Box x={4} y={204} w={356} title={t.pool} note={t.poolNote} />
-        <Box x={392} y={204} w={356} title={t.ids} note={t.idsNote} />
-      </svg>
+      {/* Below 640 px the drawing would shrink its text to 4 or 5 px: keep it legible and let it scroll instead. */}
+      <div className="scroll-x overflow-x-auto" tabIndex={0} role="region" aria-label={t.aria}>
+        <svg viewBox="0 0 752 296" className="h-auto w-full min-w-[640px]" role="img" aria-label={t.aria}>
+          <Side x={4} title={t.bids} note={t.bidsNote} levels={bids} side="bid" lang={lang} />
+          <Side x={392} title={t.asks} note={t.asksNote} levels={asks} side="ask" lang={lang} />
+          <text x={4} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
+            {t.level}
+          </text>
+          <text x={fifoX} y={52} fontSize={10.5} fill="var(--muted)" fontFamily="var(--font-martian)">
+            {t.fifo}
+          </text>
+          <Box x={4} y={204} w={356} title={t.pool} note={t.poolNote} />
+          <Box x={392} y={204} w={356} title={t.ids} note={t.idsNote} />
+        </svg>
+      </div>
     </figure>
   );
 }

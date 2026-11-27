@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView, usePrefersReducedMotion } from "@/src/lib/useInView";
-import { fmtDec, fmtInt } from "@/src/lib/format";
+import { fill, fmtDec, fmtInt } from "@/src/lib/format";
 import { BINS, BS, P, STEPS, Y_MAX, Y_MIN } from "@/src/lib/mcsim";
 import type { WorkerIn, WorkerOut } from "@/src/lib/montecarlo.worker";
 import type { Dict } from "@/src/content";
@@ -32,6 +32,7 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
   const workerRef = useRef<Worker | null>(null);
   const view = useRef<View>({ paths: [], hist: new Uint32Array(BINS) });
   const frame = useRef(0);
+  const palette = useRef<{ width: number; strong: string; grey: string; ink2: string; sheet: string; mono: string } | null>(null);
   const runs = useRef(0);
   const [phase, setPhase] = useState<"idle" | "running" | "done">("idle");
   const [stats, setStats] = useState<Stats>({ paths: 0, price: 0, ci: Infinity });
@@ -50,11 +51,19 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, HEIGHT);
 
-    const css = getComputedStyle(document.documentElement);
-    const strong = css.getPropertyValue("--ink").trim();
-    const grey = css.getPropertyValue("--line-2").trim();
-    const ink2 = css.getPropertyValue("--ink-2").trim();
-    const mono = getComputedStyle(canvas).getPropertyValue("--font-martian").trim() || "monospace";
+    // Theme colours and font are read once per size change, not on every frame of a run.
+    if (!palette.current || canvas.width !== palette.current.width) {
+      const css = getComputedStyle(document.documentElement);
+      palette.current = {
+        width: canvas.width,
+        strong: css.getPropertyValue("--ink").trim(),
+        grey: css.getPropertyValue("--line-2").trim(),
+        ink2: css.getPropertyValue("--ink-2").trim(),
+        sheet: css.getPropertyValue("--sheet").trim(),
+        mono: getComputedStyle(canvas).getPropertyValue("--font-martian").trim() || "monospace",
+      };
+    }
+    const { strong, grey, ink2, sheet, mono } = palette.current;
 
     const histW = Math.min(90, w * 0.18);
     const plotW = w - histW - 8;
@@ -93,9 +102,14 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
     ctx.lineTo(w, y(P.k));
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = ink2;
+    // The strike label sits on a sheet-coloured backing so the paths do not run through it.
     ctx.font = `11px ${mono}`;
-    ctx.fillText("K = 100", 6, y(P.k) - 6);
+    const label = `K = ${P.k}`;
+    const lw = ctx.measureText(label).width;
+    ctx.fillStyle = sheet;
+    ctx.fillRect(2, y(P.k) - 19, lw + 8, 15);
+    ctx.fillStyle = ink2;
+    ctx.fillText(label, 6, y(P.k) - 7);
   }, []);
 
   /** Coalesce bursts of worker messages into one repaint per animation frame. */
@@ -146,7 +160,7 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
 
   // Only on request. With reduced motion the worker answers once, with the finished result.
   const start = () => {
-    if (!workerRef.current) return;
+    if (!workerRef.current || phase === "running") return;
     runs.current += 1;
     setPhase("running");
     workerRef.current.postMessage({ type: "run", seed: SEED + runs.current, instant: reduced } satisfies WorkerIn);
@@ -158,20 +172,30 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
     <div ref={wrapRef} className="overflow-hidden rounded-[6px] border border-line-2 bg-sheet">
       <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <p className="font-mono text-xs text-ink-2">{t.header}</p>
+        {/* aria-disabled rather than disabled, so a keyboard user's focus stays on the button during the run. */}
         <button
+          type="button"
           onClick={start}
-          disabled={phase === "running"}
-          className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px disabled:opacity-40"
+          aria-disabled={phase === "running"}
+          className="demo-button shrink-0 aria-disabled:cursor-progress aria-disabled:opacity-60"
         >
-          {t.run}
+          {phase === "running" ? t.running : phase === "done" ? t.runAgain : t.run}
         </button>
       </div>
       <canvas ref={canvasRef} className="block w-full" style={{ height: HEIGHT }} role="img" aria-label={t.aria} />
-      <div className="grid grid-cols-2 border-t border-line sm:grid-cols-4">
+      <p role="status" className="sr-only">
+        {phase === "done"
+          ? fill(t.done, { price: fmtDec(stats.price, lang, 3), ci: fmtDec(stats.ci, lang, 3), paths: fmtInt(stats.paths, lang), bs: fmtDec(BS, lang, 3) })
+          : ""}
+      </p>
+      {/* Four columns only when the panel itself is wide: in the half-width column at 1024 px they would collide. */}
+      <div className="@container border-t border-line">
+      <div className="grid grid-cols-2 @lg:grid-cols-4">
         <Cell label={t.paths} value={fmtInt(stats.paths, lang)} />
         <Cell label={t.monteCarlo} value={stats.paths ? `${fmtDec(stats.price, lang, 3)} ± ${fmtDec(stats.ci, lang, 3)}` : "–"} accent />
         <Cell label={t.blackScholes} value={fmtDec(BS, lang, 3)} />
         <Cell label={t.absError} value={err == null ? "–" : fmtDec(err, lang, 4)} />
+      </div>
       </div>
     </div>
   );
@@ -179,7 +203,7 @@ export default function MonteCarloLab({ t, lang }: { t: Dict["work"]["mcUi"]; la
 
 function Cell({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <div className="border-line px-4 py-2.5 odd:border-r sm:not-last:border-r">
+    <div className="border-line px-4 py-2.5 odd:border-r @lg:not-last:border-r">
       <p className="font-mono text-[10px] text-muted">{label}</p>
       <p className={`font-mono text-[13px] whitespace-nowrap tabular ${accent ? "text-ink" : ""}`}>{value}</p>
     </div>

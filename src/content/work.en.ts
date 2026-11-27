@@ -37,7 +37,7 @@ export const casesEn: CaseStudy[] = [
               "Integer prices, as 64-bit ticks, in both versions. Floating point breaks equality.",
               "The Java matching core is plain Java with no I/O. Spring is banned from it by the build (maven-enforcer) and by architecture tests (ArchUnit): no clock, randomness, threads, I/O or floating point.",
               "Order ids are assigned by the engine, per instrument. Every command gets a gap-free sequence number and one microsecond UTC timestamp, taken at ingress and journaled. That is what makes replay exact.",
-              "The C++ prototype allocates nothing per order on the hot path, and its benchmark uses a fixed seed, so any run can be repeated exactly.",
+              "The C++ prototype takes every order from a pre-allocated pool, so an order costs no malloc. The hot path is not allocation-free: the id map and each new price level allocate a node, and a match returns its trades in a vector. Its benchmark uses a fixed seed, so any run can be repeated exactly.",
             ],
           },
         ],
@@ -57,7 +57,7 @@ export const casesEn: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Deliberately simple first: cancel is O(n) inside a price level and the book sides are `TreeMap`s. Both are to be measured with JMH before being optimised.",
+            text: "Deliberately simple first: cancel is O(n) inside a price level and the book sides are `TreeMap` instances. Both are to be measured with JMH before being optimised.",
           },
           { t: "h", text: "The prototype, in C++" },
           {
@@ -70,9 +70,9 @@ export const casesEn: CaseStudy[] = [
             head: ["Operation", "Cost"],
             rows: [
               ["Add, no match", "O(log n)"],
-              ["Add, match at the best level", "O(1)"],
+              ["Add, filled at the best level", "O(1)"],
               ["Add, sweeping K levels", "O(K + log n)"],
-              ["Cancel", "O(1)"],
+              ["Cancel", "O(1) on average (hash lookup)"],
               ["Best bid or best ask", "O(1)"],
             ],
             note: "n is the number of active price levels.",
@@ -83,7 +83,6 @@ export const casesEn: CaseStudy[] = [
         id: "result",
         blocks: [
           { t: "h", text: "Correctness: the Java engine" },
-          { t: "p", text: "The evidence here is tests and gates, not speed." },
           {
             t: "table",
             head: ["What is checked", "How"],
@@ -95,12 +94,12 @@ export const casesEn: CaseStudy[] = [
               ["A FIX member can log on, trade, cancel, query status and get every reject code, and resend works after a disconnect", "QuickFIX/J initiators over a socket"],
               ["A consumer that loses one UDP packet in five rebuilds every book by retransmission alone", "Real UDP and TCP sockets"],
               ["The matching core uses only the JDK", "ArchUnit"],
-              ["At least 90 % line and branch coverage", "JaCoCo, enforced by `./mvnw verify` in CI"],
+              ["At least 90% line and branch coverage", "JaCoCo, enforced by `./mvnw verify` in CI"],
             ],
           },
           {
             t: "p",
-            text: "CI is green on main (GitHub Actions runs `./mvnw verify`). The repository also defines a mutation-testing profile (PIT, with an 80 % threshold on every engine module). It is run on demand, not in CI, so I do not quote a score.",
+            text: "CI is green on main (GitHub Actions runs `./mvnw verify`). The repository also defines a mutation-testing profile (PIT, with an 80% threshold on every engine module). It is run on demand, not in CI, so I do not quote a score.",
           },
           {
             t: "p",
@@ -115,37 +114,41 @@ export const casesEn: CaseStudy[] = [
           { t: "h", text: "How to read these numbers" },
           {
             t: "p",
-            text: "The benchmark mixes 60 % adds, 25 % cancels and 15 % aggressive orders around a mid price, with seed 42. It times every operation with two reads of `std::chrono::high_resolution_clock`. On this laptop that pair costs about 15 ns, measured with an empty timed region, and it is not subtracted.",
+            text: "The benchmark mixes 60% adds, 25% cancels and 15% aggressive orders around a mid price, with seed 42. It times every operation with two reads of `std::chrono::high_resolution_clock`. On this laptop that pair costs about 15 ns, measured with an empty timed region, and it is not subtracted.",
           },
           {
             t: "p",
             text: "The timed region also contains the random price and quantity draws and the bookkeeping of the list of ids to cancel, so every figure is an upper bound on the engine's own time. The draw that picks the action sits outside the timed region but inside the throughput clock, which is why throughput is a little below one over the mean.",
           },
-          { t: "h", text: "Same code, different answers" },
+          {
+            t: "p",
+            text: "Limits of this benchmark. The clock is `high_resolution_clock`, which on libstdc++ is the system clock and is not monotonic; `steady_clock` would be the right tool. Prices are drawn over the same 1,000-tick range on both sides, so many adds cross and trade at once, and the cancel list keeps the ids of orders already filled, so some cancels are lookups that miss: the 60/25/15 split describes the dice, not the work done. And it measures service time one operation after another, not latency under a given arrival rate.",
+          },
+          { t: "h", text: "Why 5 million and 50 million operations differ" },
           {
             t: "p",
             text: "The README described 5 million operations after a warm-up, but until November 2026 the committed benchmark ran 50 million operations with the warm-up call commented out. Same engine, different median: 149 ns at 5 million operations, 229 ns at 50 million. The benchmark now runs the method the README describes.",
           },
           {
             t: "p",
-            text: "The cancel list grows by about 0.35 ids per operation (60 % adds minus 25 % cancels), so late operations touch much more memory. I have not profiled the cache behaviour. That is my explanation, not a measurement.",
+            text: "The cancel list grows by about 0.35 ids per operation (60% adds minus 25% cancels), so late operations touch much more memory. I have not profiled the cache behaviour. That is my explanation, not a measurement.",
           },
           { t: "figure", id: "lob-histogram" },
           {
             t: "p",
-            text: "Half of the operations finish in under 150 ns and 99 % in under 460 ns. The slowest 0.1 % take 900 ns or more, up to a maximum of about 1.6 ms.",
+            text: "Half of the operations finish in under 150 ns and 99% in under 460 ns. The slowest 0.1% take 900 ns or more, up to a maximum of about 1.6 ms.",
           },
-          { t: "h", text: "The 68 ms outlier is a hash map rehash" },
+          { t: "h", text: "The 70 ms outlier is a hash map rehash" },
           {
             t: "p",
-            text: "In the 50 million run the maximum latency is about 68 ms, and it happens at the same operation, number 26,749,413, in both runs I traced. With a fixed seed that is a deterministic event. At that point the benchmark's list holds about 9.4 million ids, and the engine's id-to-order `std::unordered_map` is not pre-sized, so a rehash is the obvious suspect.",
+            text: "In the 50 million run the maximum latency is 68 to 73 ms: 68 ms in the two runs I traced for the experiment below, 72 to 73 ms in the three runs of the results table. In both traced runs it happens at the same operation, number 26,749,413. With a fixed seed that is a deterministic event. At that point the benchmark's list holds about 9.4 million ids, and the engine's id-to-order `std::unordered_map` is not pre-sized, so a rehash is the obvious suspect.",
           },
           {
             t: "p",
             text: "I tested it on a scratch copy. Constructing the map with 30 million buckets up front drops the maximum to 1.1 to 1.4 ms and lifts throughput from 3.25 to 4.25 million operations a second. The engine is unchanged. The price is memory: the bucket array alone is about 240 MB.",
           },
           { t: "figure", id: "id-map-probe" },
-          { t: "h", text: "What I cannot tell you" },
+          { t: "h", text: "Open questions" },
           {
             t: "p",
             text: "The README did not record which machine produced its first figures, so I cannot tell whether the gap between its 5.5 µs P99.9 and my 0.9 µs is hardware, load or a different version of the code. My runs were on a laptop with the powersave governor, no core pinning and a load average around 1.2 from background processes. Run the script on your own machine: the numbers are meant to be checked.",
@@ -158,7 +161,7 @@ export const casesEn: CaseStudy[] = [
           { t: "p", text: "The Java engine:" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Order_Book && cd Order_Book\n./mvnw verify                          # build, tests and quality gates\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify   # mutation testing, slow\n./mvnw -pl api -am install -DskipTests && ./mvnw -pl api spring-boot:run   # REST on :8080, FIX on :9878",
+            text: "git clone https://github.com/Ahmed-Berrada/Order_Book\ncd Order_Book\n./mvnw verify                          # build, tests and quality gates\n# mutation testing, slow\n./mvnw -pl engine-core,engine-journal,engine-service,market-data -am -Pmutation verify\n# REST on :8080, FIX on :9878\n./mvnw -pl api -am install -DskipTests\n./mvnw -pl api spring-boot:run",
           },
           {
             t: "code",
@@ -167,13 +170,13 @@ export const casesEn: CaseStudy[] = [
           { t: "p", text: "The C++ prototype:" },
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/lob-engine && cd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j\n./build/tests    # unit tests\n./build/bench    # 5 M operations after a 100 K warm-up",
+            text: "git clone https://github.com/Ahmed-Berrada/lob-engine\ncd lob-engine\ncmake -S . -B build -DCMAKE_BUILD_TYPE=Release\ncmake --build build -j\n./build/tests    # unit tests\n./build/bench    # 5 M operations after a 100 K warm-up",
           },
           {
             t: "p",
             text: "To record the machine, the compiler and every run in a JSON file, use [scripts/bench-lob-engine.sh](https://github.com/Ahmed-Berrada/MyFantasticWebsite/blob/main/scripts/bench-lob-engine.sh) from this site's repository. It works on a scratch copy and leaves lob-engine untouched:",
           },
-          { t: "code", text: "RUNS=5 scripts/bench-lob-engine.sh              # as committed\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # the earlier 50 M version" },
+          { t: "code", text: "RUNS=8 scripts/bench-lob-engine.sh              # as committed\nMETHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # the earlier 50 M version" },
           { t: "p", text: "Release builds use `-O3 -march=native`, so results depend on the CPU." },
         ],
       },
@@ -195,12 +198,12 @@ export const casesEn: CaseStudy[] = [
 
   {
     slug: "cbtc-validation",
-    title: "Test tooling for a 5G radio signalling system",
-    plain: "The tools that test the radio software of New York's Crosstown subway signalling: a train and trackside simulator, a scenario library and a test bench.",
+    title: "Test tooling for 5G CBTC radio software at Siemens Mobility",
+    plain: "The tools that test the safety-critical radio software of the CBTC signalling on New York's Crosstown line: a simulator, a scenario library and a test bench.",
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, Linux network namespaces",
     status: "Siemens Mobility, since September 2025. Delivered for CRG release 4.2. Internal tooling: no code or protocol details are published here.",
     repos: [],
-    updated: "2026-11-26",
+    updated: "2026-11-27",
     sections: [
       {
         id: "problem",
@@ -208,6 +211,10 @@ export const casesEn: CaseStudy[] = [
           {
             t: "p",
             text: "The radio software, called the CRG, exchanges messages with equipment on the train and along the track. Without that equipment it cannot be tested. When I joined there was no test bench, no tool and no product to start from.",
+          },
+          {
+            t: "p",
+            text: "To be precise about my part: I do not write the safety-critical software. I designed and developed the simulator, the CRG Message Generator, and I own the test bench; the execution environment around it was built with the team.",
           },
         ],
       },
@@ -250,7 +257,7 @@ export const casesEn: CaseStudy[] = [
               ["Scenarios", "300+"],
               ["Users", "9 validators: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
               ["Delivered for", "CRG release 4.2"],
-              ["Without this tool", "the software cannot be tested"],
+              ["Why it matters", "the CRG only runs against train and trackside equipment; on the bench, the simulator is that equipment"],
             ],
           },
           {
@@ -265,11 +272,19 @@ export const casesEn: CaseStudy[] = [
           { t: "p", text: "The tooling is internal, so the project itself cannot be reproduced outside Siemens. The checksum can:" },
           {
             t: "code",
-            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF if crc & 0x80000000 else (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
+            text: "def crc32_mpeg2(data: bytes) -> int:\n    crc = 0xFFFFFFFF\n    for b in data:\n        crc ^= b << 24\n        for _ in range(8):\n            if crc & 0x80000000:\n                crc = ((crc << 1) ^ 0x04C11DB7) & 0xFFFFFFFF\n            else:\n                crc = (crc << 1) & 0xFFFFFFFF\n    return crc\n\nassert crc32_mpeg2(b\"123456789\") == 0x0376E6E7",
           },
         ],
       },
-      { id: "next", blocks: [{ t: "p", text: "The apprenticeship runs until August 2027." }] },
+      {
+        id: "next",
+        blocks: [
+          {
+            t: "p",
+            text: "I remain test bench owner until the apprenticeship ends in August 2027. From September 2027 I am looking for a permanent role: critical or embedded software, test and validation tooling, or performance-sensitive systems.",
+          },
+        ],
+      },
     ],
   },
 
@@ -283,7 +298,7 @@ export const casesEn: CaseStudy[] = [
       { label: "Pipeline on GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
       { label: "Dashboard", href: "https://marketdatapipeline.ahmedberrada.com/" },
     ],
-    updated: "2026-11-26",
+    updated: "2026-11-27",
     sections: [
       {
         id: "problem",
@@ -339,7 +354,7 @@ export const casesEn: CaseStudy[] = [
         blocks: [
           {
             t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline && cd Market_data_pipeline\n# set DATABASE_URL and X_CG_DEMO_API_KEY in .env, as the README describes\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow on :8080, API on :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
+            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline\ncd Market_data_pipeline\n# set DATABASE_URL and X_CG_DEMO_API_KEY in .env, as the README describes\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow on :8080, API on :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
           },
         ],
       },

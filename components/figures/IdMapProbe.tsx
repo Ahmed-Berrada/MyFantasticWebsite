@@ -33,7 +33,7 @@ export default function IdMapProbe({ t, lang }: { t: T; lang: Lang }) {
   ];
   return (
     <figure className="my-10">
-      <div className="overflow-x-auto" tabIndex={0} role="region" aria-labelledby="idmapprobe-caption">
+      <div className="scroll-x overflow-x-auto" tabIndex={0} role="region" aria-labelledby="idmapprobe-caption">
         <table className="w-full min-w-[480px] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-line-2">

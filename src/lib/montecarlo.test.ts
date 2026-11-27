@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { blackScholesCall, CallEstimator, normCdf } from "./montecarlo";
-import { prng } from "./orderbook/flow";
+import { prng } from "./prng";
 
 const params = { s0: 100, k: 100, r: 0.05, sigma: 0.2, t: 1 };
 

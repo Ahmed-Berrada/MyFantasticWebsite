@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { en } from "./en";
 import { fr } from "./fr";
-import { getCases, getDict, getNotes } from "./index";
+import { frTypo, getCases, getDict, getNotes, unitTypo } from "./index";
 import type { Block, CaseStudy, Note } from "./types";
 
 type Json = unknown;
@@ -49,6 +49,16 @@ describe("dictionary", () => {
   it("puts a no-break space before French double punctuation", () => {
     for (const [path, s] of strings(getDict("fr"))) expect(s, path).not.toMatch(/ [?!:;]/);
   });
+
+  it("keeps numbers with their units and groups French thousands", () => {
+    expect(unitTypo("median 996 ns, 90% and 1.6 ms.")).toBe("median 996\u00a0ns, 90% and 1.6\u00a0ms.");
+    expect(unitTypo("in 3 steps")).toBe("in 3 steps");
+    expect(unitTypo("P99 460 ns")).toBe("P99\u00a0460\u00a0ns");
+    expect(frTypo("opération 26 749 413 : 5 M d'opérations, 25 %")).toBe("opération 26\u202f749\u202f413\u00a0: 5\u00a0M d'opérations, 25\u00a0%");
+    for (const lang of ["en", "fr"] as const) {
+      for (const [path, s] of strings(getDict(lang))) expect(s, `${lang}${path}`).not.toMatch(/\d (ns|µs|ms)\b/);
+    }
+  });
 });
 
 describe("case studies and notes", () => {
@@ -68,11 +78,30 @@ describe("case studies and notes", () => {
     for (const c of getCases("en")) expect(c.sections.map((s) => s.id)).toEqual(["problem", "constraints", "approach", "result", "reproduce", "next"]);
   });
 
+  const pages = () =>
+    new Set(["/", "/writing", ...getCases("en").map((c) => `/work/${c.slug}`), ...getNotes("en").map((n) => `/writing/${n.slug}`)]);
+
   it("only link to pages that exist", () => {
-    const valid = new Set(["/", ...getCases("en").map((c) => `/work/${c.slug}`), ...getNotes("en").map((n) => `/writing/${n.slug}`)]);
+    const valid = pages();
     for (const lang of ["en", "fr"] as const) {
       const all = [...getCases(lang).flatMap((c) => c.sections.flatMap((s) => s.blocks)), ...getNotes(lang).flatMap((n) => n.blocks)];
       for (const href of all.flatMap(links)) expect(valid.has(href), `${lang} ${href}`).toBe(true);
+      // Table cells are rich text too.
+      const cells = all.flatMap((b) => (b.t === "table" ? b.rows.flat() : []));
+      for (const href of cells.flatMap((t) => [...t.matchAll(/\]\((\/[^)]*)\)/g)].map((m) => m[1]))) expect(valid.has(href), `${lang} ${href}`).toBe(true);
+      // Every internal href in the dictionary (evidence strip and the like).
+      for (const [path, href] of strings(getDict(lang))) if (path.endsWith(".href") && href.startsWith("/")) expect(valid.has(href), `${lang}${path}`).toBe(true);
+    }
+  });
+
+  it("are linked from the components only by paths that exist", async () => {
+    // Components link to a few pages by literal path; read their sources so a renamed slug fails here, not in production.
+    const { readdirSync, readFileSync } = await import("node:fs");
+    const dir = new URL("../../components/", import.meta.url);
+    const valid = pages();
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".tsx"))) {
+      const src = readFileSync(new URL(file, dir), "utf8");
+      for (const m of src.matchAll(/"(\/(?:work|writing)\/[a-z0-9-]+)"/g)) expect(valid.has(m[1]), `${file} ${m[1]}`).toBe(true);
     }
   });
 

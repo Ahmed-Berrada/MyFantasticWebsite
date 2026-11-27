@@ -16,12 +16,10 @@
   --line: #d3d7dd;
   --line-2: #b9bfc8;
   --accent: #ffc400;
-  --accent-soft: #ffc40033;
   --bid: #17703f;
   --bid-soft: #17703f1f;
   --ask: #b33526;
   --ask-soft: #b335261a;
-  --running: #a86a00;
 }
 
 @theme inline {
@@ -34,12 +32,10 @@
   --color-line: var(--line);
   --color-line-2: var(--line-2);
   --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
   --color-bid: var(--bid);
   --color-bid-soft: var(--bid-soft);
   --color-ask: var(--ask);
   --color-ask-soft: var(--ask-soft);
-  --color-running: var(--running);
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-martian), ui-monospace, monospace;
@@ -85,6 +81,33 @@ body::after {
   background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 0;
 }
 .link:hover { text-decoration-color: var(--ink); background-size: 100% 40%; }
+/* Horizontal scrollers: a soft shadow appears on the side that has more content, and disappears at the end
+   (Lea Verou's scrolling shadows; the covers scroll with the content, the shadows stay put). */
+.scroll-x {
+  --scroll-bg: var(--ground);
+  background:
+    linear-gradient(to right, var(--scroll-bg) 30%, transparent) left / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--scroll-bg) 30%, transparent) right / 40px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, #12141729, transparent) left / 14px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, #12141729, transparent) right / 14px 100% no-repeat scroll;
+  background-color: var(--scroll-bg);
+}
+/* The one control each live demo depends on: filled while it invites a press, quiet while the demo runs. */
+.demo-button {
+  min-height: 2.25rem;
+  padding-inline: 0.9rem;
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  background: var(--ink);
+  color: var(--ground);
+  font-family: var(--font-martian), monospace;
+  font-size: 12px;
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease, transform 100ms ease;
+}
+.demo-button:hover { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.demo-button:active { transform: scale(0.97); }
+.demo-button-quiet { background: transparent; color: var(--ink-2); border-color: var(--line-2); }
+@media (pointer: coarse) { .demo-button { min-height: 2.75rem; } }
 /* Standalone links: a 24px-high hit area without moving anything (WCAG 2.5.8). Links inside sentences stay inline. */
 .link-tap { display: inline-block; padding-block: 4px; margin-block: -4px; }
 
@@ -109,4 +132,12 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Radio scene labels: the 640-unit-wide scene is drawn at about half size on phones, so its text is scaled up
+   to stay near 10 px on screen. */
+@media (max-width: 639px) {
+  .radio-scene .rl-label { font-size: 18px; }
+  .radio-scene .rl-title { font-size: 20px; }
+  .radio-scene .rl-sub { font-size: 13px; }
 }

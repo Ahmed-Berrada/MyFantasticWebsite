@@ -11,22 +11,22 @@ export const notesEn: Note[] = [
     blocks: [
       {
         t: "p",
-        text: "lob-engine, the C++ prototype of my order book, first published a median of 163 ns and a P99.9 of 5,517 ns, about 34 times the median. A ratio like that is a question, not an answer. Here is how I went looking for what was behind a tail, and what I found.",
+        text: "lob-engine, the C++ prototype of my order book, first published a median of 163 ns and a P99.9 of 5,517 ns, about 34 times the median. A ratio like that needs explaining. Here is how I went looking for what was behind a tail, and what I found.",
       },
       { t: "h", text: "Step 1: make the measurement repeatable" },
       {
         t: "p",
-        text: "I wrote a small script that rebuilds the engine on a scratch copy, applies the method the README states (5 million operations, a 100,000 warm-up), runs it several times and records the machine, the compiler, the load and every run. On my laptop, eight runs gave a median of 149 ns, a P99 of 460 ns and a P99.9 of 909 ns. The median and the P99 moved by less than 3 % between runs, the P99.9 by about 8 %.",
+        text: "I wrote a small script that rebuilds the engine on a scratch copy, applies the method the README states (5 million operations, a 100,000 warm-up), runs it several times and records the machine, the compiler, the load and every run. On my laptop, eight runs gave a median of 149 ns, a P99 of 460 ns and a P99.9 of 909 ns. The median and the P99 moved by less than 3% between runs, the P99.9 by about 8%.",
       },
       { t: "h", text: "Step 2: know what the timer costs" },
       {
         t: "p",
-        text: "Each operation is wrapped in two clock reads. I measured an empty timed region: about 15 ns. That is 10 % of a 149 ns median, so it matters for the median and not at all for a millisecond outlier. I did not subtract it.",
+        text: "Each operation is wrapped in two clock reads. I measured an empty timed region: about 15 ns. That is 10% of a 149 ns median, so it matters for the median and not at all for a millisecond outlier. I did not subtract it.",
       },
       { t: "h", text: "Step 3: find the biggest outlier, and where it sits" },
       {
         t: "p",
-        text: "The benchmark's earlier version ran 50 million operations. Its maximum latency was about 68 ms, and it happened at operation 26,749,413 in both runs I traced. A fixed seed means the same operation does the same work every time, so a maximum that always lands on the same operation is not noise. It is something the program does.",
+        text: "The benchmark's earlier version ran 50 million operations. Its maximum latency was about 68 ms, and it happened at operation 26,749,413 in both runs I traced. A fixed seed means the same operation does the same work every time, so a maximum that always lands on the same operation is not noise but the program.",
       },
       {
         t: "p",
@@ -43,7 +43,7 @@ export const notesEn: Note[] = [
       {
         t: "list",
         items: [
-          "A tail ratio is a question. Ask where the slowest operations are before asking how to speed them up.",
+          "Find where the slowest operations are before trying to speed them up.",
           "A fixed seed turns an outlier into evidence: an outlier at the same operation every run is the program, not the machine.",
           "Change one thing, and keep the before and the after.",
           "Say what you measured on. The README first published no hardware, and its benchmark ran a different operation count from the one it described. Both are fixed now: the README records the machine, and the code runs the method the README states.",
@@ -96,7 +96,11 @@ export const notesEn: Note[] = [
       { t: "h", text: "What it costs" },
       {
         t: "p",
-        text: "A full queue refuses the order at once (`OVERLOADED`) instead of growing without bound, so overload shows up as a visible refusal, not as latency nobody can explain. And the sync to disk per command is a deliberate trade: no acknowledged order is lost, at the price of throughput. I have not measured that price yet. JMH benchmarking is phase 6 of the project.",
+        text: "A full queue refuses the order at once (`OVERLOADED`) instead of growing without bound, so overload shows up as a visible refusal instead of unbounded queueing delay. And the sync to disk per command is a deliberate trade: no acknowledged order is lost, at the price of throughput. I have not measured that price yet. JMH benchmarking is phase 6 of the project.",
+      },
+      {
+        t: "p",
+        text: "One limit of the crash test: killing the JVM with SIGKILL proves the order (journaled before acknowledged) and the replay, but not the sync itself, because the operating system keeps a killed process's writes in its page cache. Power-loss testing, and grouping several commands per sync, are still open.",
       },
       { t: "p", text: "Code and decisions: [Order Book](/work/order-book)." },
     ],
@@ -116,7 +120,7 @@ export const notesEn: Note[] = [
       { t: "h", text: "The check" },
       {
         t: "p",
-        text: "The estimator draws a standard normal with Box-Muller, builds the terminal price, discounts the payoff, and reports the mean with a 95 % confidence interval (1.96 times the standard error). With antithetic variates each draw Z is paired with −Z, and the pair counts as one sample.",
+        text: "The estimator draws a standard normal with Box-Muller, builds the terminal price, discounts the payoff, and reports the mean with a 95% confidence interval (1.96 times the standard error). With antithetic variates each draw Z is paired with −Z, and the pair counts as one sample.",
       },
       {
         t: "p",
@@ -132,24 +136,24 @@ export const notesEn: Note[] = [
           ["100,000", "10.4987 ± 0.0651", "0.0482", "10.4768 ± 0.0915"],
           ["1,000,000", "10.4701 ± 0.0204", "0.0195", "10.4625 ± 0.0289"],
         ],
-        note: "Exact price 10.4506 (S₀ 100, K 100, r 5 %, σ 20 %, 1 year). Seed 7, same random generator as the demo on this site.",
+        note: "Exact price 10.4506 (S₀ 100, K 100, r 5%, σ 20%, 1 year). Seed 7, same random generator as the demo on this site.",
       },
       {
         t: "p",
-        text: "Two things to look for. Each ten-fold increase in paths narrows the interval by about the square root of ten, which is how Monte Carlo converges. And at the same number of paths, antithetic variates give an interval about 30 % narrower than plain sampling.",
+        text: "Each ten-fold increase in paths narrows the interval by about the square root of ten, which is how Monte Carlo converges. And at the same number of paths, antithetic variates give an interval about 30% narrower than plain sampling.",
       },
       {
         t: "p",
-        text: "The distance to the exact price at a million paths, 0.0195, is inside the interval of ±0.0204, as it should be about 95 % of the time. A result outside the interval, run after run, would mean a bug.",
+        text: "The distance to the exact price at a million paths, 0.0195, is inside the interval of ±0.0204, as it should be about 95% of the time. A result outside the interval, run after run, would mean a bug.",
       },
       { t: "h", text: "The GPU numbers" },
       {
         t: "p",
-        text: "The GPU pricer in the Monte-Carlo-Option-Pricing repository is a notebook. In my runs the same simulation took 295 s in pure Python, 7.4 s with vectorised NumPy and 0.46 s on a GPU with CuPy. That is 641 times faster than pure Python and 16 times faster than NumPy. The README's \"100 to 1,000 times\" is a general claim against single-threaded CPU code, not this notebook's measurement.",
+        text: "The GPU pricer in the Monte-Carlo-Option-Pricing repository started as a notebook. Its first run priced a call with 100 million paths: 295 s in pure Python, 7.4 s with vectorised NumPy and 0.46 s on a GPU with CuPy. That is 16 times faster than NumPy, which is the comparison that matters; the 647 times against a Python loop says more about the loop than about the GPU.",
       },
       {
         t: "p",
-        text: "The notebook does not record the GPU model or the number of paths, so treat the speedup as indicative until a benchmark script records them. The simulation in the demo on the home page uses the same estimator in TypeScript, and the test above is part of this site's test suite.",
+        text: "The notebook did not record the GPU model, so treat the speedup as indicative. The repository is now a tested package whose benchmark script records the CPU, the GPU and every timing, and whose test suite checks every backend against Black-Scholes the way this note describes. The demo on the home page uses the same estimator in TypeScript, and the test above is part of this site's test suite.",
       },
     ],
   },

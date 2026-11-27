@@ -4,8 +4,6 @@
  * Placeholders in {braces} are filled by the components.
  */
 export const en = {
-  htmlLang: "en",
-  siteName: "Ahmed Berrada",
   meta: {
     homeTitle: "Ahmed Berrada, software engineer for critical systems",
     homeDescription:
@@ -37,7 +35,7 @@ export const en = {
       "Final-year engineering student at ESIEA (2027) and apprentice at Siemens Mobility. Looking for a permanent role (CDI) in Paris from September 2027.",
     thesis: ["Right first.", "Then fast."],
     intro:
-      "At Siemens Mobility I build the test tools for the radio software of New York's Crosstown subway line. On my own time I build matching engines and measure them. The discipline is the same: deterministic, measured, tested until it is boring.",
+      "At Siemens Mobility I build the test tools for the radio software of New York's Crosstown subway line. On my own time I build matching engines and measure them. The discipline is the same in both: deterministic, measured and tested.",
     email: "Email me",
     cv: "Download CV",
     cvOther: "CV en français",
@@ -48,6 +46,7 @@ export const en = {
       dwell: "at station {station}, leaves in {s} s",
       run: "{s} s to station {station}",
       hint: "Move the pointer over the graph to read the timetable.",
+      hintTouch: "Touch the graph to read the timetable.",
       aria: "A live train graph: each line is a train running between stations over time. Moving the pointer reads the timetable.",
     },
   },
@@ -55,21 +54,21 @@ export const en = {
     label: "Evidence",
     items: [
       {
-        value: "163 ns",
-        label: "median to match an order, P99 996 ns",
-        note: "Order Book's C++ prototype, first published run. I reproduce a 149 ns median and 460 ns P99 on a laptop.",
-        href: "/work/order-book",
-      },
-      {
         value: "300+",
-        label: "test scenarios, used by 9 validators",
-        note: "Siemens Mobility, test tooling for the radio software.",
+        label: "test scenarios for safety-critical CBTC radio software",
+        note: "Siemens Mobility. Used by 9 test engineers and validators.",
         href: "/work/cbtc-validation",
       },
       {
-        value: "90 %",
+        value: "90%",
         label: "line and branch coverage required by CI",
-        note: "Order Book: plus property tests and a crash-recovery test.",
+        note: "Order Book, with property-based tests and a crash-recovery test.",
+        href: "/work/order-book",
+      },
+      {
+        value: "149 ns",
+        label: "median per order book operation, P99 460 ns",
+        note: "Order Book's C++ prototype, reproduced on a laptop. The first published run gave 163 ns.",
         href: "/work/order-book",
       },
     ],
@@ -78,12 +77,12 @@ export const en = {
     since: "Since September 2025, apprenticeship until August 2027",
     title: "Siemens Mobility",
     subtitle: "Software engineer. Châtillon, France.",
-    lede: "New York City Transit is moving its Crosstown subway line to radio-based signalling over 5G. I build what the radio software is tested with: a simulator of the train and trackside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
+    lede: "New York City Transit (MTA) is moving its Crosstown subway line to CBTC, radio-based train control, over 5G. The radio software at its centre, the CRG, is safety-critical (CENELEC EN 50128). I build what it is tested with: a simulator of the onboard and wayside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
     flaps: [
       { value: "300+", label: "test scenarios" },
       { value: "200+", label: "message types" },
-      { value: "9", label: "validators use it" },
-      { value: "4.2", label: "CRG release delivered" },
+      { value: "9", label: "test engineers and validators use it" },
+      { value: "4.2", label: "CRG release it was delivered for" },
     ],
     caseCta: "How the test bench works",
     radio: {
@@ -96,8 +95,11 @@ export const en = {
       verified: "verified",
       pending: "…",
       hover: "byte {i}, {field}: {hex}",
-      typed: "Your keys are the payload. Change one byte and the CRC changes completely.",
-      idle: "Type anything to write the payload yourself.",
+      typed: "Your text is the payload. Change one byte and the CRC changes completely.",
+      idle: "Write your own payload in the field above.",
+      inputLabel: "your payload",
+      placeholder: "type here",
+      announce: "Frame with your payload, CRC {crc}",
       illustrative: "Illustrative frame layout, not the real protocol.",
       source: { CC: "CC", ZC: "ZC", WRG: "WRG", you: "you" },
       meaning: { CC: "position report", ZC: "movement authority", WRG: "link status", you: "typed by you" },
@@ -115,7 +117,7 @@ export const en = {
   },
   work: {
     title: "Work",
-    lede: "Projects where the same rules meet measurement. Each links to its code and to a case study that says what was measured, and how.",
+    lede: "Personal projects. Each links to its code and to a case study that says what was measured, and how.",
     caseCta: "Read the case study",
     orderBook: {
       title: "Order Book",
@@ -123,7 +125,7 @@ export const en = {
         "A matching engine, built twice. First in C++17, to learn how fast a book can match. Then in Java 21, as the core of a trading venue: orders over FIX or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
       facts: [
         "C++ prototype, first published: median 163 ns, P99 996 ns, 3.46 million operations a second. Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX conformance tests, with a 90 % coverage gate in CI.",
+        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX 4.4 session tests over a real socket, with a 90% coverage gate in CI.",
         "No numbers for the Java engine yet, on purpose: its benchmarking is phase 6, after correctness.",
       ],
       demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
@@ -133,7 +135,7 @@ export const en = {
     pipeline: {
       title: "Market data pipeline",
       plain:
-        "Fetches stock and crypto prices on a schedule, validates and stores them in TimescaleDB, and serves them through an API and a dashboard.",
+        "A small data service, end to end: scheduled ingestion of stock and crypto prices, validation, a time-series database, and an API and dashboard deployed on Google Cloud.",
       facts: [
         "One-minute bars for seven stocks and funds, five-minute prices for four crypto assets.",
         "Airflow locally, Cloud Run Jobs and Cloud Scheduler in production.",
@@ -144,14 +146,14 @@ export const en = {
     pricer: {
       title: "GPU option pricer",
       plain:
-        "Prices a European option by Monte Carlo. The same simulation takes 295 s in pure Python, 7.4 s with NumPy and 0.46 s on a GPU with CuPy.",
+        "Prices a European call by Monte Carlo and checks it against the exact Black-Scholes price. On 100 million paths a GPU with CuPy takes 0.46 s, against 7.4 s for vectorised NumPy: 16 times faster.",
       facts: [
-        "That is 641 times faster than pure Python and 16 times faster than vectorised NumPy.",
-        "The timings come from my runs of the notebook. It does not record the GPU model or the number of paths.",
+        "Pure Python takes 295 s on the same paths, but a Python loop is a weak baseline: NumPy is the fair comparison.",
+        "Now a tested Python package: four backends, confidence intervals, antithetic variates, and a benchmark script that records the hardware. The GPU model of this first run was not recorded.",
       ],
       demo: "Running in this tab, not on a GPU: the same estimate, checked against the exact Black-Scholes price.",
       note: "Read how it is checked",
-      repo: "Notebook on GitHub",
+      repo: "Pricer on GitHub",
     },
     pricerChart: {
       python: "Pure Python",
@@ -169,6 +171,9 @@ export const en = {
       sub: "matching engine, in this tab",
       run: "run",
       pause: "pause",
+      step: "step",
+      buy: "buy at",
+      sell: "sell at",
       price: "price",
       size: "size",
       trades: "trades",
@@ -185,6 +190,9 @@ export const en = {
     mcUi: {
       header: "european call, S₀ 100, K 100, σ 20%, r 5%, 1 year",
       run: "run live",
+      running: "running…",
+      runAgain: "run again",
+      done: "Monte Carlo estimate {price} ± {ci} after {paths} paths. Black-Scholes price {bs}.",
       paths: "paths",
       monteCarlo: "monte carlo",
       blackScholes: "black-scholes",
@@ -207,8 +215,13 @@ export const en = {
     education:
       "ESIEA, engineering degree (Master's level), computer science, artificial intelligence track, 2022 to 2027. Coursework: mathematics (probability, statistics, optimisation), algorithms, software development, architecture.",
     toolsTitle: "Tools",
-    tools:
-      "Languages: C++, Java, Python, SQL, Bash. Engineering: Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5. Computing: NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch. Domain, in personal projects: order books, matching, FIX, option pricing, Monte Carlo.",
+    tools: [
+      { label: "Programming", value: "C++, Java, Python, SQL, Bash" },
+      { label: "Engineering", value: "Linux, Git, GitLab CI/CD, GitHub Actions, Docker, QEMU/KVM, Spring Boot, pytest, Robot Framework, JUnit 5" },
+      { label: "Computing", value: "NumPy, Pandas, CUDA (Numba, CuPy), scikit-learn, PyTorch" },
+      { label: "Domain", value: "Order books, matching, FIX, option pricing, Monte Carlo (personal projects)" },
+    ],
+    languagesTitle: "Languages",
     languages: "French (C2), English (C1, my daily working language), Arabic (native).",
     metroLabel: "Path so far, as a metro line",
     stops: [
@@ -216,15 +229,15 @@ export const en = {
       { when: "2023", name: "Axeli", note: "Network intern" },
       { when: "2024", name: "Maroc Telecom", note: "Cloud and network intern" },
       { when: "2024", name: "ESIEA", note: "Student ambassador" },
-      { when: "Sep 2025", name: "Siemens Mobility", note: "Apprentice software engineer" },
-      { when: "Sep 2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
+      { when: "2025", name: "Siemens Mobility", note: "Apprentice software engineer" },
+      { when: "2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
       { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-      { when: "Sep 2027", name: "Next stop", note: "A permanent role, Paris" },
+      { when: "2027", name: "Next stop", note: "A permanent role, Paris" },
     ],
   },
   contact: {
-    title: "Building something that cannot fail, or cannot wait?",
-    lede: "I am looking for a permanent software engineering role (CDI) from September 2027, in Paris. Critical systems, infrastructure, low-latency or trading platforms.",
+    title: "Hiring for September 2027?",
+    lede: "I am looking for a permanent software engineering role (CDI) in Paris from September 2027: critical or embedded software, test and validation tooling, backend infrastructure, or low-latency and trading systems. Available for interviews now, in French or English.",
     copy: "Copy",
     copied: "Copied",
     linkedin: "LinkedIn",
@@ -238,6 +251,7 @@ export const en = {
     live: "The train graph, radio link, order book and pricer on this site run live in your browser.",
   },
   notFound: {
+    metaTitle: "Page not found, Ahmed Berrada",
     code: "Error 404",
     title: "This page does not exist.",
     body: "The link may be old, or mistyped.",
@@ -249,14 +263,22 @@ export const en = {
       problem: "Problem",
       constraints: "Constraints",
       approach: "Approach",
-      result: "Measured result",
+      result: "Result",
       reproduce: "How to reproduce",
       next: "What comes next",
     },
     code: "Code",
     status: "Status",
+    stack: "Stack",
     updated: "Last updated",
     back: "All work",
+  },
+  pageEnd: {
+    next: "Next",
+    allNotes: "All notes",
+    hiring: "Hiring for September 2027?",
+    email: "Email me",
+    cv: "Download my CV",
   },
   figures: {
     structure: {
@@ -269,7 +291,7 @@ export const en = {
       fifo: "intrusive FIFO list of orders",
       orders: "orders",
       pool: "Pool allocator",
-      poolNote: "orders are carved from pre-allocated blocks, no malloc per order",
+      poolNote: "orders are carved from pre-allocated blocks, not malloc'd one by one",
       ids: "Id table",
       idsNote: "unordered_map from order id to order: O(1) cancel",
     },

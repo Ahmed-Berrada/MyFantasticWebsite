@@ -5,7 +5,7 @@ import type { Depth, Trade } from "@/src/lib/orderbook/engine";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
 import type { Dict } from "@/src/content";
 import type { Lang } from "@/src/content/types";
-import { fill } from "@/src/lib/format";
+import { fill, fmtDec, fmtInt } from "@/src/lib/format";
 
 const SEED = 2027;
 const LEVELS = 7;
@@ -26,8 +26,8 @@ interface Snapshot {
   resting: number;
 }
 
-const px = (ticks: number) => (ticks / 100).toFixed(2);
-const fmt = (n: number, lang: Lang) => n.toLocaleString(lang === "fr" ? "fr-FR" : "en-US");
+/** Prices are integer ticks of 0.01, shown with the page language's decimal separator. */
+const px = (ticks: number, lang: Lang) => fmtDec(ticks / 100, lang, 2);
 
 export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookUi"]; lang: Lang }) {
   const reduced = usePrefersReducedMotion();
@@ -105,8 +105,11 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
           </span>
           <p className="truncate font-mono text-xs text-ink-2">
             <span className="font-medium text-ink">{running ? t.live : t.paused}</span>
-            <span className="mx-2 text-line-2">/</span>
-            {t.sub}
+            {/* The description only fits beside the status from the sm breakpoint. */}
+            <span className="hidden sm:inline">
+              <span className="mx-2 text-line-2">/</span>
+              {t.sub}
+            </span>
           </p>
         </div>
         <button
@@ -117,9 +120,11 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
               publish();
             } else setUserPaused(!paused);
           }}
-          className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px"
+          type="button"
+          aria-pressed={reduced ? undefined : !paused}
+          className={`demo-button shrink-0 ${!paused && !reduced ? "demo-button-quiet" : ""}`}
         >
-          {paused || reduced ? t.run : t.pause}
+          {reduced ? t.step : paused ? t.run : t.pause}
         </button>
       </div>
 
@@ -130,14 +135,14 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
             <span>{t.price}</span>
             <span className="text-right">{t.size}</span>
           </div>
-          <Ladder label={t.asks} levels={asks} side="ask" maxQty={maxQty} pad={LEVELS} loading={!snap} />
+          <Ladder label={t.asks} levels={asks} side="ask" maxQty={maxQty} pad={LEVELS} loading={!snap} lang={lang} />
           <div className="flex items-center justify-between border-y border-line bg-sunken px-4 py-1.5 font-mono text-[11px] text-ink-2 tabular">
             <span>
-              {t.spread} {bestBid != null && bestAsk != null ? px(bestAsk - bestBid) : "–"}
+              {t.spread} {bestBid != null && bestAsk != null ? px(bestAsk - bestBid, lang) : "–"}
             </span>
-            <span>{t.mid} {bestBid != null && bestAsk != null ? px((bestAsk + bestBid) / 2) : "–"}</span>
+            <span>{t.mid} {bestBid != null && bestAsk != null ? px((bestAsk + bestBid) / 2, lang) : "–"}</span>
           </div>
-          <Ladder label={t.bids} levels={bids} side="bid" maxQty={maxQty} pad={LEVELS} loading={!snap} />
+          <Ladder label={t.bids} levels={bids} side="bid" maxQty={maxQty} pad={LEVELS} loading={!snap} lang={lang} />
         </div>
 
         {/* Trade tape */}
@@ -150,7 +155,8 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
             {(snap?.tape ?? []).map((row) => (
               <li key={row.seq} className="tape-row grid grid-cols-[1fr_auto] rounded px-2 py-[3px] font-mono text-xs tabular">
                 <span className={row.aggressor === "buy" ? "text-bid" : "text-ask"}>
-                  {row.aggressor === "buy" ? "▲" : "▼"} {px(row.price)}
+                  <span aria-hidden>{row.aggressor === "buy" ? "▲" : "▼"}</span>
+                  <span className="sr-only">{row.aggressor === "buy" ? t.buy : t.sell}</span> {px(row.price, lang)}
                 </span>
                 <span className="text-ink-2">{row.qty}</span>
               </li>
@@ -161,9 +167,9 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
 
       {/* Stats + benchmark */}
       <div className="grid grid-cols-3 border-t border-line">
-        <Stat label={t.orders} value={snap ? fmt(snap.ops, lang) : "–"} />
-        <Stat label={t.tradeCount} value={snap ? fmt(snap.trades, lang) : "–"} />
-        <Stat label={t.resting} value={snap ? fmt(snap.resting, lang) : "–"} />
+        <Stat label={t.orders} value={snap ? fmtInt(snap.ops, lang) : "–"} />
+        <Stat label={t.tradeCount} value={snap ? fmtInt(snap.trades, lang) : "–"} />
+        <Stat label={t.resting} value={snap ? fmtInt(snap.resting, lang) : "–"} />
       </div>
       <div className="border-t border-line bg-sunken px-4 py-3">
         <p className="font-mono text-xs text-muted">{fill(t.seed, { seed: SEED })}</p>
@@ -184,9 +190,10 @@ interface LadderProps {
   maxQty: number;
   pad: number;
   loading: boolean;
+  lang: Lang;
 }
 
-function Ladder({ label, levels, side, maxQty, pad, loading }: LadderProps) {
+function Ladder({ label, levels, side, maxQty, pad, loading, lang }: LadderProps) {
   const rows: ({ price: number; qty: number } | null)[] = [...levels];
   while (rows.length < pad) {
     if (side === "ask") rows.unshift(null);
@@ -203,7 +210,7 @@ function Ladder({ label, levels, side, maxQty, pad, loading }: LadderProps) {
               aria-hidden
             />
           )}
-          <span className={`relative ${side === "bid" ? "text-bid" : "text-ask"}`}>{l ? px(l.price) : loading ? "·" : ""}</span>
+          <span className={`relative ${side === "bid" ? "text-bid" : "text-ask"}`}>{l ? px(l.price, lang) : loading ? "·" : ""}</span>
           <span className="relative text-right text-ink-2">{l ? l.qty : ""}</span>
         </li>
       ))}

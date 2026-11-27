@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { fill } from "@/src/lib/format";
 import { TrainGraph, type Train } from "@/src/lib/traingraph";
 import { usePrefersReducedMotion } from "@/src/lib/useInView";
 
@@ -22,33 +23,45 @@ interface Labels {
   dwell: string;
   run: string;
   hint: string;
+  hintTouch: string;
   aria: string;
 }
 
-const fill = (tpl: string, vars: Record<string, string | number>) =>
-  tpl.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? ""));
 
 interface Props {
   labels: Labels;
+  /**
+   * Where text sits over the graph: while `query` matches, the left `fraction` of the canvas is under the
+   * headline, so the pointer there reads nothing and the readout never draws into it.
+   */
+  covered?: { query: string; fraction: number };
 }
 
-export default function TrainGraphCanvas({ labels }: Props) {
+/** Idle frames are drawn at about 30 per second; a moving pointer is drawn at the display's rate. */
+const IDLE_FRAME_MS = 33;
+/** On touch, the reading stays on screen this long after the finger lifts. */
+const TOUCH_HOLD_MS = 2500;
+
+export default function TrainGraphCanvas({ labels, covered }: Props) {
+  const coverQuery = covered?.query;
+  const coverFraction = covered?.fraction ?? 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reduced = usePrefersReducedMotion();
-  const state = useRef({
-    graph: new TrainGraph(41),
-    now: 0,
-    pointer: null as { x: number; y: number } | null,
-  });
+  const [graph] = useState(() => new TrainGraph(41));
+  const state = useRef({ now: 0, pointer: null as { x: number; y: number } | null, dirty: true });
   const labelsRef = useRef(labels);
   useEffect(() => {
     labelsRef.current = labels;
   });
 
   useEffect(() => {
-    const canvas = canvasRef.current!;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
     const s = state.current;
-    const ctx = canvas.getContext("2d")!;
+    const coveredQuery = coverQuery ? window.matchMedia(coverQuery) : null;
+    /** Left edge of the readable part of the canvas, in CSS pixels. */
+    const readableFrom = () => (coveredQuery?.matches ? width * coverFraction : 0);
     let raf = 0;
     let last = performance.now();
     let width = 0;
@@ -91,8 +104,9 @@ export default function TrainGraphCanvas({ labels }: Props) {
       ctx.stroke();
     };
 
-    function draw() {
-      const g = s.graph;
+    const draw = () => {
+      s.dirty = false;
+      const g = graph;
       const L = labelsRef.current;
       ctx.clearRect(0, 0, width, height);
       const tLeft = s.now - width / pxPerS();
@@ -199,22 +213,29 @@ export default function TrainGraphCanvas({ labels }: Props) {
         ctx.font = `11px ${monoFont}`;
         const w = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 16;
         const h = lines.length * 16 + 10;
-        const bx = p.x + 14 + w > width ? p.x - 14 - w : p.x + 14;
+        const bx = p.x + 14 + w > width ? Math.max(readableFrom(), p.x - 14 - w) : p.x + 14;
         const by = Math.min(Math.max(top, p.y - h - 10), top + plotH() - h);
         ctx.fillStyle = colors.ink;
         ctx.fillRect(bx, by, w, h);
         ctx.fillStyle = colors.ground;
         lines.forEach((l, i) => ctx.fillText(l, bx + 8, by + 19 + i * 16));
       }
-    }
+    };
 
+    // The timetable advances by a fraction of a pixel per frame, so idle frames are thinned out; a moving pointer
+    // marks the state dirty and is drawn on the next frame. With reduced motion there is no loop at all:
+    // the graph is drawn once and again only when the pointer moves or the canvas resizes.
+    let lastDraw = 0;
     const loop = (nowReal: number) => {
       const dt = Math.min(0.1, (nowReal - last) / 1000);
       last = nowReal;
-      if (!reduced) s.now += dt * SIM_SPEED;
-      s.graph.schedule(s.now + 400);
-      s.graph.prune(s.now - width / pxPerS() - 1200);
-      draw();
+      s.now += dt * SIM_SPEED;
+      graph.schedule(s.now + 400);
+      graph.prune(s.now - width / pxPerS() - 1200);
+      if (s.dirty || nowReal - lastDraw >= IDLE_FRAME_MS) {
+        lastDraw = nowReal;
+        draw();
+      }
       raf = requestAnimationFrame(loop);
     };
 
@@ -222,41 +243,56 @@ export default function TrainGraphCanvas({ labels }: Props) {
     ro.observe(canvas);
     const io = new IntersectionObserver(([e]) => {
       cancelAnimationFrame(raf);
-      if (e.isIntersecting) {
+      if (e.isIntersecting && !reduced) {
         last = performance.now();
         raf = requestAnimationFrame(loop);
       }
     });
     io.observe(canvas);
-    s.graph.schedule(s.now + 400);
+    graph.schedule(s.now + 400);
     resize();
 
+    let release = 0;
+    const update = () => (reduced ? draw() : (s.dirty = true));
     const move = (e: PointerEvent) => {
+      window.clearTimeout(release);
       const r = canvas.getBoundingClientRect();
-      s.pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
-      if (reduced) draw();
+      const x = e.clientX - r.left;
+      s.pointer = x < readableFrom() ? null : { x, y: e.clientY - r.top };
+      update();
     };
-    const leave = () => {
-      s.pointer = null;
-      if (reduced) draw();
+    const leave = (e: PointerEvent) => {
+      window.clearTimeout(release);
+      const clear = () => {
+        s.pointer = null;
+        update();
+      };
+      // A finger lifting ends the gesture: keep the reading long enough to be read.
+      if (e.pointerType === "touch") release = window.setTimeout(clear, TOUCH_HOLD_MS);
+      else clear();
     };
     canvas.addEventListener("pointermove", move);
     canvas.addEventListener("pointerdown", move);
     canvas.addEventListener("pointerleave", leave);
     return () => {
       cancelAnimationFrame(raf);
+      window.clearTimeout(release);
       ro.disconnect();
       io.disconnect();
       canvas.removeEventListener("pointermove", move);
       canvas.removeEventListener("pointerdown", move);
       canvas.removeEventListener("pointerleave", leave);
     };
-  }, [reduced]);
+  }, [reduced, graph, coverQuery, coverFraction]);
 
   return (
-    <div className="relative h-full w-full">
-      <canvas ref={canvasRef} className="block h-full w-full touch-pan-y" role="img" aria-label={labels.aria} />
-      <p className="pointer-events-none absolute right-10 bottom-[10px] text-right text-sm text-muted">{labels.hint}</p>
+    <div className="relative flex h-full w-full flex-col">
+      <canvas ref={canvasRef} className="block min-h-0 w-full flex-1 touch-pan-y" role="img" aria-label={labels.aria} />
+      {/* Below the graph on small screens, over its bottom edge where there is room. */}
+      <p className="pointer-events-none mt-2 text-right text-sm text-muted xl:absolute xl:right-10 xl:bottom-[10px] xl:mt-0">
+        <span className="pointer-coarse:hidden">{labels.hint}</span>
+        <span className="hidden pointer-coarse:inline">{labels.hintTouch}</span>
+      </p>
     </div>
   );
 }
