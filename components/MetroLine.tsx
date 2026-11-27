@@ -84,8 +84,9 @@ export default function MetroLine({ stops, label }: { stops: Stop[]; label: stri
           <li key={`${s.name}-${s.when}`} className="group relative lg:text-center">
             <span
               aria-hidden
-              className={`absolute top-1 -left-[37px] block rounded-full border-[3px] transition-colors duration-300 lg:static lg:mx-auto lg:-mt-[46px] lg:mb-5 ${
-                big ? "size-6 lg:size-7" : "size-[18px] lg:size-5"
+              // The larger Siemens dot is offset so every dot shares one centre line and every label one top edge.
+              className={`absolute top-1 -left-[37px] block rounded-full border-[3px] transition-colors duration-300 lg:static lg:mx-auto ${
+                big ? "size-6 lg:-mt-[50px] lg:mb-4 lg:size-7" : "size-[18px] lg:-mt-[46px] lg:mb-5 lg:size-5"
               } ${end ? "border-ink bg-accent" : visited ? "border-ink bg-ink" : "border-line-2 bg-ground"} group-hover:scale-125 motion-safe:transition-transform`}
             />
             <p className="text-sm text-muted tabular">{s.when}</p>
