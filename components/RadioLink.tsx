@@ -169,8 +169,9 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
     dot = { x: pts[i].x + (pts[i + 1].x - pts[i].x) * f, y: pts[i].y + (pts[i + 1].y - pts[i].y) * f };
   }
 
-  const fieldOf = (i: number) => frame.fields.find((f) => i >= f.from && i < f.to)!;
-  const hoverField = hover !== null ? fieldOf(hover) : null;
+  // A new frame can be shorter than the byte under the pointer: ignore a hover index the frame no longer has.
+  const h = hover !== null && hover < frame.bytes.length ? hover : null;
+  const hoverField = h !== null ? (frame.fields.find((f) => h >= f.from && h < f.to) ?? null) : null;
   const shown = reduced ? frame.bytes.length : Math.min(revealed, frame.bytes.length);
   const verified = shown >= frame.bytes.length;
 
@@ -226,7 +227,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
         <rect x={CRG.x} y={CRG.y} width={CRG.w} height={CRG.h} rx="5" fill="var(--ink)" />
         <text x={CRG.x + 14} y={CRG.y + 18} fontSize="13" fontWeight="600" fontFamily="var(--font-instrument)" fill="var(--ground)">CRG</text>
         <text x={CRG.x + 14} y={CRG.y + 32} fontSize="10" fontFamily="var(--font-martian)" fill="#b9bec8">{t.crgSub}</text>
-        {verified && frame && (
+        {verified && (
           <circle cx={CRG.x + CRG.w - 14} cy={CRG.y + 14} r="4" fill="var(--accent)" />
         )}
 
@@ -249,7 +250,7 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
                       key={i}
                       onMouseEnter={() => setHover(i)}
                       className={`w-[22px] text-center font-mono text-[11px] leading-6 tabular transition-colors duration-150 ${
-                        hover === i ? "bg-ink text-ground" : isCrc && verified ? "bg-accent text-ink" : isPayload ? "bg-sunken" : ""
+                        h === i ? "bg-ink text-ground" : isCrc && verified ? "bg-accent text-ink" : isPayload ? "bg-sunken" : ""
                       } ${on ? "opacity-100" : "opacity-0"}`}
                     >
                       {hex(b)}
@@ -263,11 +264,11 @@ export default function RadioLink({ t }: { t: Dict["siemens"]["radio"] }) {
         </div>
 
         <p className="mt-3 min-h-5 font-mono text-[11px] text-ink-2" aria-live="polite">
-          {hover !== null
+          {h !== null && hoverField
             ? fill(t.hover, {
-                i: hover,
-                field: t.fields[hoverField!.id],
-                hex: `0x${hex(frame.bytes[hover])}${frame.bytes[hover] >= 32 && frame.bytes[hover] < 127 ? ` '${String.fromCharCode(frame.bytes[hover])}'` : ""}`,
+                i: h,
+                field: t.fields[hoverField.id],
+                hex: `0x${hex(frame.bytes[h])}${frame.bytes[h] >= 32 && frame.bytes[h] < 127 ? ` '${String.fromCharCode(frame.bytes[h])}'` : ""}`,
               })
             : fill(t.status, {
                 source: t.source[frame.source],
