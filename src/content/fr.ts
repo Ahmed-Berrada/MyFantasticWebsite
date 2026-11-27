@@ -239,6 +239,7 @@ export const fr: Dict = {
     live: "Le graphe des trains, la liaison radio, le carnet d'ordres et le pricer de ce site tournent en direct dans votre navigateur.",
   },
   notFound: {
+    metaTitle: "Page introuvable, Ahmed Berrada",
     code: "Erreur 404",
     title: "Cette page n'existe pas.",
     body: "Le lien est peut-être ancien, ou mal saisi.",
@@ -256,8 +257,16 @@ export const fr: Dict = {
     },
     code: "Code",
     status: "État",
+    stack: "Technologies",
     updated: "Dernière mise à jour",
     back: "Tous les projets",
+  },
+  pageEnd: {
+    next: "Suivant",
+    allNotes: "Tous les articles",
+    hiring: "Vous recrutez pour septembre 2027 ?",
+    email: "M'écrire",
+    cv: "Télécharger mon CV",
   },
   figures: {
     structure: {

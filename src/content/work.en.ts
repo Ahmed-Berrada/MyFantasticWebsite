@@ -200,7 +200,7 @@ export const casesEn: CaseStudy[] = [
     stack: "Python, pytest, Robot Framework, GitLab CI/CD, QEMU/KVM, Linux network namespaces",
     status: "Siemens Mobility, since September 2025. Delivered for CRG release 4.2. Internal tooling: no code or protocol details are published here.",
     repos: [],
-    updated: "2026-11-26",
+    updated: "2026-11-27",
     sections: [
       {
         id: "problem",
@@ -295,7 +295,7 @@ export const casesEn: CaseStudy[] = [
       { label: "Pipeline on GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
       { label: "Dashboard", href: "https://marketdatapipeline.ahmedberrada.com/" },
     ],
-    updated: "2026-11-26",
+    updated: "2026-11-27",
     sections: [
       {
         id: "problem",

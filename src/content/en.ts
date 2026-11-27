@@ -241,6 +241,7 @@ export const en = {
     live: "The train graph, radio link, order book and pricer on this site run live in your browser.",
   },
   notFound: {
+    metaTitle: "Page not found, Ahmed Berrada",
     code: "Error 404",
     title: "This page does not exist.",
     body: "The link may be old, or mistyped.",
@@ -258,8 +259,16 @@ export const en = {
     },
     code: "Code",
     status: "Status",
+    stack: "Stack",
     updated: "Last updated",
     back: "All work",
+  },
+  pageEnd: {
+    next: "Next",
+    allNotes: "All notes",
+    hiring: "Hiring for September 2027?",
+    email: "Email me",
+    cv: "Download my CV",
   },
   figures: {
     structure: {
