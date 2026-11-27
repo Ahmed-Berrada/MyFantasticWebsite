@@ -68,7 +68,7 @@ export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
     <section id="work" className="border-t border-line-2 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-24">
-          <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em]">{t.title}</h2>
+          <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.02em]">{t.title}</h2>
           <p className="text-xl leading-relaxed text-pretty text-ink-2">{t.lede}</p>
         </div>
 

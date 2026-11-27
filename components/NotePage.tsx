@@ -38,7 +38,7 @@ export default function NotePage({ lang, slug }: { lang: Lang; slug: string }) {
               {t.writing.back}
             </Link>
           </p>
-          <h1 className="mt-6 max-w-[48rem] font-display text-[clamp(34px,4.6vw,58px)] leading-[1] font-semibold tracking-[-0.03em] text-balance">{n.title}</h1>
+          <h1 className="mt-6 max-w-[48rem] font-display text-[clamp(34px,4.6vw,58px)] leading-[1] font-semibold tracking-[-0.02em] text-balance">{n.title}</h1>
           <p className="mt-5 text-ink-2">
             {t.writing.published} {formatDate(n.date, lang)}, {n.minutes} {t.writing.minutes}
           </p>

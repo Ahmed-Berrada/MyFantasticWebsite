@@ -12,7 +12,7 @@ export default function Siemens({ t, lang }: { t: Dict["siemens"]; lang: Lang })
         <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-20">
           <div className="max-w-[46rem]">
             <p className="text-ink-2">{t.since}</p>
-            <h2 className="mt-4 font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.03em] [font-variation-settings:'wdth'_88]">{t.title}</h2>
+            <h2 className="mt-4 font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.015em] [font-variation-settings:'wdth'_88]">{t.title}</h2>
             <p className="mt-3 text-lg text-ink-2">{t.subtitle}</p>
             <p className="mt-10 max-w-[38rem] text-xl leading-relaxed text-pretty">{t.lede}</p>
             <p className="mt-8">

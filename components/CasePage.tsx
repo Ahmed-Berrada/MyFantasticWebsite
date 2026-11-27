@@ -42,7 +42,7 @@ export default function CasePage({ lang, slug }: { lang: Lang; slug: string }) {
               {t.case.back}
             </Link>
           </p>
-          <h1 className="mt-6 max-w-[48rem] font-display text-[clamp(36px,5vw,64px)] leading-[0.98] font-semibold tracking-[-0.03em] text-balance">{c.title}</h1>
+          <h1 className="mt-6 max-w-[48rem] font-display text-[clamp(36px,5vw,64px)] leading-[0.98] font-semibold tracking-[-0.02em] text-balance">{c.title}</h1>
           <p className="mt-6 max-w-[40rem] text-xl leading-relaxed text-pretty">{c.plain}</p>
 
           <dl className="mt-10 grid gap-x-10 gap-y-3 border-y border-line py-6 text-[15px] sm:grid-cols-[8rem_1fr]">

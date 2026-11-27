@@ -14,7 +14,7 @@ export default function Background({ t }: { t: Dict["background"] }) {
   return (
     <section id="background" className="border-t border-line-2 py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <h2 className="mb-14 font-display text-[clamp(40px,5vw,68px)] leading-[0.95] font-semibold tracking-[-0.03em]">{t.title}</h2>
+        <h2 className="mb-14 font-display text-[clamp(40px,5vw,68px)] leading-[0.95] font-semibold tracking-[-0.02em]">{t.title}</h2>
         <div className="mb-20">
           <MetroLine stops={t.stops} label={t.metroLabel} />
         </div>
