@@ -105,8 +105,11 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
           </span>
           <p className="truncate font-mono text-xs text-ink-2">
             <span className="font-medium text-ink">{running ? t.live : t.paused}</span>
-            <span className="mx-2 text-line-2">/</span>
-            {t.sub}
+            {/* The description only fits beside the status from the sm breakpoint. */}
+            <span className="hidden sm:inline">
+              <span className="mx-2 text-line-2">/</span>
+              {t.sub}
+            </span>
           </p>
         </div>
         <button
@@ -117,9 +120,11 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
               publish();
             } else setUserPaused(!paused);
           }}
-          className="shrink-0 rounded-[3px] border border-line px-2.5 py-1 font-mono text-[11px] text-ink-2 transition-colors hover:border-ink hover:text-ink active:translate-y-px"
+          type="button"
+          aria-pressed={reduced ? undefined : !paused}
+          className={`demo-button shrink-0 ${!paused && !reduced ? "demo-button-quiet" : ""}`}
         >
-          {paused || reduced ? t.run : t.pause}
+          {reduced ? t.step : paused ? t.run : t.pause}
         </button>
       </div>
 

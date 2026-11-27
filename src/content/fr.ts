@@ -171,6 +171,7 @@ export const fr: Dict = {
       sub: "moteur d'appariement, dans cet onglet",
       run: "lancer",
       pause: "pause",
+      step: "pas à pas",
       price: "prix",
       size: "taille",
       trades: "transactions",
@@ -187,6 +188,9 @@ export const fr: Dict = {
     mcUi: {
       header: "call européen, S₀ 100, K 100, σ 20 %, r 5 %, 1 an",
       run: "lancer",
+      running: "en cours…",
+      runAgain: "relancer",
+      done: "Estimation Monte Carlo {price} ± {ci} après {paths} trajectoires. Prix de Black-Scholes {bs}.",
       paths: "trajectoires",
       monteCarlo: "monte carlo",
       blackScholes: "black-scholes",

@@ -173,6 +173,7 @@ export const en = {
       sub: "matching engine, in this tab",
       run: "run",
       pause: "pause",
+      step: "step",
       price: "price",
       size: "size",
       trades: "trades",
@@ -189,6 +190,9 @@ export const en = {
     mcUi: {
       header: "european call, S₀ 100, K 100, σ 20%, r 5%, 1 year",
       run: "run live",
+      running: "running…",
+      runAgain: "run again",
+      done: "Monte Carlo estimate {price} ± {ci} after {paths} paths. Black-Scholes price {bs}.",
       paths: "paths",
       monteCarlo: "monte carlo",
       blackScholes: "black-scholes",
