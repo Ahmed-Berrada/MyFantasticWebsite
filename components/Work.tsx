@@ -19,6 +19,7 @@ function Project({
   facts,
   links,
   lang,
+  extra,
   children,
 }: {
   title: string;
@@ -26,6 +27,8 @@ function Project({
   facts: string[];
   links: ProjectLink[];
   lang: Lang;
+  /** More evidence under the facts, in the text column. */
+  extra?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   return (
@@ -35,7 +38,8 @@ function Project({
         <p className="mt-3 max-w-[44rem] text-lg leading-relaxed text-ink-2 text-pretty">{plain}</p>
       </header>
       <div className={`grid gap-12 pt-10 [&>*]:min-w-0 ${children ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-20" : ""}`}>
-        <div>
+        {/* Beside a tall demo, the text column travels with it instead of leaving a void under the links. */}
+        <div className={children ? "lg:sticky lg:top-24 lg:self-start" : ""}>
           <ul className="max-w-[40rem] space-y-4 text-ink-2">
             {facts.map((f) => (
               <li key={f} className="relative pl-6 leading-relaxed before:absolute before:top-[0.8em] before:left-0 before:h-px before:w-3.5 before:bg-ink">
@@ -56,6 +60,7 @@ function Project({
               ),
             )}
           </p>
+          {extra && <div className="mt-12 max-w-[40rem]">{extra}</div>}
         </div>
         {children}
       </div>
@@ -110,13 +115,11 @@ export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
             { label: t.pricer.note, href: "/writing/monte-carlo-against-black-scholes", internal: true },
             { label: t.pricer.repo, href: "https://github.com/Ahmed-Berrada/Monte-Carlo-Option-Pricing" },
           ]}
+          extra={<SpeedupChart t={t.pricerChart} lang={lang} />}
         >
-          <div className="space-y-10">
-            <div>
-              <MonteCarloLab t={t.mcUi} lang={lang} />
-              <p className="mt-3 text-sm text-muted">{t.pricer.demo}</p>
-            </div>
-            <SpeedupChart t={t.pricerChart} lang={lang} />
+          <div>
+            <MonteCarloLab t={t.mcUi} lang={lang} />
+            <p className="mt-3 text-sm text-muted">{t.pricer.demo}</p>
           </div>
         </Project>
       </div>
