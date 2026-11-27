@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Blocks from "./Blocks";
+import JsonLd from "./JsonLd";
 import SiteShell from "./SiteShell";
 import { formatDate } from "./WritingList";
 import { getCase, getDict } from "@/src/content";
-import { localPath } from "@/src/lib/seo";
+import { SITE_URL, authorRef, localPath } from "@/src/lib/seo";
 import type { Lang } from "@/src/content/types";
 import { notFound } from "next/navigation";
 
@@ -14,6 +15,21 @@ export default function CasePage({ lang, slug }: { lang: Lang; slug: string }) {
   if (!c) notFound();
   return (
     <SiteShell lang={lang} path={`/work/${c.slug}`}>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "TechArticle",
+          headline: c.title,
+          description: c.plain,
+          dateModified: c.updated,
+          inLanguage: lang,
+          mainEntityOfPage: SITE_URL + localPath(lang, `/work/${c.slug}`),
+          author: authorRef(lang),
+          ...(c.repos.length
+            ? { about: c.repos.map((r) => ({ "@type": "SoftwareSourceCode", name: r.label, codeRepository: r.href })) }
+            : {}),
+        }}
+      />
       <article className="mx-auto max-w-5xl px-5 pt-32 pb-24 md:px-8">
         <p>
           <Link href={`${localPath(lang, "/")}#work`} className="link text-sm">
