@@ -3,6 +3,7 @@
 #
 #   scripts/bench-lob-engine.sh                 # 5 runs, writes ./lob-bench-result.json
 #   RUNS=7 PIN_CPU=2 OUT=mac.json scripts/bench-lob-engine.sh
+#   MODEL="Dell XPS 15" scripts/bench-lob-engine.sh      # name the machine (read from DMI on Linux when readable)
 #   METHOD=50m RUNS=3 scripts/bench-lob-engine.sh   # the benchmark's earlier version (50 M ops, no warm-up)
 #
 # Needs: git, cmake, a C++17 compiler, python3. Works on Linux and macOS.
@@ -106,14 +107,18 @@ if command -v sysctl >/dev/null && sysctl -n machdep.cpu.brand_string >/dev/null
 OS="$(uname -sr)"
 if [ -r /etc/os-release ]; then OS="$(. /etc/os-release && echo "$PRETTY_NAME")"; fi
 COMPILER="$("$CXX_BIN" --version | head -1)"
+MODEL="${MODEL:-}"
+if [ -z "$MODEL" ] && [ -r /sys/class/dmi/id/product_name ]; then MODEL="$(xargs < /sys/class/dmi/id/product_name)"; fi
+if [ -z "$MODEL" ] && command -v sysctl >/dev/null && sysctl -n hw.model >/dev/null 2>&1; then MODEL="$(sysctl -n hw.model)"; fi
+MODEL="${MODEL:-unknown}"
 GOV="n/a"
 if [ -r /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ]; then GOV="$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)"; fi
 
 LOAD_AFTER="$(cut -d" " -f1 /proc/loadavg 2>/dev/null || uptime | sed -E "s/.*load averages?: *([0-9.]+).*/\1/")"
 
-python3 - "$WORK" "$RUNS" "$OUT" "$CPU" "$OS" "$COMPILER" "$GOV" "${PIN_CPU:-}" "$TIMER_NS" "$COMMIT" "$LOAD_BEFORE" "$LOAD_AFTER" "$METHOD" <<'PY'
+python3 - "$WORK" "$RUNS" "$OUT" "$CPU" "$OS" "$COMPILER" "$GOV" "${PIN_CPU:-}" "$TIMER_NS" "$COMMIT" "$LOAD_BEFORE" "$LOAD_AFTER" "$METHOD" "$MODEL" <<'PY'
 import json, sys, datetime, statistics
-work, runs, out, cpu, os_, compiler, gov, pin, timer, commit, load0, load1, method = sys.argv[1:]
+work, runs, out, cpu, os_, compiler, gov, pin, timer, commit, load0, load1, method, model = sys.argv[1:]
 data = [json.load(open(f"{work}/run{i}.json")) for i in range(1, int(runs) + 1)]
 keys = ["throughput", "mean", "p50", "p99", "p999", "max"]
 med = {k: statistics.median(d[k] for d in data) for k in keys}
@@ -122,7 +127,7 @@ mid = sorted(data, key=lambda d: d["p50"])[len(data) // 2]
 result = {
     "date": datetime.date.today().isoformat(),
     "repoCommit": commit,
-    "machine": {"cpu": cpu, "os": os_, "compiler": compiler, "governor": gov, "pinnedCpu": pin or None},
+    "machine": {"model": model, "cpu": cpu, "os": os_, "compiler": compiler, "governor": gov, "pinnedCpu": pin or None},
     "method": {"name": method, "ops": 5000000 if method == "readme" else 50000000, "warmup": 100000 if method == "readme" else 0, "seed": 42, "flags": "-O3 -march=native", "mix": "60 % add, 25 % cancel, 15 % aggressive"},
     "timerOverheadNs": float(timer),
     "loadAverage1m": {"before": float(load0), "after": float(load1)},
