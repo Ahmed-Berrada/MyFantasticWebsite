@@ -113,6 +113,7 @@ export const en = {
       demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
       repo: "Order_Book on GitHub",
       prototype: "C++ prototype on GitHub",
+      show: "Show the live order book",
     },
     ai: {
       title: "AI project",

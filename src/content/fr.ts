@@ -111,6 +111,7 @@ export const fr: Dict = {
       demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
       repo: "Order_Book sur GitHub",
       prototype: "Prototype C++ sur GitHub",
+      show: "Voir le carnet d'ordres en direct",
     },
     ai: {
       title: "Projet IA",
