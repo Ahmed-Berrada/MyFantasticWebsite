@@ -207,7 +207,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Le logiciel radio, appelé CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, rien n'existait : ni banc de test, ni outil, ni produit sur lequel s'appuyer.",
+            text: "La passerelle radio que fournit Siemens Mobility, le CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, rien n'existait : ni banc de test, ni outil, ni produit sur lequel s'appuyer.",
           },
           {
             t: "p",

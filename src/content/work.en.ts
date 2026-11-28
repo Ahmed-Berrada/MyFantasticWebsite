@@ -210,7 +210,7 @@ export const casesEn: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "The radio software, called the CRG, exchanges messages with equipment on the train and along the track. Without that equipment it cannot be tested. When I joined there was no test bench, no tool and no product to start from.",
+            text: "The radio gateway Siemens Mobility supplies, the CRG, exchanges messages with equipment on the train and along the track. Without that equipment it cannot be tested. When I joined there was no test bench, no tool and no product to start from.",
           },
           {
             t: "p",
