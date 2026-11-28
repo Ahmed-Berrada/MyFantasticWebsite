@@ -133,13 +133,14 @@ export default function TrainGraphCanvas({ labels, stations }: Props) {
       const firstMin = Math.ceil((ORIGIN_S + tLeft) / 60) * 60 - ORIGIN_S;
       for (let t = firstMin; t < tRight; t += 60) {
         const x = Math.round(xOf(t)) + 0.5;
+        if (x > R) break;
         const isFive = Math.round((ORIGIN_S + t) / 60) % 5 === 0;
         ctx.strokeStyle = colors.line;
         ctx.beginPath();
         ctx.moveTo(x, top - (isFive ? 10 : 5));
         ctx.lineTo(x, top);
         ctx.stroke();
-        if (isFive) ctx.fillText(clock(t).slice(0, 5), x + 4, top - 12);
+        if (isFive && x + 4 + ctx.measureText("00:00").width < R) ctx.fillText(clock(t).slice(0, 5), x + 4, top - 12);
       }
 
       // Pointer time and the train nearest to it
@@ -159,7 +160,11 @@ export default function TrainGraphCanvas({ labels, stations }: Props) {
         }
       }
 
-      // Trains
+      // Trains, clipped to the plot so nothing runs into the station-name gutter.
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, R, height);
+      ctx.clip();
       ctx.lineJoin = "round";
       for (const tr of g.trains) {
         if (tr.path[tr.path.length - 1].t < tLeft || tr.path[0].t > tRight) continue;
@@ -192,6 +197,8 @@ export default function TrainGraphCanvas({ labels, stations }: Props) {
         ctx.arc(xNow, yOf(y), 2.6, 0, Math.PI * 2);
         ctx.fill();
       }
+
+      ctx.restore();
 
       // Time cursor + readout
       if (p && tc !== null) {
@@ -235,12 +242,15 @@ export default function TrainGraphCanvas({ labels, stations }: Props) {
       // Station names in the gutter: all of them when there is room, otherwise every other one, always the
       // terminals and the station the hovered train is at or heading to.
       const names = namesRef.current;
-      const gap = stationRows.length > 1 ? stationRows[1] - stationRows[0] : 99;
-      const every = gap >= 13 ? 1 : 2;
       const room = width - R - 14;
+      // Stations are unevenly spaced: show a name only if it does not collide with one already shown, choosing
+      // the hovered train's station and the two terminals first.
+      const last = stationRows.length - 1;
+      const order = [highlight, 0, last, ...stationRows.map((_, i) => i)].filter((i, k, a) => i >= 0 && a.indexOf(i) === k);
+      const shown: number[] = [];
+      for (const i of order) if (shown.every((j) => Math.abs(stationRows[i] - stationRows[j]) >= 12)) shown.push(i);
       stationRows.forEach((py, i) => {
-        const isEnd = i === 0 || i === stationRows.length - 1;
-        if (i !== highlight && !isEnd && i % every !== 0) return;
+        if (!shown.includes(i)) return;
         let name = names[i] ?? String(i + 1);
         ctx.font = i === highlight ? `600 10.5px ${monoFont}` : `10.5px ${monoFont}`;
         while (name.length > 3 && ctx.measureText(name).width > room) name = name.slice(0, -2) + "…";
