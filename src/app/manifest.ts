@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Ahmed Berrada",
     short_name: "A. Berrada",
-    description: "Software engineer: critical systems and performance.",
+    description: "Software and AI engineer. Open to a CDI in Paris from September 2027.",
     start_url: "/",
     display: "browser",
     background_color: "#eceef0",

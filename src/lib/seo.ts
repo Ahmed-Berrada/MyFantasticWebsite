@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getDict } from "../content";
 import type { Lang } from "@/src/content/types";
 
 /** One canonical host. The apex domain redirects here (see next.config.ts). */
@@ -81,16 +82,13 @@ export function personJsonLd(lang: Lang) {
     "@type": "Person",
     name: "Ahmed Berrada",
     url: SITE_URL + localPath(lang, "/"),
-    jobTitle: lang === "fr" ? "Ingénieur logiciel" : "Software engineer",
-    description:
-      lang === "fr"
-        ? "Ingénieur logiciel, systèmes critiques et performance. Alternant chez Siemens Mobility, élève-ingénieur à l'ESIEA (2027)."
-        : "Software engineer, critical systems and performance. Apprentice at Siemens Mobility, ESIEA engineering student (2027).",
+    jobTitle: getDict(lang).meta.jobTitle,
+    description: getDict(lang).meta.person,
     email: `mailto:${LINKS.email}`,
     alumniOf: { "@type": "CollegeOrUniversity", name: "ESIEA" },
     worksFor: { "@type": "Organization", name: "Siemens Mobility" },
     address: { "@type": "PostalAddress", addressLocality: "Paris", addressCountry: "FR" },
     sameAs: [LINKS.github, LINKS.linkedin],
-    knowsAbout: ["C++", "Java", "Python", "Low-latency systems", "Matching engines", "Test automation", "Safety-critical software"],
+    knowsAbout: ["C++", "Java", "Python", "Artificial intelligence", "Low-latency systems", "Matching engines", "Test automation", "Safety-critical software"],
   };
 }

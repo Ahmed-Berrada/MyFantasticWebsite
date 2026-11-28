@@ -6,16 +6,16 @@ export const OG_SIZE = { width: 1200, height: 630 };
 
 const TEXT: Record<Lang, { who: string; thesis: [string, string]; line: string; alt: string }> = {
   en: {
-    who: "Ahmed Berrada, software engineer",
+    who: "Ahmed Berrada, software & AI engineer",
     thesis: ["Right first.", "Then fast."],
-    line: "Safety-critical rail software at Siemens Mobility. Engines measured in nanoseconds.",
-    alt: "Ahmed Berrada, software engineer. Right first. Then fast.",
+    line: "From New York's subway signalling to trading engines. Open to a CDI in Paris, September 2027.",
+    alt: "Ahmed Berrada, software and AI engineer. Right first. Then fast.",
   },
   fr: {
-    who: "Ahmed Berrada, ingénieur logiciel",
+    who: "Ahmed Berrada, ingénieur logiciel & IA",
     thesis: ["D'abord juste.", "Ensuite rapide."],
-    line: "Logiciel ferroviaire critique chez Siemens Mobility. Des moteurs mesurés à la nanoseconde.",
-    alt: "Ahmed Berrada, ingénieur logiciel. D'abord juste. Ensuite rapide.",
+    line: "De la signalisation du métro de New York aux moteurs de trading. CDI à Paris, septembre 2027.",
+    alt: "Ahmed Berrada, ingénieur logiciel et IA. D'abord juste. Ensuite rapide.",
   },
 };
 

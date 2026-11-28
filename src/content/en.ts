@@ -5,9 +5,11 @@
  */
 export const en = {
   meta: {
-    homeTitle: "Ahmed Berrada, software engineer for critical systems",
+    homeTitle: "Ahmed Berrada, software and AI engineer",
     homeDescription:
-      "Software that has to be right, then fast: safety-critical rail software at Siemens Mobility, low-latency engines. Paris, permanent role from Sept. 2027.",
+      "Software & AI engineer: safety-critical rail software at Siemens Mobility, trading engines. Open to a CDI in Paris from September 2027.",
+    jobTitle: "Software and AI engineer",
+    person: "Software and AI engineer. Apprentice at Siemens Mobility on New York's Crosstown line, ESIEA engineering student (2027). Open to a CDI in Paris from September 2027.",
     writingTitle: "Writing, Ahmed Berrada",
     writingDescription: "Short technical notes on things I measured or built: latency, determinism and checking numerical code.",
   },

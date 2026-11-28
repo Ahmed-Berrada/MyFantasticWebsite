@@ -3,9 +3,11 @@ import type { Dict } from "./en";
 /** Version française. Même forme que en.ts (le type en est dérivé). Les espaces avant ? ! : ; sont rendues insécables au chargement. */
 export const fr: Dict = {
   meta: {
-    homeTitle: "Ahmed Berrada, ingénieur logiciel, systèmes critiques",
+    homeTitle: "Ahmed Berrada, ingénieur logiciel et IA",
     homeDescription:
-      "Du logiciel juste, puis rapide : ferroviaire critique chez Siemens Mobility, moteurs basse latence. Paris, je cherche un CDI à partir de septembre 2027.",
+      "Ingénieur logiciel & IA : logiciel ferroviaire critique chez Siemens Mobility, moteurs de trading. Disponible pour un CDI à Paris dès septembre 2027.",
+    jobTitle: "Ingénieur logiciel et IA",
+    person: "Ingénieur logiciel et IA. Alternant chez Siemens Mobility sur la ligne Crosstown de New York, élève-ingénieur à l'ESIEA (2027). Disponible pour un CDI à Paris à partir de septembre 2027.",
     writingTitle: "Articles, Ahmed Berrada",
     writingDescription: "Courtes notes techniques sur ce que j'ai mesuré ou construit : latence, déterminisme et vérification de code numérique.",
   },
