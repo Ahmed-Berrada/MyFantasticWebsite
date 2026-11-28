@@ -2,7 +2,6 @@ import Background from "./Background";
 import Contact from "./Contact";
 import Hero from "./Hero";
 import JsonLd from "./JsonLd";
-import ProofStrip from "./ProofStrip";
 import SiteShell from "./SiteShell";
 import Siemens from "./Siemens";
 import Work from "./Work";
@@ -22,7 +21,6 @@ export default function HomePage({ lang }: { lang: Lang }) {
     <SiteShell lang={lang} path="/" rail>
       <JsonLd data={personJsonLd(lang)} />
       <Hero t={t.hero} cvHref={mine?.href ?? null} cvOtherHref={other?.href ?? null} />
-      <ProofStrip t={t.proof} lang={lang} />
       <Siemens t={t.siemens} lang={lang} />
       <Work t={t.work} lang={lang} />
       <WritingList notes={getNotes(lang)} t={t.writing} lang={lang} />

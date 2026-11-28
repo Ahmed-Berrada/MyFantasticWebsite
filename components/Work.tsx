@@ -1,7 +1,6 @@
 import Link from "next/link";
 import LiveOrderBook from "./LiveOrderBook";
-import MonteCarloLab from "./MonteCarloLab";
-import SpeedupChart from "./SpeedupChart";
+import AiPlaceholder from "./AiPlaceholder";
 import { localPath } from "@/src/lib/seo";
 import type { Dict } from "@/src/content";
 import type { Lang } from "@/src/content/types";
@@ -70,7 +69,7 @@ function Project({
 
 export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
   return (
-    <section id="work" className="border-t border-line-2 py-16 md:py-32">
+    <section id="work" className="border-t border-line-2 py-16 md:py-28">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-24">
           <h2 className="font-display text-[clamp(44px,6.5vw,92px)] leading-[0.92] font-semibold tracking-[-0.02em]">{t.title}</h2>
@@ -94,22 +93,14 @@ export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
           </div>
         </Project>
 
-        <Project
-          lang={lang}
-          title={t.pricer.title}
-          plain={t.pricer.plain}
-          facts={t.pricer.facts}
-          links={[
-            { label: t.pricer.note, href: "/writing/monte-carlo-against-black-scholes", internal: true },
-            { label: t.pricer.repo, href: "https://github.com/Ahmed-Berrada/Monte-Carlo-Option-Pricing" },
-          ]}
-          extra={<SpeedupChart t={t.pricerChart} lang={lang} />}
-        >
+        {/* The AI project, while it is being built: what it is and when it lands, beside a quiet animation. */}
+        <article className="mt-16 grid gap-10 border-t border-line pt-10 md:mt-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-center lg:gap-20">
           <div>
-            <MonteCarloLab t={t.mcUi} lang={lang} />
-            <p className="mt-3 text-sm text-muted">{t.pricer.demo}</p>
+            <h3 className="font-display text-4xl leading-tight font-medium tracking-tight md:text-5xl">{t.ai.title}</h3>
+            <p className="mt-3 max-w-[36rem] text-lg leading-relaxed text-ink-2 text-pretty">{t.ai.plain}</p>
           </div>
-        </Project>
+          <AiPlaceholder header={t.ai.header} status={t.ai.status} aria={t.ai.aria} />
+        </article>
       </div>
     </section>
   );
