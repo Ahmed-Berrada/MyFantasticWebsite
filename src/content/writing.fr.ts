@@ -117,6 +117,7 @@ export const notesFr: Note[] = [
         t: "p",
         text: "Un call européen dont le sous-jacent suit un mouvement brownien géométrique a un prix exact, Black-Scholes. C'est un bon test pour un pricer Monte Carlo : la simulation doit tomber dans son propre intervalle de confiance autour de la valeur exacte.",
       },
+      { t: "figure", id: "mc-lab" },
       { t: "h", text: "La vérification" },
       {
         t: "p",
@@ -151,6 +152,7 @@ export const notesFr: Note[] = [
         t: "p",
         text: "Le pricer GPU du dépôt Monte-Carlo-Option-Pricing a commencé comme un notebook. Sa première exécution valorisait un call sur 100 millions de trajectoires : 295 s en Python pur, 7,4 s avec NumPy vectorisé et 0,46 s sur GPU avec CuPy. Soit 16 fois plus rapide que NumPy, la comparaison qui compte ; les 647 fois face à une boucle Python en disent plus sur la boucle que sur le GPU.",
       },
+      { t: "figure", id: "mc-speedup" },
       {
         t: "p",
         text: "Le notebook n'a pas noté le modèle de GPU : considérez l'accélération comme indicative. Le dépôt est désormais un package testé, dont le script de benchmark note le CPU, le GPU et chaque temps, et dont la suite de tests compare chaque implémentation à Black-Scholes comme le décrit cette note. La démo de la page d'accueil utilise le même estimateur en TypeScript, et le test ci-dessus fait partie de la suite de tests de ce site.",

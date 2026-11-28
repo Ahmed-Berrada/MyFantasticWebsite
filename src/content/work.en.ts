@@ -262,8 +262,9 @@ export const casesEn: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "I cannot publish real frames or code. The radio scene on the [home page](/) uses an illustrative frame layout and a real CRC-32/MPEG-2, checked against the standard test value `0x0376E6E7`.",
+            text: "I cannot publish real frames or code. The radio scene below uses an illustrative frame layout and a real CRC-32/MPEG-2, checked against the standard test value `0x0376E6E7`. Write your own payload and watch the checksum follow.",
           },
+          { t: "figure", id: "radio-link" },
         ],
       },
       {

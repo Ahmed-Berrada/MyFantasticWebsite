@@ -259,8 +259,9 @@ export const casesFr: CaseStudy[] = [
           },
           {
             t: "p",
-            text: "Je ne peux pas publier de vraies trames ni de code. L'animation de la liaison radio de la [page d'accueil](/) utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`.",
+            text: "Je ne peux pas publier de vraies trames ni de code. La scène radio ci-dessous utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`. Écrivez votre propre charge utile et regardez la somme de contrôle suivre.",
           },
+          { t: "figure", id: "radio-link" },
         ],
       },
       {
