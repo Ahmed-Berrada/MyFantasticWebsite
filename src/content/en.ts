@@ -80,12 +80,14 @@ export const en = {
     since: "Since September 2025, apprenticeship until August 2027",
     title: "Siemens Mobility",
     subtitle: "Software engineer. Châtillon, France.",
-    lede: "New York City Transit (MTA) is moving its Crosstown subway line to CBTC, radio-based train control, over 5G. Siemens Mobility supplies the radio gateway between the trains and the trackside (the CRG, safety-critical software under CENELEC EN 50128), the onboard radio equipment and the train supervision system. I build what the gateway is tested with: a simulator of the onboard and wayside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
-    flaps: [
-      { value: "300+", label: "test scenarios" },
-      { value: "200+", label: "message types" },
-      { value: "9", label: "test engineers and validators use it" },
-      { value: "4.2", label: "CRG release it was delivered for" },
+    lede: "New York City Transit is moving its Crosstown subway line to radio-based train control (CBTC) over 5G. Siemens Mobility supplies the radio gateway between the trains and the trackside, safety-critical software under CENELEC EN 50128, with the onboard radio equipment and the train supervision system. I build what the gateway is tested with.",
+    pathLabel: "What I built, in order",
+    path: [
+      { when: "Sep 2025", text: "Joined Siemens Mobility in Châtillon as an apprentice. There was no test bench and no tool to start from." },
+      { text: "Built the simulator, the CRG Message Generator: it plays the train and trackside equipment, with 200+ message types." },
+      { text: "Set up the test platform with the team: Git, GitLab CI/CD, and the gateway virtualised with QEMU/KVM. I own the test bench." },
+      { text: "Wrote a scenario library in business keywords (Robot Framework), so people who do not code write their own tests." },
+      { when: "Nov 2026", text: "Delivered for CRG release 4.2: 300+ scenarios, used by 9 people in Châtillon and Pune." },
     ],
     caseCta: "How the test bench works",
     radio: {
@@ -125,15 +127,22 @@ export const en = {
     orderBook: {
       title: "Order Book",
       plain:
-        "A matching engine, built twice. First in C++17, to learn how fast a book can match. Then in Java 21, as the core of a trading venue: orders over FIX or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
+        "The core of a trading venue in Java 21, built to be right first: orders over FIX 4.4 or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
       facts: [
-        "C++ prototype, first published: median 163 ns, P99 996 ns, 3.46 million operations a second. Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX 4.4 session tests over a real socket, with a 90% coverage gate in CI.",
-        "No numbers for the Java engine yet, on purpose: its benchmarking is phase 6, after correctness.",
+        "Checked by property-based tests, a reference model, a SIGKILL crash test and FIX session tests over a real socket, with a 90% coverage gate in CI.",
+        "Benchmarking the Java engine is the next phase, on purpose: correctness came first.",
+        "It started as a C++ prototype, now archived, measured at a 149 ns median per operation on a laptop.",
       ],
       demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
       repo: "Order_Book on GitHub",
       prototype: "C++ prototype on GitHub",
+    },
+    ai: {
+      title: "AI project",
+      plain: "Building now. It lands here with its code, what it does and what it measured, as soon as it ships.",
+      header: "ai project",
+      status: "in progress",
+      aria: "An animated network with signals moving through it: a placeholder while the AI project is being built.",
     },
     pricer: {
       title: "GPU option pricer",

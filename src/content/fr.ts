@@ -78,12 +78,14 @@ export const fr: Dict = {
     since: "Depuis septembre 2025, alternance jusqu'en août 2027",
     title: "Siemens Mobility",
     subtitle: "Ingénieur logiciel. Châtillon, France.",
-    lede: "New York City Transit (MTA) fait passer sa ligne de métro Crosstown à une signalisation CBTC sur radio 5G. Siemens Mobility fournit la passerelle radio entre les trains et la voie (le CRG, logiciel critique de sécurité selon CENELEC EN 50128), les équipements radio embarqués et le système de supervision des trains. Je développe ce qui sert à tester la passerelle : un simulateur des équipements bord et sol, une bibliothèque de scénarios utilisable par des non-développeurs, et le banc de test qui fait tourner le tout.",
-    flaps: [
-      { value: "300+", label: "scénarios de test" },
-      { value: "200+", label: "types de messages" },
-      { value: "9", label: "ingénieurs de test et validateurs l'utilisent" },
-      { value: "4.2", label: "version du CRG pour laquelle il a été livré" },
+    lede: "New York City Transit fait passer sa ligne de métro Crosstown au contrôle des trains par radio (CBTC) sur 5G. Siemens Mobility fournit la passerelle radio entre les trains et la voie, logiciel critique de sécurité selon CENELEC EN 50128, ainsi que les équipements radio embarqués et le système de supervision des trains. Je développe ce qui sert à tester la passerelle.",
+    pathLabel: "Ce que j'ai construit, dans l'ordre",
+    path: [
+      { when: "sept. 2025", text: "Arrivée chez Siemens Mobility à Châtillon en alternance. Il n'y avait ni banc de test ni outil sur lequel s'appuyer." },
+      { text: "Développement du simulateur, le CRG Message Generator : il joue les équipements bord et sol, avec plus de 200 types de messages." },
+      { text: "Mise en place de la plateforme de test avec l'équipe : Git, GitLab CI/CD, et la passerelle virtualisée avec QEMU/KVM. Je suis responsable du banc de test." },
+      { text: "Une bibliothèque de scénarios en mots-clés métier (Robot Framework), pour que des non-développeurs écrivent leurs propres tests." },
+      { when: "nov. 2026", text: "Livré pour la version 4.2 du CRG : plus de 300 scénarios, utilisés par 9 personnes à Châtillon et à Pune." },
     ],
     caseCta: "Comment fonctionne le banc de test",
     radio: {
@@ -123,15 +125,22 @@ export const fr: Dict = {
     orderBook: {
       title: "Order Book",
       plain:
-        "Un moteur d'appariement construit deux fois. D'abord en C++17, pour savoir à quelle vitesse un carnet peut apparier. Puis en Java 21, comme cœur d'une plateforme de négociation : ordres en FIX ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
+        "Le cœur d'une plateforme de négociation en Java 21, construit pour être juste d'abord : ordres en FIX 4.4 ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
       facts: [
-        "Prototype C++, première mesure publiée : médiane 163 ns, P99 996 ns, 3,46 millions d'opérations par seconde. Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de session FIX 4.4 sur un vrai socket, avec un seuil de 90 % de couverture en CI.",
-        "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, une fois le comportement prouvé juste.",
+        "Vérifié par des tests de propriétés, un modèle de référence, un test de crash avec SIGKILL et des tests de session FIX sur un vrai socket, avec un seuil de 90 % de couverture en CI.",
+        "Le benchmark du moteur Java est la prochaine phase, volontairement : la justesse d'abord.",
+        "Il a commencé comme un prototype C++, aujourd'hui archivé, mesuré à 149 ns de médiane par opération sur un portable.",
       ],
       demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
       repo: "Order_Book sur GitHub",
       prototype: "Prototype C++ sur GitHub",
+    },
+    ai: {
+      title: "Projet IA",
+      plain: "En construction. Il arrive ici avec son code, ce qu'il fait et ce qu'il a mesuré, dès qu'il sera livré.",
+      header: "projet ia",
+      status: "en cours",
+      aria: "Un réseau animé que traversent des signaux : un espace réservé pendant que le projet IA se construit.",
     },
     pricer: {
       title: "Pricer d'options sur GPU",
