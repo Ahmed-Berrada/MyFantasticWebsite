@@ -252,7 +252,7 @@ export const casesFr: CaseStudy[] = [
             rows: [
               ["Types de messages pris en charge", "200+"],
               ["Scénarios", "300+"],
-              ["Utilisateurs", "9 validateurs : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
+              ["Utilisateurs", "9 personnes, dans l'équipe de validation à Châtillon et l'équipe logicielle à Pune : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
               ["Livré pour", "la version 4.2 du CRG"],
               ["Pourquoi c'est indispensable", "le CRG ne fonctionne qu'avec les équipements bord et sol ; sur le banc, le simulateur tient ce rôle"],
             ],

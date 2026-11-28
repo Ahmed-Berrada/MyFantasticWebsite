@@ -75,7 +75,7 @@ export const fr: Dict = {
     since: "Depuis septembre 2025, alternance jusqu'en août 2027",
     title: "Siemens Mobility",
     subtitle: "Ingénieur logiciel. Châtillon, France.",
-    lede: "New York City Transit (MTA) fait passer sa ligne de métro Crosstown à une signalisation CBTC sur radio 5G. Le logiciel radio au cœur du système, le CRG, est un logiciel critique de sécurité (CENELEC EN 50128). Je développe ce qui sert à le tester : un simulateur des équipements bord et sol, une bibliothèque de scénarios utilisable par des non-développeurs, et le banc de test qui fait tourner le tout.",
+    lede: "New York City Transit (MTA) fait passer sa ligne de métro Crosstown à une signalisation CBTC sur radio 5G. Siemens Mobility fournit la passerelle radio entre les trains et la voie (le CRG, logiciel critique de sécurité selon CENELEC EN 50128), les équipements radio embarqués et le système de supervision des trains. Je développe ce qui sert à tester la passerelle : un simulateur des équipements bord et sol, une bibliothèque de scénarios utilisable par des non-développeurs, et le banc de test qui fait tourner le tout.",
     flaps: [
       { value: "300+", label: "scénarios de test" },
       { value: "200+", label: "types de messages" },

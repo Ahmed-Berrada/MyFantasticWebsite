@@ -77,7 +77,7 @@ export const en = {
     since: "Since September 2025, apprenticeship until August 2027",
     title: "Siemens Mobility",
     subtitle: "Software engineer. Châtillon, France.",
-    lede: "New York City Transit (MTA) is moving its Crosstown subway line to CBTC, radio-based train control, over 5G. The radio software at its centre, the CRG, is safety-critical (CENELEC EN 50128). I build what it is tested with: a simulator of the onboard and wayside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
+    lede: "New York City Transit (MTA) is moving its Crosstown subway line to CBTC, radio-based train control, over 5G. Siemens Mobility supplies the radio gateway between the trains and the trackside (the CRG, safety-critical software under CENELEC EN 50128), the onboard radio equipment and the train supervision system. I build what the gateway is tested with: a simulator of the onboard and wayside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
     flaps: [
       { value: "300+", label: "test scenarios" },
       { value: "200+", label: "message types" },

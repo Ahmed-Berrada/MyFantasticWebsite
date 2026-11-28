@@ -255,7 +255,7 @@ export const casesEn: CaseStudy[] = [
             rows: [
               ["Message types supported", "200+"],
               ["Scenarios", "300+"],
-              ["Users", "9 validators: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
+              ["Users", "9 people, in the validation team in Châtillon and the software team in Pune: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
               ["Delivered for", "CRG release 4.2"],
               ["Why it matters", "the CRG only runs against train and trackside equipment; on the bench, the simulator is that equipment"],
             ],
