@@ -132,17 +132,6 @@ export const en = {
       repo: "Order_Book on GitHub",
       prototype: "C++ prototype on GitHub",
     },
-    pipeline: {
-      title: "Market data pipeline",
-      plain:
-        "A small data service, end to end: scheduled ingestion of stock and crypto prices, validation, a time-series database, and an API and dashboard deployed on Google Cloud.",
-      facts: [
-        "One-minute bars for seven stocks and funds, five-minute prices for four crypto assets.",
-        "Airflow locally, Cloud Run Jobs and Cloud Scheduler in production.",
-      ],
-      live: "Dashboard",
-      repo: "Pipeline on GitHub",
-    },
     pricer: {
       title: "GPU option pricer",
       plain:

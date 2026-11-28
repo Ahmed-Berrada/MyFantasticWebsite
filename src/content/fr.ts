@@ -130,17 +130,6 @@ export const fr: Dict = {
       repo: "Order_Book sur GitHub",
       prototype: "Prototype C++ sur GitHub",
     },
-    pipeline: {
-      title: "Pipeline de données de marché",
-      plain:
-        "Un petit service de données, de bout en bout : ingestion planifiée de prix d'actions et de cryptos, validation, base de séries temporelles, et une API et un tableau de bord déployés sur Google Cloud.",
-      facts: [
-        "Barres d'une minute pour sept actions et fonds, prix à cinq minutes pour quatre cryptos.",
-        "Airflow en local, Cloud Run Jobs et Cloud Scheduler en production.",
-      ],
-      live: "Tableau de bord",
-      repo: "Pipeline sur GitHub",
-    },
     pricer: {
       title: "Pricer d'options sur GPU",
       plain:

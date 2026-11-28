@@ -47,6 +47,9 @@ const nextConfig: NextConfig = {
       // lob-engine was the C++ prototype of Order Book; both now share one case study.
       { source: "/work/lob-engine", destination: "/work/order-book", permanent: true },
       { source: "/fr/work/lob-engine", destination: "/fr/work/order-book", permanent: true },
+      // The market data pipeline is no longer hosted; its case study was removed until it is rebuilt.
+      { source: "/work/market-data-pipeline", destination: "/#work", permanent: false },
+      { source: "/fr/work/market-data-pipeline", destination: "/fr#work", permanent: false },
     ];
   },
 };

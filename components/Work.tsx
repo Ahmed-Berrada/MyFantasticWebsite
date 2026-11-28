@@ -96,18 +96,6 @@ export default function Work({ t, lang }: { t: Dict["work"]; lang: Lang }) {
 
         <Project
           lang={lang}
-          title={t.pipeline.title}
-          plain={t.pipeline.plain}
-          facts={t.pipeline.facts}
-          links={[
-            { label: t.caseCta, href: "/work/market-data-pipeline", internal: true },
-            { label: t.pipeline.live, href: "https://marketdatapipeline.ahmedberrada.com/" },
-            { label: t.pipeline.repo, href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
-          ]}
-        />
-
-        <Project
-          lang={lang}
           title={t.pricer.title}
           plain={t.pricer.plain}
           facts={t.pricer.facts}
