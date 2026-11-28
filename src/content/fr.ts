@@ -51,29 +51,6 @@ export const fr: Dict = {
       aria: "Un graphique de circulation en direct de la ligne Crosstown de New York, avec un horaire illustratif : chaque ligne est un train qui circule entre les 21 gares, de Court Sq à Church Av. Le survol du graphique donne l'horaire.",
     },
   },
-  proof: {
-    label: "Preuves",
-    items: [
-      {
-        value: "300+",
-        label: "scénarios de test pour un logiciel radio CBTC critique",
-        note: "Siemens Mobility. Utilisés par 9 ingénieurs de test et validateurs.",
-        href: "/work/cbtc-validation",
-      },
-      {
-        value: "90 %",
-        label: "de couverture de lignes et de branches exigée par la CI",
-        note: "Order Book. S'y ajoutent des tests de propriétés et un test de reprise après crash.",
-        href: "/work/order-book",
-      },
-      {
-        value: "149 ns",
-        label: "médiane par opération sur le carnet, P99 460 ns",
-        note: "Prototype C++ d'Order Book, reproduit sur un portable. La première mesure publiée donnait 163 ns.",
-        href: "/work/order-book",
-      },
-    ],
-  },
   siemens: {
     since: "Depuis septembre 2025, alternance jusqu'en août 2027",
     title: "Siemens Mobility",
@@ -143,16 +120,7 @@ export const fr: Dict = {
       aria: "Un réseau animé que traversent des signaux : un espace réservé pendant que le projet IA se construit.",
     },
     pricer: {
-      title: "Pricer d'options sur GPU",
-      plain:
-        "Valorise un call européen par Monte Carlo et le compare au prix exact de Black-Scholes. Sur 100 millions de trajectoires, un GPU avec CuPy met 0,46 s, contre 7,4 s pour NumPy vectorisé : 16 fois plus rapide.",
-      facts: [
-        "Python pur met 295 s sur les mêmes trajectoires, mais une boucle Python est une référence faible : NumPy est la comparaison honnête.",
-        "C'est désormais un package Python testé : quatre implémentations, intervalles de confiance, variables antithétiques, et un script de benchmark qui note le matériel. Le modèle de GPU de cette première exécution n'a pas été noté.",
-      ],
       demo: "Ici dans cet onglet, sans GPU : la même estimation, comparée au prix exact de Black-Scholes.",
-      note: "Lire comment c'est vérifié",
-      repo: "Pricer sur GitHub",
     },
     pricerChart: {
       python: "Python pur",

@@ -53,29 +53,6 @@ export const en = {
       aria: "A live train graph of New York's Crosstown line, with an illustrative timetable: each line is a train running between the 21 stations from Court Sq to Church Av. Moving the pointer reads the timetable.",
     },
   },
-  proof: {
-    label: "Evidence",
-    items: [
-      {
-        value: "300+",
-        label: "test scenarios for safety-critical CBTC radio software",
-        note: "Siemens Mobility. Used by 9 test engineers and validators.",
-        href: "/work/cbtc-validation",
-      },
-      {
-        value: "90%",
-        label: "line and branch coverage required by CI",
-        note: "Order Book, with property-based tests and a crash-recovery test.",
-        href: "/work/order-book",
-      },
-      {
-        value: "149 ns",
-        label: "median per order book operation, P99 460 ns",
-        note: "Order Book's C++ prototype, reproduced on a laptop. The first published run gave 163 ns.",
-        href: "/work/order-book",
-      },
-    ],
-  },
   siemens: {
     since: "Since September 2025, apprenticeship until August 2027",
     title: "Siemens Mobility",
@@ -145,16 +122,7 @@ export const en = {
       aria: "An animated network with signals moving through it: a placeholder while the AI project is being built.",
     },
     pricer: {
-      title: "GPU option pricer",
-      plain:
-        "Prices a European call by Monte Carlo and checks it against the exact Black-Scholes price. On 100 million paths a GPU with CuPy takes 0.46 s, against 7.4 s for vectorised NumPy: 16 times faster.",
-      facts: [
-        "Pure Python takes 295 s on the same paths, but a Python loop is a weak baseline: NumPy is the fair comparison.",
-        "Now a tested Python package: four backends, confidence intervals, antithetic variates, and a benchmark script that records the hardware. The GPU model of this first run was not recorded.",
-      ],
       demo: "Running in this tab, not on a GPU: the same estimate, checked against the exact Black-Scholes price.",
-      note: "Read how it is checked",
-      repo: "Pricer on GitHub",
     },
     pricerChart: {
       python: "Pure Python",
