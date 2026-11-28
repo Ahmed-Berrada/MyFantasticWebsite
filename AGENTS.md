@@ -1,8 +1,15 @@
 # AGENTS.md
 
 ## Project snapshot
-- Portfolio for ahmedberrada.com. Positioning: software that has to be right, then fast. Safety-critical work at
-  Siemens Mobility first; low-latency engines (finance as one application) second. Not a finance-only site.
+- Portfolio for ahmedberrada.com. Goal: a recruiter knows within 10 seconds who he is, what job he wants, his proof
+  and how to reach him. Headline: "Software & AI engineer", open to a CDI in Paris from September 2027. Targets the
+  best-paid roles (finance first, then AI and maths). Siemens Mobility is the flagship story; the slogan
+  "Right first. Then fast." is a subtitle.
+- Home page, in this order: Hero (name largest, role, CDI line, Email / CV / LinkedIn, Crosstown graph) -> Siemens
+  (project + dated path) -> Work (Order Book, AI project in progress) -> Writing (compact list) -> Background (two-line
+  metro map + education, tools, languages) -> Contact. Only two interactive pieces on it: the hero graph and the
+  order-book demo (behind a button on phones). Every number appears once per depth: once on the home page, then in
+  detail in the case study. Keep it short: about 4,800 px on desktop, about 8 phone screens today.
 - Stack: Next.js 16 App Router, React 19, TypeScript strict, Tailwind v4, vitest. Deployed on Vercel.
 - Two languages: English at `/`, French under `/fr`. Route groups `(en)` and `(fr)/fr` each have their own root layout
   (`<html lang>`), both using `components/RootShell.tsx`. Pages are thin: they call `components/*Page.tsx` with a `lang`.
@@ -23,18 +30,25 @@
 - Quote the first published lob-engine figures next to the reproduced ones, and say which is which. The README did not
   record the hardware of the first run; the reproductions are from an HP ProBook 450 G7 (i7-10510U, powersave governor, no pinning).
 - Siemens work is internal: only what the CV says. Illustrative frames are labelled as such. No real frames or code.
+  On Crosstown, Hitachi Rail is the CBTC contractor (public); Siemens Mobility supplies the radio gateway (the CRG), the
+  onboard radio equipment and the ATS. Say only Siemens' part, never describe a partner's scope, and do not claim
+  "Siemens' first 5G project" unless the manager confirms it. The tool's 9 users are the validation team in
+  Châtillon and the software team in Pune (5 developers, 4 trained non-developers): never "9 engineers".
   Say plainly what was his (the simulator, the test bench) and what was the team's; he does not write the safety code.
 - The C++ prototype pools its orders but is not allocation-free (id map, new levels, trade vectors): never claim
   "no allocation" for it. Name the benchmark's limits rather than hide them.
 - No invented testimonials, logos or client claims. The AWS certificate and the `/consulting` page are deliberately not on the site.
-- Projects shown: Order Book (Java engine + C++ prototype), market data pipeline, GPU option pricer (last, demoted).
+- Projects shown: Order Book (Java engine leads, the archived C++ prototype in one line) and the AI project (a
+  placeholder card, `AiPlaceholder`, until it ships; replace it with a real card and case study then). The GPU pricer
+  lives only in its note. The market data pipeline was removed (not hosted); its URLs redirect (307) to `#work`.
 - Case studies and notes end with `PageEnd` (next page, email, CV). Errors render `ErrorPage` per language; the 404 sits
   inside `SiteShell`.
 
 ## Design direction (keep it)
 - Whiteprint greys + true ink + one safety yellow (`--accent`) as a fill only. `--bid` / `--ask` only inside market-data
   instruments. Type: Bricolage Grotesque (display), Instrument Sans (body), Martian Mono inside instruments.
-- The hero is the one bold moment: `TrainGraphCanvas` (pointer reads the timetable) and `ProximityText`. Everything else stays quiet.
+- The hero is the one bold moment: `TrainGraphCanvas` (New York's Crosstown line, 21 real station names in
+  `src/content/crosstown.ts`, an illustrative timetable, labelled as such) and `ProximityText` on the name.
 - Avoid template tells: no uppercase eyebrows, no 01/02 numbering unless the content is a sequence, no `A · B · C`
   meta strings, no arrow glyphs on links, no icon set, no fade-up on every section. Links use `.link`.
 - Demos start only when asked (order book, Monte Carlo). The Monte Carlo simulation runs in a Web Worker
@@ -42,7 +56,9 @@
   and, under `prefers-reduced-motion`, runs no animation loop at all. Demo buttons use `.demo-button`.
 - The radio demo takes input from its own field, never from a window-wide key listener. Hover state must survive a
   frame getting shorter (guard indexes against the current frame).
-- Large statistics never animate through wrong values (the split-flaps play once and do not replay on hover).
+- Large statistics never animate through wrong values.
+- The radio demo is a figure in the Siemens case study (`radio-link`); the Monte Carlo lab and speed-up chart are
+  figures in their note (`mc-lab`, `mc-speedup`). `components/figures/Figure.tsx` maps the ids.
 
 ## Code map
 - `src/lib/traingraph.ts`: Marey train graph model. `src/lib/orderbook/*`: price-time priority book and seeded flow.
