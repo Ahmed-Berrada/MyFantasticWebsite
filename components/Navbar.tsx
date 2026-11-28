@@ -80,6 +80,9 @@ export default function Navbar({ t, lang, altPath, cvHref }: Props) {
               {l.label}
             </Link>
           ))}
+          <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="text-ink-2 transition-colors hover:text-ink">
+            {t.linkedin}
+          </a>
           <a href={LINKS.github} target="_blank" rel="noreferrer" className="text-ink-2 transition-colors hover:text-ink">
             {t.github}
           </a>
@@ -112,6 +115,9 @@ export default function Navbar({ t, lang, altPath, cvHref }: Props) {
               </Link>
             ))}
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-4">
+              <a href={LINKS.linkedin} target="_blank" rel="noreferrer" className="link link-tap">
+                {t.linkedin}
+              </a>
               <a href={LINKS.github} target="_blank" rel="noreferrer" className="link link-tap">
                 {t.github}
               </a>
