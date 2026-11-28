@@ -5,9 +5,11 @@
  */
 export const en = {
   meta: {
-    homeTitle: "Ahmed Berrada, software engineer for critical systems",
+    homeTitle: "Ahmed Berrada, software and AI engineer",
     homeDescription:
-      "Software that has to be right, then fast: safety-critical rail software at Siemens Mobility, low-latency engines. Paris, permanent role from Sept. 2027.",
+      "Software & AI engineer: safety-critical rail software at Siemens Mobility, trading engines. Open to a CDI in Paris from September 2027.",
+    jobTitle: "Software and AI engineer",
+    person: "Software and AI engineer. Apprentice at Siemens Mobility on New York's Crosstown line, ESIEA engineering student (2027). Open to a CDI in Paris from September 2027.",
     writingTitle: "Writing, Ahmed Berrada",
     writingDescription: "Short technical notes on things I measured or built: latency, determinism and checking numerical code.",
   },
@@ -18,6 +20,7 @@ export const en = {
     writing: "Writing",
     background: "Background",
     contact: "Contact",
+    linkedin: "LinkedIn",
     github: "GitHub",
     cv: "CV",
     menu: "Menu",
@@ -30,59 +33,38 @@ export const en = {
   },
   hero: {
     name: "Ahmed Berrada",
-    role: "Software engineer, critical systems and performance",
-    status:
-      "Final-year engineering student at ESIEA (2027) and apprentice at Siemens Mobility. Looking for a permanent role (CDI) in Paris from September 2027.",
+    role: "Software & AI engineer. I build systems that have to work, from New York's subway signalling to trading engines.",
+    open: "Open to a CDI in Paris from September 2027.",
+    status: "Final-year engineering student at ESIEA and apprentice software engineer at Siemens Mobility.",
     thesis: ["Right first.", "Then fast."],
-    intro:
-      "At Siemens Mobility I build the test tools for the radio software of New York's Crosstown subway line. On my own time I build matching engines and measure them. The discipline is the same in both: deterministic, measured and tested.",
     email: "Email me",
     cv: "Download CV",
+    linkedin: "LinkedIn",
     cvOther: "CV en français",
     graph: {
-      train: "train {id}, {dir}",
-      down: "down",
-      up: "up",
-      dwell: "at station {station}, leaves in {s} s",
-      run: "{s} s to station {station}",
+      title: "Crosstown line, New York. Illustrative timetable",
+      train: "train {id} {dir}",
+      down: "to Church Av",
+      up: "to Court Sq",
+      dwell: "at {station}, leaves in {s} s",
+      run: "{s} s to {station}",
       hint: "Move the pointer over the graph to read the timetable.",
       hintTouch: "Touch the graph to read the timetable.",
-      aria: "A live train graph: each line is a train running between stations over time. Moving the pointer reads the timetable.",
+      aria: "A live train graph of New York's Crosstown line, with an illustrative timetable: each line is a train running between the 21 stations from Court Sq to Church Av. Moving the pointer reads the timetable.",
     },
-  },
-  proof: {
-    label: "Evidence",
-    items: [
-      {
-        value: "300+",
-        label: "test scenarios for safety-critical CBTC radio software",
-        note: "Siemens Mobility. Used by 9 test engineers and validators.",
-        href: "/work/cbtc-validation",
-      },
-      {
-        value: "90%",
-        label: "line and branch coverage required by CI",
-        note: "Order Book, with property-based tests and a crash-recovery test.",
-        href: "/work/order-book",
-      },
-      {
-        value: "149 ns",
-        label: "median per order book operation, P99 460 ns",
-        note: "Order Book's C++ prototype, reproduced on a laptop. The first published run gave 163 ns.",
-        href: "/work/order-book",
-      },
-    ],
   },
   siemens: {
     since: "Since September 2025, apprenticeship until August 2027",
     title: "Siemens Mobility",
     subtitle: "Software engineer. Châtillon, France.",
-    lede: "New York City Transit (MTA) is moving its Crosstown subway line to CBTC, radio-based train control, over 5G. The radio software at its centre, the CRG, is safety-critical (CENELEC EN 50128). I build what it is tested with: a simulator of the onboard and wayside equipment, a scenario library that people who do not code can use, and the test bench that runs it all.",
-    flaps: [
-      { value: "300+", label: "test scenarios" },
-      { value: "200+", label: "message types" },
-      { value: "9", label: "test engineers and validators use it" },
-      { value: "4.2", label: "CRG release it was delivered for" },
+    lede: "New York City Transit is moving its Crosstown subway line to radio-based train control (CBTC) over 5G. Siemens Mobility supplies the radio gateway between the trains and the trackside, safety-critical software under CENELEC EN 50128, with the onboard radio equipment and the train supervision system. I build what the gateway is tested with.",
+    pathLabel: "What I built, in order",
+    path: [
+      { when: "Sep 2025", text: "Joined Siemens Mobility in Châtillon as an apprentice. There was no test bench and no tool to start from." },
+      { text: "Built the simulator, the CRG Message Generator: it plays the train and trackside equipment, with 200+ message types." },
+      { text: "Set up the test platform with the team: Git, GitLab CI/CD, and the gateway virtualised with QEMU/KVM. I own the test bench." },
+      { text: "Wrote a scenario library in business keywords (Robot Framework), so people who do not code write their own tests." },
+      { when: "Nov 2026", text: "Delivered for CRG release 4.2: 300+ scenarios, used by 9 people in Châtillon and Pune." },
     ],
     caseCta: "How the test bench works",
     radio: {
@@ -122,38 +104,26 @@ export const en = {
     orderBook: {
       title: "Order Book",
       plain:
-        "A matching engine, built twice. First in C++17, to learn how fast a book can match. Then in Java 21, as the core of a trading venue: orders over FIX or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
+        "The core of a trading venue in Java 21, built to be right first: orders over FIX 4.4 or REST, each one journaled before it is matched, and the exact state rebuilt after a crash.",
       facts: [
-        "C++ prototype, first published: median 163 ns, P99 996 ns, 3.46 million operations a second. Reproduced on an HP ProBook (i7-10510U): median 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Java engine: property-based tests, a reference-model check, a SIGKILL crash test and FIX 4.4 session tests over a real socket, with a 90% coverage gate in CI.",
-        "No numbers for the Java engine yet, on purpose: its benchmarking is phase 6, after correctness.",
+        "Checked by property-based tests, a reference model, a SIGKILL crash test and FIX session tests over a real socket, with a 90% coverage gate in CI.",
+        "Benchmarking the Java engine is the next phase, on purpose: correctness came first.",
+        "It started as a C++ prototype, now archived, measured at a 149 ns median per operation on a laptop.",
       ],
       demo: "A TypeScript port of the prototype's structure, running in this tab. Press run.",
       repo: "Order_Book on GitHub",
       prototype: "C++ prototype on GitHub",
+      show: "Show the live order book",
     },
-    pipeline: {
-      title: "Market data pipeline",
-      plain:
-        "A small data service, end to end: scheduled ingestion of stock and crypto prices, validation, a time-series database, and an API and dashboard deployed on Google Cloud.",
-      facts: [
-        "One-minute bars for seven stocks and funds, five-minute prices for four crypto assets.",
-        "Airflow locally, Cloud Run Jobs and Cloud Scheduler in production.",
-      ],
-      live: "Dashboard",
-      repo: "Pipeline on GitHub",
+    ai: {
+      title: "AI project",
+      plain: "Building now. It lands here with its code, what it does and what it measured, as soon as it ships.",
+      header: "ai project",
+      status: "in progress",
+      aria: "An animated network with signals moving through it: a placeholder while the AI project is being built.",
     },
     pricer: {
-      title: "GPU option pricer",
-      plain:
-        "Prices a European call by Monte Carlo and checks it against the exact Black-Scholes price. On 100 million paths a GPU with CuPy takes 0.46 s, against 7.4 s for vectorised NumPy: 16 times faster.",
-      facts: [
-        "Pure Python takes 295 s on the same paths, but a Python loop is a weak baseline: NumPy is the fair comparison.",
-        "Now a tested Python package: four backends, confidence intervals, antithetic variates, and a benchmark script that records the hardware. The GPU model of this first run was not recorded.",
-      ],
       demo: "Running in this tab, not on a GPU: the same estimate, checked against the exact Black-Scholes price.",
-      note: "Read how it is checked",
-      repo: "Pricer on GitHub",
     },
     pricerChart: {
       python: "Pure Python",
@@ -223,16 +193,18 @@ export const en = {
     ],
     languagesTitle: "Languages",
     languages: "French (C2), English (C1, my daily working language), Arabic (native).",
-    metroLabel: "Path so far, as a metro line",
+    metroLabel: "Path so far, as a metro map: the ESIEA line from 2022 to 2027 and the Siemens Mobility line from September 2025, meeting at the next stop",
+    lines: { school: "ESIEA line, 2022 to 2027", work: "Siemens Mobility line, Sep 2025 to Aug 2027" },
     stops: [
-      { when: "2022", name: "ESIEA", note: "Engineering school, computer science" },
-      { when: "2023", name: "Axeli", note: "Network intern" },
-      { when: "2024", name: "Maroc Telecom", note: "Cloud and network intern" },
-      { when: "2024", name: "ESIEA", note: "Student ambassador" },
-      { when: "2025", name: "Siemens Mobility", note: "Apprentice software engineer" },
-      { when: "2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
-      { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-      { when: "2027", name: "Next stop", note: "A permanent role, Paris" },
+      { line: "school", when: "2022", name: "ESIEA", note: "Engineering school, computer science" },
+      { line: "school", when: "2023", name: "Axeli", note: "Network intern" },
+      { line: "school", when: "2024", name: "Maroc Telecom", note: "Cloud and network intern" },
+      { line: "school", when: "2024", name: "ESIEA", note: "Student ambassador" },
+      { line: "work", when: "Sep 2025", name: "Siemens Mobility", note: "Apprentice software engineer" },
+      { line: "school", when: "Sep 2026", name: "GDG on Campus ESIEA", note: "Co-founder" },
+      { line: "school", when: "Nov 2026", name: "Junction", note: "Hackathon, Espoo" },
+      { line: "work", when: "Nov 2026", name: "First delivery", note: "The test tooling ships with a CRG release" },
+      { line: "end", when: "Sep 2027", name: "Next stop", note: "A CDI in Paris" },
     ],
   },
   contact: {

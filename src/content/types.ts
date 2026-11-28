@@ -1,6 +1,16 @@
 export type Lang = "en" | "fr";
 
-export type FigureId = "lob-structure" | "lob-results" | "lob-histogram" | "id-map-probe" | "order-path" | "cbtc-bench";
+export type FigureId =
+  | "lob-structure"
+  | "lob-results"
+  | "lob-histogram"
+  | "id-map-probe"
+  | "order-path"
+  | "cbtc-bench"
+  | "radio-link"
+  | "order-book-demo"
+  | "mc-lab"
+  | "mc-speedup";
 
 /**
  * A block of article content. Text supports `code` spans and [label](href) links;

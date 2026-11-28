@@ -210,7 +210,7 @@ export const casesEn: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "The radio software, called the CRG, exchanges messages with equipment on the train and along the track. Without that equipment it cannot be tested. When I joined there was no test bench, no tool and no product to start from.",
+            text: "The radio gateway Siemens Mobility supplies, the CRG, exchanges messages with equipment on the train and along the track. Without that equipment it cannot be tested. When I joined there was no test bench, no tool and no product to start from.",
           },
           {
             t: "p",
@@ -255,15 +255,16 @@ export const casesEn: CaseStudy[] = [
             rows: [
               ["Message types supported", "200+"],
               ["Scenarios", "300+"],
-              ["Users", "9 validators: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
+              ["Users", "9 people, in the validation team in Châtillon and the software team in Pune: 5 developers and 4 trained non-developers, who write and run their own scenarios"],
               ["Delivered for", "CRG release 4.2"],
               ["Why it matters", "the CRG only runs against train and trackside equipment; on the bench, the simulator is that equipment"],
             ],
           },
           {
             t: "p",
-            text: "I cannot publish real frames or code. The radio scene on the [home page](/) uses an illustrative frame layout and a real CRC-32/MPEG-2, checked against the standard test value `0x0376E6E7`.",
+            text: "I cannot publish real frames or code. The radio scene below uses an illustrative frame layout and a real CRC-32/MPEG-2, checked against the standard test value `0x0376E6E7`. Write your own payload and watch the checksum follow.",
           },
+          { t: "figure", id: "radio-link" },
         ],
       },
       {
@@ -282,88 +283,6 @@ export const casesEn: CaseStudy[] = [
           {
             t: "p",
             text: "I remain test bench owner until the apprenticeship ends in August 2027. From September 2027 I am looking for a permanent role: critical or embedded software, test and validation tooling, or performance-sensitive systems.",
-          },
-        ],
-      },
-    ],
-  },
-
-  {
-    slug: "market-data-pipeline",
-    title: "Market data pipeline",
-    plain: "A pipeline that fetches stock and crypto prices on a schedule, checks and stores them, and serves them through an API and a dashboard.",
-    stack: "Python, TimescaleDB, Airflow, Cloud Run, FastAPI, Next.js",
-    status: "Deployed on Cloud Run and Vercel, with a public dashboard. Throughput and API latency are not measured yet.",
-    repos: [
-      { label: "Pipeline on GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
-      { label: "Dashboard", href: "https://marketdatapipeline.ahmedberrada.com/" },
-    ],
-    updated: "2026-11-27",
-    sections: [
-      {
-        id: "problem",
-        blocks: [
-          {
-            t: "p",
-            text: "Prices come from public APIs at different rhythms and with gaps. They have to be fetched on a schedule, validated, stored so that time-range queries stay fast, and served to a dashboard.",
-          },
-        ],
-      },
-      {
-        id: "constraints",
-        blocks: [
-          {
-            t: "list",
-            items: [
-              "Free public sources: Yahoo Finance for one-minute bars on seven stocks and funds (SPY, NVDA, MSFT, SIE.DE, GOOGL, PLTR, URTH) and CoinGecko for five-minute prices on BTC, ETH, SOL and XRP.",
-              "Two environments: Airflow with Docker Compose locally, and Cloud Run Jobs with Cloud Scheduler in production, without Airflow.",
-            ],
-          },
-        ],
-      },
-      {
-        id: "approach",
-        blocks: [
-          {
-            t: "p",
-            text: "Each pipeline follows the same four tasks: extract, transform, load, log success. After loading, it refreshes the TimescaleDB continuous aggregates. The transform step cleans and validates the data and computes a 20-period and a 50-period simple moving average and daily returns.",
-          },
-          {
-            t: "table",
-            head: ["Layer", "Choice"],
-            rows: [
-              ["Storage", "TimescaleDB Cloud hypertables with 7-day chunks, compression after 7 days (segmented by symbol), continuous aggregates refreshed hourly over a 3-day window"],
-              ["Scheduling", "Airflow DAGs locally, Cloud Run Jobs and Cloud Scheduler in production"],
-              ["API", "FastAPI on Cloud Run: OHLCV history, latest price, indicators, pipeline status"],
-              ["Dashboard", "Next.js with candlestick and line charts, hosted on Vercel"],
-            ],
-          },
-        ],
-      },
-      {
-        id: "result",
-        blocks: [
-          {
-            t: "p",
-            text: "What exists and can be inspected: the [dashboard](https://marketdatapipeline.ahmedberrada.com/) and the code. What does not exist yet: a measurement of ingestion throughput or API latency. I would add both before quoting any number.",
-          },
-        ],
-      },
-      {
-        id: "reproduce",
-        blocks: [
-          {
-            t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline\ncd Market_data_pipeline\n# set DATABASE_URL and X_CG_DEMO_API_KEY in .env, as the README describes\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow on :8080, API on :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
-          },
-        ],
-      },
-      {
-        id: "next",
-        blocks: [
-          {
-            t: "list",
-            items: ["Measure ingestion throughput and API latency, and publish the method with the numbers."],
           },
         ],
       },

@@ -73,9 +73,15 @@ for (const feed of ["/writing/feed.xml", "/fr/writing/feed.xml"]) {
   const body = await r.text();
   check(r.status === 200 && /rss\+xml/.test(r.headers.get("content-type") ?? "") && (body.match(/<item>/g)?.length ?? 0) > 0, `feed ${feed}`);
 }
-for (const [from, to] of [["/work/lob-engine", "/work/order-book"], ["/fr/work/lob-engine", "/fr/work/order-book"]]) {
+for (const [from, to, status] of [
+  ["/work/lob-engine", "/work/order-book", 308],
+  ["/fr/work/lob-engine", "/fr/work/order-book", 308],
+  // The pipeline is gone for now, not for good: a temporary redirect.
+  ["/work/market-data-pipeline", "/#work", 307],
+  ["/fr/work/market-data-pipeline", "/fr#work", 307],
+]) {
   const r = await fetch(BASE + from, { redirect: "manual" });
-  check(r.status === 308 && (r.headers.get("location") ?? "").endsWith(to), `redirect ${from} -> ${to}`);
+  check(r.status === status && (r.headers.get("location") ?? "").endsWith(to), `redirect ${from} -> ${to}`);
 }
 
 {
@@ -87,8 +93,8 @@ for (const [from, to] of [["/work/lob-engine", "/work/order-book"], ["/fr/work/l
     check(r?.status() === 404 && facts.lang === lang && facts.title.length > 0 && facts.nav, `404 ${path} (${lang}, titled, with nav)`);
   }
 
-  // Both demos actually run: the Monte Carlo worker (and the CSP that allows it) and the order book.
-  await page.goto(BASE + "/", { waitUntil: "networkidle" });
+  // Both demos actually run: the Monte Carlo worker (and the CSP that allows it), in its note, and the order book.
+  await page.goto(BASE + "/writing/monte-carlo-against-black-scholes", { waitUntil: "networkidle" });
   const mc = page.getByRole("button", { name: /run live/i });
   await mc.scrollIntoViewIfNeeded();
   await page.waitForTimeout(600);
@@ -99,9 +105,10 @@ for (const [from, to] of [["/work/lob-engine", "/work/order-book"], ["/fr/work/l
     .then(() => true, () => false);
   check(finished, "Monte Carlo demo runs to 1,000,000 paths");
 
+  await page.goto(BASE + "/", { waitUntil: "networkidle" });
   const book = page.getByRole("button", { name: /^run$/ });
   await book.scrollIntoViewIfNeeded();
-  const orders = () => page.locator("text=orders >> xpath=following-sibling::p").first().innerText();
+  const orders = () => page.locator("p", { hasText: /^orders$/ }).locator("xpath=following-sibling::p").first().innerText();
   const before = await orders();
   await book.click();
   await page.waitForTimeout(1500);
@@ -116,12 +123,16 @@ for (const [from, to] of [["/work/lob-engine", "/work/order-book"], ["/fr/work/l
   await page.goto(BASE + "/", { waitUntil: "networkidle" });
   const toggle = page.locator("button[aria-controls=mobile-menu]");
   await toggle.click();
+  await page.waitForTimeout(400); // the menu fades in over 200 ms: check contrast once it has settled
   const open = (await toggle.getAttribute("aria-expanded")) === "true" && (await page.locator("main[inert]").count()) === 1;
   await page.evaluate(axeSource);
   const { violations } = await page.evaluate(() => window.axe.run());
   await page.keyboard.press("Escape");
   const closed = (await toggle.getAttribute("aria-expanded")) === "false" && (await page.evaluate(() => document.activeElement?.getAttribute("aria-controls"))) === "mobile-menu";
   check(open && closed, "mobile menu opens, Escape closes it and returns focus");
+  // On a phone the order book is one tap away.
+  await page.getByRole("button", { name: /live order book/i }).click();
+  check(await page.getByRole("button", { name: /^run$/ }).isVisible(), "phone: the order book opens on request");
   check(violations.length === 0, `axe with the mobile menu open${violations.length ? `: ${violations.map((v) => v.id).join(", ")}` : ""}`);
   await context.close();
 }

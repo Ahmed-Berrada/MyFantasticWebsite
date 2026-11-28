@@ -16,7 +16,7 @@ describe("seo helpers", () => {
   });
 
   it("adds the name to a title only when the whole fits in 60 characters", () => {
-    expect(titleWithName("Market data pipeline")).toBe("Market data pipeline, Ahmed Berrada");
+    expect(titleWithName("Test tooling at Siemens")).toBe("Test tooling at Siemens, Ahmed Berrada");
     const long = "Order Book: a matching engine, from C++ prototype to venue core";
     expect(titleWithName(long)).toBe(long);
   });

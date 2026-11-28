@@ -207,7 +207,7 @@ export const casesFr: CaseStudy[] = [
         blocks: [
           {
             t: "p",
-            text: "Le logiciel radio, appelé CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, rien n'existait : ni banc de test, ni outil, ni produit sur lequel s'appuyer.",
+            text: "La passerelle radio que fournit Siemens Mobility, le CRG, échange des messages avec des équipements à bord du train et le long de la voie. Sans ces équipements, il ne peut pas être testé. À mon arrivée, rien n'existait : ni banc de test, ni outil, ni produit sur lequel s'appuyer.",
           },
           {
             t: "p",
@@ -252,15 +252,16 @@ export const casesFr: CaseStudy[] = [
             rows: [
               ["Types de messages pris en charge", "200+"],
               ["Scénarios", "300+"],
-              ["Utilisateurs", "9 validateurs : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
+              ["Utilisateurs", "9 personnes, dans l'équipe de validation à Châtillon et l'équipe logicielle à Pune : 5 développeurs et 4 non-développeurs formés, qui écrivent et exécutent leurs propres scénarios"],
               ["Livré pour", "la version 4.2 du CRG"],
               ["Pourquoi c'est indispensable", "le CRG ne fonctionne qu'avec les équipements bord et sol ; sur le banc, le simulateur tient ce rôle"],
             ],
           },
           {
             t: "p",
-            text: "Je ne peux pas publier de vraies trames ni de code. L'animation de la liaison radio de la [page d'accueil](/) utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`.",
+            text: "Je ne peux pas publier de vraies trames ni de code. La scène radio ci-dessous utilise un format de trame illustratif et un vrai CRC-32/MPEG-2, vérifié sur la valeur de test standard `0x0376E6E7`. Écrivez votre propre charge utile et regardez la somme de contrôle suivre.",
           },
+          { t: "figure", id: "radio-link" },
         ],
       },
       {
@@ -279,88 +280,6 @@ export const casesFr: CaseStudy[] = [
           {
             t: "p",
             text: "Je reste responsable du banc de test jusqu'à la fin de l'alternance, en août 2027. À partir de septembre 2027, je cherche un CDI : logiciel critique ou embarqué, outillage de test et de validation, ou systèmes où la performance compte.",
-          },
-        ],
-      },
-    ],
-  },
-
-  {
-    slug: "market-data-pipeline",
-    title: "Pipeline de données de marché",
-    plain: "Un pipeline qui récupère à intervalles réguliers des prix d'actions et de cryptos, les contrôle et les stocke, et les sert par une API et un tableau de bord.",
-    stack: "Python, TimescaleDB, Airflow, Cloud Run, FastAPI, Next.js",
-    status: "Déployé sur Cloud Run et Vercel, avec un tableau de bord public. Le débit et la latence de l'API ne sont pas encore mesurés.",
-    repos: [
-      { label: "Pipeline sur GitHub", href: "https://github.com/Ahmed-Berrada/Market_data_pipeline" },
-      { label: "Tableau de bord", href: "https://marketdatapipeline.ahmedberrada.com/" },
-    ],
-    updated: "2026-11-27",
-    sections: [
-      {
-        id: "problem",
-        blocks: [
-          {
-            t: "p",
-            text: "Les prix viennent d'API publiques, à des rythmes différents et avec des trous. Il faut les récupérer à intervalles réguliers, les valider, les stocker pour que les requêtes par plage de temps restent rapides, et les servir à un tableau de bord.",
-          },
-        ],
-      },
-      {
-        id: "constraints",
-        blocks: [
-          {
-            t: "list",
-            items: [
-              "Des sources publiques gratuites : Yahoo Finance pour des barres d'une minute sur sept actions et fonds (SPY, NVDA, MSFT, SIE.DE, GOOGL, PLTR, URTH) et CoinGecko pour des prix à cinq minutes sur BTC, ETH, SOL et XRP.",
-              "Deux environnements : Airflow avec Docker Compose en local, et Cloud Run Jobs avec Cloud Scheduler en production, sans Airflow.",
-            ],
-          },
-        ],
-      },
-      {
-        id: "approach",
-        blocks: [
-          {
-            t: "p",
-            text: "Chaque pipeline suit les quatre mêmes tâches : extraire, transformer, charger, journaliser le succès. Après le chargement, il rafraîchit les agrégats continus de TimescaleDB. L'étape de transformation nettoie et valide les données, et calcule des moyennes mobiles simples sur 20 et 50 périodes ainsi que les rendements quotidiens.",
-          },
-          {
-            t: "table",
-            head: ["Couche", "Choix"],
-            rows: [
-              ["Stockage", "Hypertables TimescaleDB Cloud en chunks de 7 jours, compression après 7 jours (segmentée par symbole), agrégats continus rafraîchis toutes les heures sur une fenêtre de 3 jours"],
-              ["Ordonnancement", "DAGs Airflow en local, Cloud Run Jobs et Cloud Scheduler en production"],
-              ["API", "FastAPI sur Cloud Run : historique OHLCV, dernier prix, indicateurs, état du pipeline"],
-              ["Tableau de bord", "Next.js avec graphiques en chandeliers et en lignes, hébergé sur Vercel"],
-            ],
-          },
-        ],
-      },
-      {
-        id: "result",
-        blocks: [
-          {
-            t: "p",
-            text: "Ce qui existe et peut être inspecté : le [tableau de bord](https://marketdatapipeline.ahmedberrada.com/) et le code. Ce qui n'existe pas encore : une mesure du débit d'ingestion ou de la latence de l'API. J'ajouterais les deux avant de citer le moindre chiffre.",
-          },
-        ],
-      },
-      {
-        id: "reproduce",
-        blocks: [
-          {
-            t: "code",
-            text: "git clone https://github.com/Ahmed-Berrada/Market_data_pipeline\ncd Market_data_pipeline\n# renseigner DATABASE_URL et X_CG_DEMO_API_KEY dans .env, comme le décrit le README\npsql \"$DATABASE_URL\" -f db/schema.sql\ndocker compose up -d        # Airflow sur :8080, API sur :8000\npip install -r requirements.txt && python scripts/backfill.py --days 365\ncurl http://localhost:8000/api/stocks/SPY/latest",
-          },
-        ],
-      },
-      {
-        id: "next",
-        blocks: [
-          {
-            t: "list",
-            items: ["Mesurer le débit d'ingestion et la latence de l'API, et publier la méthode avec les chiffres."],
           },
         ],
       },

@@ -117,6 +117,7 @@ export const notesEn: Note[] = [
         t: "p",
         text: "A European call under geometric Brownian motion has an exact price, Black-Scholes. That makes it a good test for a Monte Carlo pricer: the simulation must land inside its own confidence interval around the exact value.",
       },
+      { t: "figure", id: "mc-lab" },
       { t: "h", text: "The check" },
       {
         t: "p",
@@ -151,6 +152,7 @@ export const notesEn: Note[] = [
         t: "p",
         text: "The GPU pricer in the Monte-Carlo-Option-Pricing repository started as a notebook. Its first run priced a call with 100 million paths: 295 s in pure Python, 7.4 s with vectorised NumPy and 0.46 s on a GPU with CuPy. That is 16 times faster than NumPy, which is the comparison that matters; the 647 times against a Python loop says more about the loop than about the GPU.",
       },
+      { t: "figure", id: "mc-speedup" },
       {
         t: "p",
         text: "The notebook did not record the GPU model, so treat the speedup as indicative. The repository is now a tested package whose benchmark script records the CPU, the GPU and every timing, and whose test suite checks every backend against Black-Scholes the way this note describes. The demo on the home page uses the same estimator in TypeScript, and the test above is part of this site's test suite.",

@@ -3,9 +3,11 @@ import type { Dict } from "./en";
 /** Version française. Même forme que en.ts (le type en est dérivé). Les espaces avant ? ! : ; sont rendues insécables au chargement. */
 export const fr: Dict = {
   meta: {
-    homeTitle: "Ahmed Berrada, ingénieur logiciel, systèmes critiques",
+    homeTitle: "Ahmed Berrada, ingénieur logiciel et IA",
     homeDescription:
-      "Du logiciel juste, puis rapide : ferroviaire critique chez Siemens Mobility, moteurs basse latence. Paris, je cherche un CDI à partir de septembre 2027.",
+      "Ingénieur logiciel & IA : logiciel ferroviaire critique chez Siemens Mobility, moteurs de trading. Disponible pour un CDI à Paris dès septembre 2027.",
+    jobTitle: "Ingénieur logiciel et IA",
+    person: "Ingénieur logiciel et IA. Alternant chez Siemens Mobility sur la ligne Crosstown de New York, élève-ingénieur à l'ESIEA (2027). Disponible pour un CDI à Paris à partir de septembre 2027.",
     writingTitle: "Articles, Ahmed Berrada",
     writingDescription: "Courtes notes techniques sur ce que j'ai mesuré ou construit : latence, déterminisme et vérification de code numérique.",
   },
@@ -16,6 +18,7 @@ export const fr: Dict = {
     writing: "Articles",
     background: "Parcours",
     contact: "Contact",
+    linkedin: "LinkedIn",
     github: "GitHub",
     cv: "CV",
     menu: "Menu",
@@ -28,59 +31,38 @@ export const fr: Dict = {
   },
   hero: {
     name: "Ahmed Berrada",
-    role: "Ingénieur logiciel, systèmes critiques et performance",
-    status:
-      "Élève-ingénieur en dernière année à l'ESIEA (diplôme en 2027) et alternant chez Siemens Mobility. Je cherche un CDI à Paris à partir de septembre 2027.",
+    role: "Ingénieur logiciel & IA. Je construis des systèmes qui doivent fonctionner, de la signalisation du métro de New York aux moteurs de trading.",
+    open: "Disponible pour un CDI à Paris à partir de septembre 2027.",
+    status: "Élève-ingénieur en dernière année à l'ESIEA et alternant ingénieur logiciel chez Siemens Mobility.",
     thesis: ["D'abord juste.", "Ensuite rapide."],
-    intro:
-      "Chez Siemens Mobility, je développe les outils de test du logiciel radio de la ligne Crosstown du métro de New York. Sur mon temps libre, j'écris des moteurs d'appariement et je les mesure. La même exigence dans les deux cas : du code déterministe, mesuré et testé.",
     email: "M'écrire",
     cv: "Télécharger le CV",
+    linkedin: "LinkedIn",
     cvOther: "CV in English",
     graph: {
-      train: "train {id}, sens {dir}",
-      down: "aller",
-      up: "retour",
-      dwell: "en gare {station}, part dans {s} s",
-      run: "{s} s avant la gare {station}",
+      title: "Ligne Crosstown, New York. Horaire illustratif",
+      train: "train {id} {dir}",
+      down: "vers Church Av",
+      up: "vers Court Sq",
+      dwell: "à {station}, part dans {s} s",
+      run: "{s} s avant {station}",
       hint: "Survolez le graphique pour lire l'horaire.",
       hintTouch: "Touchez le graphique pour lire l'horaire.",
-      aria: "Un graphique de circulation en direct : chaque ligne est un train qui roule entre des gares au fil du temps. Le survol du graphique donne l'horaire.",
+      aria: "Un graphique de circulation en direct de la ligne Crosstown de New York, avec un horaire illustratif : chaque ligne est un train qui circule entre les 21 gares, de Court Sq à Church Av. Le survol du graphique donne l'horaire.",
     },
-  },
-  proof: {
-    label: "Preuves",
-    items: [
-      {
-        value: "300+",
-        label: "scénarios de test pour un logiciel radio CBTC critique",
-        note: "Siemens Mobility. Utilisés par 9 ingénieurs de test et validateurs.",
-        href: "/work/cbtc-validation",
-      },
-      {
-        value: "90 %",
-        label: "de couverture de lignes et de branches exigée par la CI",
-        note: "Order Book. S'y ajoutent des tests de propriétés et un test de reprise après crash.",
-        href: "/work/order-book",
-      },
-      {
-        value: "149 ns",
-        label: "médiane par opération sur le carnet, P99 460 ns",
-        note: "Prototype C++ d'Order Book, reproduit sur un portable. La première mesure publiée donnait 163 ns.",
-        href: "/work/order-book",
-      },
-    ],
   },
   siemens: {
     since: "Depuis septembre 2025, alternance jusqu'en août 2027",
     title: "Siemens Mobility",
     subtitle: "Ingénieur logiciel. Châtillon, France.",
-    lede: "New York City Transit (MTA) fait passer sa ligne de métro Crosstown à une signalisation CBTC sur radio 5G. Le logiciel radio au cœur du système, le CRG, est un logiciel critique de sécurité (CENELEC EN 50128). Je développe ce qui sert à le tester : un simulateur des équipements bord et sol, une bibliothèque de scénarios utilisable par des non-développeurs, et le banc de test qui fait tourner le tout.",
-    flaps: [
-      { value: "300+", label: "scénarios de test" },
-      { value: "200+", label: "types de messages" },
-      { value: "9", label: "ingénieurs de test et validateurs l'utilisent" },
-      { value: "4.2", label: "version du CRG pour laquelle il a été livré" },
+    lede: "New York City Transit fait passer sa ligne de métro Crosstown au contrôle des trains par radio (CBTC) sur 5G. Siemens Mobility fournit la passerelle radio entre les trains et la voie, logiciel critique de sécurité selon CENELEC EN 50128, ainsi que les équipements radio embarqués et le système de supervision des trains. Je développe ce qui sert à tester la passerelle.",
+    pathLabel: "Ce que j'ai construit, dans l'ordre",
+    path: [
+      { when: "sept. 2025", text: "Arrivée chez Siemens Mobility à Châtillon en alternance. Il n'y avait ni banc de test ni outil sur lequel s'appuyer." },
+      { text: "Développement du simulateur, le CRG Message Generator : il joue les équipements bord et sol, avec plus de 200 types de messages." },
+      { text: "Mise en place de la plateforme de test avec l'équipe : Git, GitLab CI/CD, et la passerelle virtualisée avec QEMU/KVM. Je suis responsable du banc de test." },
+      { text: "Une bibliothèque de scénarios en mots-clés métier (Robot Framework), pour que des non-développeurs écrivent leurs propres tests." },
+      { when: "nov. 2026", text: "Livré pour la version 4.2 du CRG : plus de 300 scénarios, utilisés par 9 personnes à Châtillon et à Pune." },
     ],
     caseCta: "Comment fonctionne le banc de test",
     radio: {
@@ -120,38 +102,26 @@ export const fr: Dict = {
     orderBook: {
       title: "Order Book",
       plain:
-        "Un moteur d'appariement construit deux fois. D'abord en C++17, pour savoir à quelle vitesse un carnet peut apparier. Puis en Java 21, comme cœur d'une plateforme de négociation : ordres en FIX ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
+        "Le cœur d'une plateforme de négociation en Java 21, construit pour être juste d'abord : ordres en FIX 4.4 ou en REST, chacun journalisé avant d'être apparié, et l'état exact reconstruit après un crash.",
       facts: [
-        "Prototype C++, première mesure publiée : médiane 163 ns, P99 996 ns, 3,46 millions d'opérations par seconde. Reproduit sur un HP ProBook (i7-10510U) : médiane 149 ns, P99 460 ns, P99.9 909 ns.",
-        "Moteur Java : tests de propriétés, comparaison à un modèle de référence, test de crash avec SIGKILL et tests de session FIX 4.4 sur un vrai socket, avec un seuil de 90 % de couverture en CI.",
-        "Pas encore de chiffres pour le moteur Java, volontairement : son benchmark est la phase 6, une fois le comportement prouvé juste.",
+        "Vérifié par des tests de propriétés, un modèle de référence, un test de crash avec SIGKILL et des tests de session FIX sur un vrai socket, avec un seuil de 90 % de couverture en CI.",
+        "Le benchmark du moteur Java est la prochaine phase, volontairement : la justesse d'abord.",
+        "Il a commencé comme un prototype C++, aujourd'hui archivé, mesuré à 149 ns de médiane par opération sur un portable.",
       ],
       demo: "Un portage TypeScript de la structure du prototype, qui tourne dans cet onglet. Appuyez sur lancer.",
       repo: "Order_Book sur GitHub",
       prototype: "Prototype C++ sur GitHub",
+      show: "Voir le carnet d'ordres en direct",
     },
-    pipeline: {
-      title: "Pipeline de données de marché",
-      plain:
-        "Un petit service de données, de bout en bout : ingestion planifiée de prix d'actions et de cryptos, validation, base de séries temporelles, et une API et un tableau de bord déployés sur Google Cloud.",
-      facts: [
-        "Barres d'une minute pour sept actions et fonds, prix à cinq minutes pour quatre cryptos.",
-        "Airflow en local, Cloud Run Jobs et Cloud Scheduler en production.",
-      ],
-      live: "Tableau de bord",
-      repo: "Pipeline sur GitHub",
+    ai: {
+      title: "Projet IA",
+      plain: "En construction. Il arrive ici avec son code, ce qu'il fait et ce qu'il a mesuré, dès qu'il sera livré.",
+      header: "projet ia",
+      status: "en cours",
+      aria: "Un réseau animé que traversent des signaux : un espace réservé pendant que le projet IA se construit.",
     },
     pricer: {
-      title: "Pricer d'options sur GPU",
-      plain:
-        "Valorise un call européen par Monte Carlo et le compare au prix exact de Black-Scholes. Sur 100 millions de trajectoires, un GPU avec CuPy met 0,46 s, contre 7,4 s pour NumPy vectorisé : 16 fois plus rapide.",
-      facts: [
-        "Python pur met 295 s sur les mêmes trajectoires, mais une boucle Python est une référence faible : NumPy est la comparaison honnête.",
-        "C'est désormais un package Python testé : quatre implémentations, intervalles de confiance, variables antithétiques, et un script de benchmark qui note le matériel. Le modèle de GPU de cette première exécution n'a pas été noté.",
-      ],
       demo: "Ici dans cet onglet, sans GPU : la même estimation, comparée au prix exact de Black-Scholes.",
-      note: "Lire comment c'est vérifié",
-      repo: "Pricer sur GitHub",
     },
     pricerChart: {
       python: "Python pur",
@@ -221,16 +191,18 @@ export const fr: Dict = {
     ],
     languagesTitle: "Langues",
     languages: "Français (C2), anglais (C1, ma langue de travail au quotidien), arabe (natif).",
-    metroLabel: "Parcours jusqu'ici, en ligne de métro",
+    metroLabel: "Parcours jusqu'ici, en plan de métro : la ligne ESIEA de 2022 à 2027 et la ligne Siemens Mobility depuis septembre 2025, qui se rejoignent à la prochaine station",
+    lines: { school: "Ligne ESIEA, 2022 à 2027", work: "Ligne Siemens Mobility, sept. 2025 à août 2027" },
     stops: [
-      { when: "2022", name: "ESIEA", note: "École d'ingénieurs, informatique" },
-      { when: "2023", name: "Axeli", note: "Stagiaire réseau" },
-      { when: "2024", name: "Maroc Telecom", note: "Stagiaire cloud et réseau" },
-      { when: "2024", name: "ESIEA", note: "Ambassadeur étudiant" },
-      { when: "2025", name: "Siemens Mobility", note: "Alternant ingénieur logiciel" },
-      { when: "2026", name: "GDG on Campus ESIEA", note: "Cofondateur" },
-      { when: "2026", name: "Junction", note: "Hackathon, Espoo" },
-      { when: "2027", name: "Prochaine station", note: "Un CDI, Paris" },
+      { line: "school", when: "2022", name: "ESIEA", note: "École d'ingénieurs, informatique" },
+      { line: "school", when: "2023", name: "Axeli", note: "Stagiaire réseau" },
+      { line: "school", when: "2024", name: "Maroc Telecom", note: "Stagiaire cloud et réseau" },
+      { line: "school", when: "2024", name: "ESIEA", note: "Ambassadeur étudiant" },
+      { line: "work", when: "sept. 2025", name: "Siemens Mobility", note: "Alternant ingénieur logiciel" },
+      { line: "school", when: "sept. 2026", name: "GDG on Campus ESIEA", note: "Cofondateur" },
+      { line: "school", when: "nov. 2026", name: "Junction", note: "Hackathon, Espoo" },
+      { line: "work", when: "nov. 2026", name: "Première livraison", note: "L'outillage de test part avec une version du CRG" },
+      { line: "end", when: "sept. 2027", name: "Prochaine station", note: "Un CDI à Paris" },
     ],
   },
   contact: {
