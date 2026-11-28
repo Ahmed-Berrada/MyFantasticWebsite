@@ -1,39 +1,40 @@
 import MetroMap from "./MetroMap";
 import type { Dict } from "@/src/content";
 
-function Row({ title, children }: { title: string; children: React.ReactNode }) {
+function Block({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="grid gap-4 border-t border-line py-10 md:grid-cols-[14rem_1fr] md:gap-12">
-      <h3 className="font-display text-2xl font-medium tracking-tight">{title}</h3>
-      <div className="max-w-[44rem] leading-relaxed text-ink-2">{children}</div>
+    <div className="border-t border-line pt-5">
+      <h3 className="font-mono text-xs text-muted">{title}</h3>
+      <div className="mt-3 text-[15px] leading-relaxed text-ink-2">{children}</div>
     </div>
   );
 }
 
+/** The path as a metro map, then education, tools and languages side by side: reference material, kept compact. */
 export default function Background({ t }: { t: Dict["background"] }) {
   return (
-    <section id="background" className="border-t border-line-2 py-16 md:py-32">
+    <section id="background" className="border-t border-line-2 py-14 md:py-20">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
-        <h2 className="mb-14 font-display text-[clamp(40px,5vw,68px)] leading-[0.95] font-semibold tracking-[-0.02em]">{t.title}</h2>
-        <div className="mb-20">
-          <MetroMap stops={t.stops} lines={t.lines} label={t.metroLabel} />
+        <h2 className="mb-10 font-display text-[clamp(40px,5vw,68px)] leading-[0.95] font-semibold tracking-[-0.02em]">{t.title}</h2>
+        <MetroMap stops={t.stops} lines={t.lines} label={t.metroLabel} />
+        <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-[1fr_1.4fr_0.8fr] lg:gap-12">
+          <Block title={t.educationTitle}>
+            <p>{t.education}</p>
+          </Block>
+          <Block title={t.toolsTitle}>
+            <dl className="space-y-1.5">
+              {t.tools.map((r) => (
+                <div key={r.label}>
+                  <dt className="inline font-medium text-ink">{r.label}: </dt>
+                  <dd className="inline">{r.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Block>
+          <Block title={t.languagesTitle}>
+            <p>{t.languages}</p>
+          </Block>
         </div>
-        <Row title={t.educationTitle}>
-          <p>{t.education}</p>
-        </Row>
-        <Row title={t.toolsTitle}>
-          <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-[9rem_1fr]">
-            {t.tools.map((r) => (
-              <div key={r.label} className="contents">
-                <dt className="font-medium text-ink">{r.label}</dt>
-                <dd>{r.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </Row>
-        <Row title={t.languagesTitle}>
-          <p>{t.languages}</p>
-        </Row>
       </div>
     </section>
   );
