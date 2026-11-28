@@ -34,7 +34,7 @@ export default function MetroMap({ stops, lines, label }: { stops: Stop[]; lines
           return (
             <li
               key={`${s.name}-${s.when}`}
-              className={`relative grid grid-cols-[4rem_1fr] pb-7 last:pb-0 lg:contents`}
+              className="relative grid grid-cols-[4rem_1fr] pb-5 last:pb-0 lg:contents"
               style={{ "--col": i + 1 } as React.CSSProperties}
             >
               {/* Phone: two vertical tracks on the left. Desktop: two horizontal tracks in the middle row. */}
@@ -42,7 +42,7 @@ export default function MetroMap({ stops, lines, label }: { stops: Stop[]; lines
                 {/* ESIEA track: from the first stop's centre to the last stop's centre */}
                 <span
                   className={`absolute left-[10px] w-1 bg-ink lg:top-[18px] lg:h-1 ${
-                    i === 0 ? "top-3 bottom-0 lg:left-1/2 lg:w-1/2" : i === last ? "top-0 h-3 lg:left-0 lg:w-1/2" : "top-0 -bottom-7 lg:bottom-auto lg:left-0 lg:w-full"
+                    i === 0 ? "top-3 -bottom-5 lg:bottom-auto lg:left-1/2 lg:w-1/2" : i === last ? "top-0 h-3 lg:left-0 lg:w-1/2" : "top-0 -bottom-5 lg:bottom-auto lg:left-0 lg:w-full"
                   }`}
                 />
                 {/* Siemens track, from its first stop to the end, where it turns to meet the ESIEA line */}
@@ -50,10 +50,10 @@ export default function MetroMap({ stops, lines, label }: { stops: Stop[]; lines
                   <span
                     className={`absolute left-[34px] w-1 bg-accent lg:top-[50px] lg:h-1 ${
                       i === firstWork
-                        ? "top-3 -bottom-7 lg:bottom-auto lg:left-1/2 lg:w-1/2"
+                        ? "top-3 -bottom-5 lg:bottom-auto lg:left-1/2 lg:w-1/2"
                         : i === last
                           ? "top-0 h-3 lg:left-0 lg:w-1/2"
-                          : "top-0 -bottom-7 lg:bottom-auto lg:left-0 lg:w-full"
+                          : "top-0 -bottom-5 lg:bottom-auto lg:left-0 lg:w-full"
                     }`}
                   />
                 )}
@@ -67,8 +67,11 @@ export default function MetroMap({ stops, lines, label }: { stops: Stop[]; lines
               </span>
 
               <div className={`lg:px-1 lg:text-center ${work ? "lg:[grid-row:3] lg:pt-3" : "lg:[grid-row:1] lg:self-end lg:pb-3"} lg:[grid-column:var(--col)]`}>
-                <p className="text-sm text-muted tabular">{s.when}</p>
-                <p className={`mt-0.5 leading-tight ${end || work ? "font-display text-lg font-semibold" : "font-medium"}`}>{s.name}</p>
+                {/* On a phone the date sits before the name, on one line; on the desktop map it sits above. */}
+                <p className="leading-tight">
+                  <span className="mr-2 text-sm text-muted tabular lg:mr-0 lg:block">{s.when}</span>
+                  <span className={`lg:mt-0.5 lg:block ${end || work ? "font-display text-lg font-semibold" : "font-medium"}`}>{s.name}</span>
+                </p>
                 <p className="mt-1 text-sm leading-snug text-pretty text-ink-2">{s.note}</p>
               </div>
             </li>
