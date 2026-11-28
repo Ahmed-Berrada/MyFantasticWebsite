@@ -64,7 +64,7 @@ export default function Hero({ t, cvHref, cvOtherHref }: Props) {
           </p>
         </div>
 
-        <div className="mt-12 h-[300px] sm:h-[380px] xl:mt-0 xl:h-[460px]">
+        <div className="mt-10 h-[230px] sm:h-[360px] xl:mt-0 xl:h-[460px]">
           <TrainGraphCanvas labels={t.graph} stations={crosstownStations} />
         </div>
       </div>

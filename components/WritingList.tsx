@@ -37,11 +37,11 @@ export function NoteList({ notes, t, lang, heading = "h3" }: { notes: Note[]; t:
  */
 export default function WritingList({ notes, t, lang }: { notes: Note[]; t: Dict["writing"]; lang: Lang }) {
   return (
-    <section id="writing" className="border-t border-line-2 py-16 md:py-24">
+    <section id="writing" className="border-t border-line-2 py-14 md:py-20">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 md:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-20">
         <div>
           <h2 className="font-display text-[clamp(40px,5vw,68px)] leading-[0.95] font-semibold tracking-[-0.02em]">{t.title}</h2>
-          <p className="mt-5 max-w-[26rem] text-lg leading-relaxed text-pretty text-ink-2">{t.lede}</p>
+          <p className="mt-5 hidden max-w-[26rem] text-lg leading-relaxed text-pretty text-ink-2 md:block">{t.lede}</p>
           <p className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
             <Link href={localPath(lang, "/writing")} className="link link-tap font-medium">
               {t.all}

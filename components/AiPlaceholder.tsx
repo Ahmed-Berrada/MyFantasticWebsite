@@ -4,7 +4,7 @@ import { prng } from "@/src/lib/prng";
 import { useOnScreen, usePrefersReducedMotion } from "@/src/lib/useInView";
 
 const W = 560;
-const H = 300;
+const H = 220;
 const LAYERS = [3, 5, 6, 5, 2];
 const PULSES = 9;
 

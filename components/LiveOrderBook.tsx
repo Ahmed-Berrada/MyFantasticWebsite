@@ -145,7 +145,7 @@ export default function LiveOrderBook({ t, lang }: { t: Dict["work"]["orderBookU
           <Ladder label={t.bids} levels={bids} side="bid" maxQty={maxQty} pad={LEVELS} loading={!snap} lang={lang} />
         </div>
 
-        {/* Trade tape */}
+        {/* Trade tape: from sm up; on a phone the ladder and the counters tell the story in half the height. */}
         <div className="hidden sm:block">
           <div className="grid grid-cols-[1fr_auto] px-4 pt-3 pb-1.5 font-mono text-[10px] text-muted">
             <span>{t.trades}</span>

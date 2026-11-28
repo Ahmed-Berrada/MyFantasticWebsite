@@ -13,7 +13,7 @@ interface Props {
  * A server component: only the copy button and the headline are interactive. */
 export default function Contact({ t, cvEn, cvFr }: Props) {
   return (
-    <section id="contact" className="border-t border-line-2 py-16 md:py-32">
+    <section id="contact" className="border-t border-line-2 py-14 md:py-20">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <h2 className="max-w-[56rem] font-display text-[clamp(40px,6vw,84px)] leading-[0.95] font-semibold tracking-[-0.02em] text-balance">
           <ProximityText text={t.title} rest={{ wght: 560, wdth: 88 }} peak={{ wght: 800, wdth: 94 }} radius={160} />
