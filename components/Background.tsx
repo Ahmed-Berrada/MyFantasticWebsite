@@ -1,4 +1,4 @@
-import MetroLine from "./MetroLine";
+import MetroMap from "./MetroMap";
 import type { Dict } from "@/src/content";
 
 function Row({ title, children }: { title: string; children: React.ReactNode }) {
@@ -16,7 +16,7 @@ export default function Background({ t }: { t: Dict["background"] }) {
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <h2 className="mb-14 font-display text-[clamp(40px,5vw,68px)] leading-[0.95] font-semibold tracking-[-0.02em]">{t.title}</h2>
         <div className="mb-20">
-          <MetroLine stops={t.stops} label={t.metroLabel} />
+          <MetroMap stops={t.stops} lines={t.lines} label={t.metroLabel} />
         </div>
         <Row title={t.educationTitle}>
           <p>{t.education}</p>
